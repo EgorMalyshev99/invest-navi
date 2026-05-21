@@ -1,0 +1,73 @@
+query Assets($limit: Int) {
+  assets(limit: $limit) {
+    symbol
+    name
+    lastPrice
+    changePercent
+    lotSize
+    valueToday
+    instrumentType
+    currency
+    figi
+    sector
+    dividendYieldPercent
+    dataSource
+  }
+}
+
+query Asset($symbol: String!) {
+  asset(symbol: $symbol) {
+    symbol
+    name
+    lastPrice
+    changePercent
+    lotSize
+    valueToday
+    instrumentType
+    currency
+    figi
+    sector
+    dividendYieldPercent
+    dataSource
+  }
+  sectors {
+    code
+    name
+    currentValue
+    changePercent
+    dataSource
+  }
+  indices {
+    code
+    name
+    currentValue
+    changePercent
+    valueToday
+    dataSource
+  }
+}
+
+query Indices {
+  indices {
+    code
+    name
+    currentValue
+    changePercent
+    valueToday
+    dataSource
+  }
+}
+
+query AssetInsight($symbol: String!, $locale: String) {
+  assetInsight(symbol: $symbol, locale: $locale) {
+    symbol
+    source
+    provider
+    whatIs
+    whatChanged
+    whyMatters
+    risks
+    forInvestor
+    vsIndex
+  }
+}

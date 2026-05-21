@@ -12,7 +12,8 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {},
-    "test": {},
-    "test:e2e": {}
+    "codegen": {
+      "outputs": ["src/shared/api/graphql/generated/**"]
+    }
   }
 }

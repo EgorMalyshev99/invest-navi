@@ -2,6 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Asset {
+  changePercent: Float!
+  currency: String
+  dataSource: MarketDataSource!
+
+  """Indicative dividend yield % from T-Invest when available"""
+  dividendYieldPercent: Float
+  figi: String
+  instrumentType: InstrumentType!
+  lastPrice: Float!
+  lotSize: Int!
+  name: String!
+
+  """Tinkoff sector key when available"""
+  sector: String
+  symbol: String!
+  valueToday: Float!
+}
+
+type AssetInsight {
+  forInvestor: String!
+  provider: String
+  risks: [String!]!
+  source: AssetInsightSource!
+  symbol: String!
+  vsIndex: String
+  whatChanged: String!
+  whatIs: String!
+  whyMatters: String!
+}
+
+enum AssetInsightSource {
+  AI
+  FALLBACK
+}
+
 type AuthTokens {
   accessToken: String!
   refreshToken: String!
@@ -12,9 +48,38 @@ type AuthUser {
   userId: String!
 }
 
+type Index {
+  changePercent: Float!
+  code: String!
+  currentValue: Float!
+  dataSource: MarketDataSource!
+  name: String!
+  valueToday: Float!
+}
+
+enum InstrumentType {
+  Bond
+  Currency
+  Etf
+  Index
+  Share
+}
+
 input LoginInput {
   email: String!
   password: String!
+}
+
+enum MarketDataSource {
+  Merged
+  Moex
+  Tinkoff
+}
+
+type MarketProvidersStatus {
+  cacheTtlSeconds: Int!
+  moex: Boolean!
+  tinkoff: Boolean!
 }
 
 type Mutation {
@@ -24,14 +89,37 @@ type Mutation {
 }
 
 type Query {
+  """Single share by ticker (MOEX + Tinkoff when configured)"""
+  asset(symbol: String!): Asset!
+  assetInsight(locale: String = "ru", symbol: String!): AssetInsight!
+
+  """Top MOEX assets by traded value (Tinkoff enrichment when configured)"""
+  assets(limit: Int = 20): [Asset!]!
+
+  """Core MOEX indices (IMOEX, RGBI)"""
+  indices: [Index!]!
+
+  """Which market data providers are active"""
+  marketProviders: MarketProvidersStatus!
   me: AuthUser!
 
   """Basic health check for GraphQL API"""
   ping: String!
+
+  """MOEX sector indices"""
+  sectors: [Sector!]!
 }
 
 input RegisterInput {
   email: String!
   name: String
   password: String!
+}
+
+type Sector {
+  changePercent: Float!
+  code: String!
+  currentValue: Float!
+  dataSource: MarketDataSource!
+  name: String!
 }

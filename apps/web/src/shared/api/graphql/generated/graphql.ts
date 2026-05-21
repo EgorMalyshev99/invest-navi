@@ -1,0 +1,54 @@
+/* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+export type AssetInsightSource =
+  | 'AI'
+  | 'FALLBACK';
+
+export type InstrumentType =
+  | 'Bond'
+  | 'Currency'
+  | 'Etf'
+  | 'Index'
+  | 'Share';
+
+export type MarketDataSource =
+  | 'Merged'
+  | 'Moex'
+  | 'Tinkoff';
+
+export type AssetsQueryVariables = Exact<{
+  limit?: number | null | undefined;
+}>;
+
+
+export type AssetsQuery = { assets: Array<{ symbol: string, name: string, lastPrice: number, changePercent: number, lotSize: number, valueToday: number, instrumentType: InstrumentType, currency: string | null, figi: string | null, sector: string | null, dividendYieldPercent: number | null, dataSource: MarketDataSource }> };
+
+export type AssetQueryVariables = Exact<{
+  symbol: string;
+}>;
+
+
+export type AssetQuery = { asset: { symbol: string, name: string, lastPrice: number, changePercent: number, lotSize: number, valueToday: number, instrumentType: InstrumentType, currency: string | null, figi: string | null, sector: string | null, dividendYieldPercent: number | null, dataSource: MarketDataSource }, sectors: Array<{ code: string, name: string, currentValue: number, changePercent: number, dataSource: MarketDataSource }>, indices: Array<{ code: string, name: string, currentValue: number, changePercent: number, valueToday: number, dataSource: MarketDataSource }> };
+
+export type IndicesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IndicesQuery = { indices: Array<{ code: string, name: string, currentValue: number, changePercent: number, valueToday: number, dataSource: MarketDataSource }> };
+
+export type AssetInsightQueryVariables = Exact<{
+  symbol: string;
+  locale?: string | null | undefined;
+}>;
+
+
+export type AssetInsightQuery = { assetInsight: { symbol: string, source: AssetInsightSource, provider: string | null, whatIs: string, whatChanged: string, whyMatters: string, risks: Array<string>, forInvestor: string, vsIndex: string | null } };
+
+
+export const AssetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Assets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"lastPrice"}},{"kind":"Field","name":{"kind":"Name","value":"changePercent"}},{"kind":"Field","name":{"kind":"Name","value":"lotSize"}},{"kind":"Field","name":{"kind":"Name","value":"valueToday"}},{"kind":"Field","name":{"kind":"Name","value":"instrumentType"}},{"kind":"Field","name":{"kind":"Name","value":"currency"}},{"kind":"Field","name":{"kind":"Name","value":"figi"}},{"kind":"Field","name":{"kind":"Name","value":"sector"}},{"kind":"Field","name":{"kind":"Name","value":"dividendYieldPercent"}},{"kind":"Field","name":{"kind":"Name","value":"dataSource"}}]}}]}}]} as unknown as DocumentNode<AssetsQuery, AssetsQueryVariables>;
+export const AssetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Asset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"symbol"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"asset"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"symbol"},"value":{"kind":"Variable","name":{"kind":"Name","value":"symbol"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"lastPrice"}},{"kind":"Field","name":{"kind":"Name","value":"changePercent"}},{"kind":"Field","name":{"kind":"Name","value":"lotSize"}},{"kind":"Field","name":{"kind":"Name","value":"valueToday"}},{"kind":"Field","name":{"kind":"Name","value":"instrumentType"}},{"kind":"Field","name":{"kind":"Name","value":"currency"}},{"kind":"Field","name":{"kind":"Name","value":"figi"}},{"kind":"Field","name":{"kind":"Name","value":"sector"}},{"kind":"Field","name":{"kind":"Name","value":"dividendYieldPercent"}},{"kind":"Field","name":{"kind":"Name","value":"dataSource"}}]}},{"kind":"Field","name":{"kind":"Name","value":"sectors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"currentValue"}},{"kind":"Field","name":{"kind":"Name","value":"changePercent"}},{"kind":"Field","name":{"kind":"Name","value":"dataSource"}}]}},{"kind":"Field","name":{"kind":"Name","value":"indices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"currentValue"}},{"kind":"Field","name":{"kind":"Name","value":"changePercent"}},{"kind":"Field","name":{"kind":"Name","value":"valueToday"}},{"kind":"Field","name":{"kind":"Name","value":"dataSource"}}]}}]}}]} as unknown as DocumentNode<AssetQuery, AssetQueryVariables>;
+export const IndicesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Indices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"indices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"currentValue"}},{"kind":"Field","name":{"kind":"Name","value":"changePercent"}},{"kind":"Field","name":{"kind":"Name","value":"valueToday"}},{"kind":"Field","name":{"kind":"Name","value":"dataSource"}}]}}]}}]} as unknown as DocumentNode<IndicesQuery, IndicesQueryVariables>;
+export const AssetInsightDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AssetInsight"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"symbol"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"locale"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assetInsight"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"symbol"},"value":{"kind":"Variable","name":{"kind":"Name","value":"symbol"}}},{"kind":"Argument","name":{"kind":"Name","value":"locale"},"value":{"kind":"Variable","name":{"kind":"Name","value":"locale"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"provider"}},{"kind":"Field","name":{"kind":"Name","value":"whatIs"}},{"kind":"Field","name":{"kind":"Name","value":"whatChanged"}},{"kind":"Field","name":{"kind":"Name","value":"whyMatters"}},{"kind":"Field","name":{"kind":"Name","value":"risks"}},{"kind":"Field","name":{"kind":"Name","value":"forInvestor"}},{"kind":"Field","name":{"kind":"Name","value":"vsIndex"}}]}}]}}]} as unknown as DocumentNode<AssetInsightQuery, AssetInsightQueryVariables>;

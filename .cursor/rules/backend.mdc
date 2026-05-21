@@ -75,7 +75,12 @@ Env:
 - Только типы/контракты, без Nest runtime
 - `pnpm build` перед использованием в apps
 
+## Market module (Phase 4)
+
+- `apps/api/src/market/` — `MoexProvider`, `TinkoffProvider`, `MarketCacheService`
+- Env: `MOEX_ISS_BASE_URL`, `TINKOFF_INVEST_TOKEN`, `TINKOFF_INVEST_API_URL`, `MARKET_CACHE_TTL_SECONDS`
+- Shared types: `@repo/api` (`AssetSnapshot`, `InstrumentType`, `MarketDataSource`)
+
 ## Тесты
 
-- Unit: `*.spec.ts` рядом с модулем
-- E2E: `apps/api/test/`
+> Отложено: Jest / E2E не в репозитории. При возврате — unit `*.spec.ts` рядом с модулем, E2E в `apps/api/test/`.

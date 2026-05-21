@@ -5,9 +5,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 
+import { AiModule } from './ai';
 import { AppResolver } from './app.resolver';
 import { AuthModule } from './auth';
 import { DatabaseModule } from './database';
+import { MarketModule } from './market';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { DatabaseModule } from './database';
     }),
     AuthModule,
     DatabaseModule,
+    MarketModule,
+    AiModule,
   ],
   controllers: [],
   providers: [AppResolver],

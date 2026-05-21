@@ -37,7 +37,6 @@ packages/api/   — Shared types (build before apps/api)
 packages/ui/    — Shared UI components
 packages/eslint-config/
 packages/typescript-config/
-packages/jest-config/
 ```
 
 ## Язык и контент
@@ -163,16 +162,18 @@ export default function MarketPage() {
 
 ## Тестирование
 
-- Unit: Jest (`@repo/jest-config`)
-- E2E API: supertest в `apps/api/test`
-- Перед PR: `pnpm lint`, `pnpm test`, при изменении api — `pnpm --filter @repo/api build`
+> **Отложено:** Jest, `@repo/jest-config` и E2E (supertest) убраны из репозитория; подключим на отдельном этапе.
+
+- Перед PR: `pnpm lint`, при изменении shared types — `pnpm --filter @repo/api build`
 
 ## Phase scope
 
 Phase 1 ✅ — инфраструктура (monorepo, ESLint, Prettier, документация).
 Phase 2 ✅ — Tailwind v4, shadcn/ui, Drizzle + PostgreSQL, FSD-скелет.
 Phase 3 ✅ — Auth (email/password + JWT), GraphQL base.
-Текущая фаза — **Phase 4**: MOEX ISS интеграция, базовые entities (Asset, Sector, Index).
+Phase 4 ✅ — MOEX ISS + T-Invest API, entities Asset/Sector/Index, `packages/api` contracts, market cache.
+Phase 5 ✅ — Web: каталог, карточка актива, watchlist, next-intl, GraphQL codegen.
+Текущая фаза — **Phase 6**: инвестиционный дневник + AI.
 OAuth (Yandex ID, VK ID) запланирован отдельным шагом в Phase 9 после получения токенов.
 
 ## Полезные команды

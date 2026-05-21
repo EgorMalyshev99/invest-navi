@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "market": "Market",
+    "watchlist": "Watchlist",
+    "brand": "Invest Navigator"
+  },
+  "catalog": {
+    "title": "Asset catalog",
+    "subtitle": "Russian equities from MOEX — not investment advice",
+    "simple": "Simple",
+    "advanced": "Advanced",
+    "empty": "No asset data available",
+    "error": "Failed to load catalog",
+    "retry": "Retry",
+    "refreshing": "Refreshing…",
+    "columnName": "Name",
+    "columnPrice": "Price",
+    "columnChange": "Change",
+    "columnVolume": "Volume",
+    "columnSector": "Sector",
+    "columnDividend": "Dividend yield",
+    "columnLot": "Lot"
+  },
+  "asset": {
+    "back": "Back to catalog",
+    "notFound": "Asset not found",
+    "whatIs": "What is it?",
+    "whatChanged": "What changed?",
+    "whyMatters": "Why does it matter?",
+    "risks": "What are the risks?",
+    "forInvestor": "Who is it for?",
+    "vsIndex": "Index comparison",
+    "educationTitle": "Educational context",
+    "aiDisclaimer": "Educational context based on market data. Not investment advice.",
+    "aiDisclaimerGenerated": "AI-generated text based on market data. May contain inaccuracies. Not investment advice.",
+    "aiBadge": "AI",
+    "templateBadge": "Template",
+    "addWatchlist": "Add to watchlist",
+    "inWatchlist": "On watchlist",
+    "createHypothesis": "Journal hypothesis",
+    "comingSoon": "Coming to journal"
+  },
+  "watchlist": {
+    "title": "Watchlist",
+    "subtitle": "Track assets and record your research status",
+    "empty": "Watchlist is empty. Add assets from the catalog.",
+    "analyticsTitle": "Summary",
+    "analyticsInsightTitle": "Insight",
+    "goMarket": "Open catalog",
+    "remove": "Remove"
+  },
+  "watchlistStatus": {
+    "watching": "Watching",
+    "researching": "Researching",
+    "idea": "Have an idea",
+    "in_portfolio": "In portfolio",
+    "too_risky": "Too risky for now"
+  },
+  "instrumentType": {
+    "Share": "Share",
+    "Bond": "Bond",
+    "Etf": "ETF",
+    "Currency": "Currency",
+    "Index": "Index"
+  },
+  "risk": {
+    "low": "Below average",
+    "medium": "Medium",
+    "high": "Elevated"
+  },
+  "locale": {
+    "ru": "Русский",
+    "en": "English"
+  }
+}

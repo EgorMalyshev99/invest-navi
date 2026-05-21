@@ -64,7 +64,8 @@ function Typography({
   asChild = false,
   ...props
 }: TypographyProps) {
-  const Comp = asChild ? Slot.Root : variantTagMap[variant];
+  const resolvedVariant = variant ?? 'body';
+  const Comp = asChild ? Slot.Root : variantTagMap[resolvedVariant];
 
   return (
     <Comp

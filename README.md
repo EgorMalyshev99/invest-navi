@@ -38,7 +38,6 @@ invest-navi/
 │   ├── api/          # Общие типы/DTO между api и web
 │   ├── ui/           # shadcn/ui + Tailwind v4, общие компоненты
 │   ├── eslint-config/
-│   ├── jest-config/
 │   └── typescript-config/
 └── .github/workflows/   # CI (по мере необходимости)
 ```
@@ -100,9 +99,10 @@ pnpm --filter web dev
 ```bash
 pnpm lint
 pnpm format
-pnpm test
-pnpm test:e2e
+pnpm --filter web codegen   # после изменения schema.gql или *.graphql
 ```
+
+> Тесты (Jest, E2E) пока не подключены — вернём на отдельном этапе.
 
 ## Переменные окружения
 
@@ -139,21 +139,23 @@ pnpm test:e2e
 - GraphQL code-first на NestJS (Apollo)
 - Auth flow: `register`, `login`, `refreshTokens`, `me`
 - JWT access/refresh tokens
-- E2E тесты auth-потоков (positive + negative cases)
 
-### Phase 4 (текущая) — Рыночные данные и доменные сущности
+### Phase 4 ✅ — Рыночные данные и доменные сущности
 
-- Интеграция MOEX ISS
-- Базовые entities: `Asset`, `Sector`, `Index`
-- Нормализация доменной модели и контрактов API
+- Интеграция MOEX ISS (акции TQBR, индексы IMOEX/RGBI, сектора)
+- Интеграция T-Invest API (обогащение акций: FIGI, валюта, сектор, див. доходность)
+- GraphQL: `assets`, `asset(symbol)`, `indices`, `sectors`, `marketProviders`
+- In-memory кэш (`MARKET_CACHE_TTL_SECONDS`)
+- Shared-контракты в `packages/api` (`AssetSnapshot`, enums)
 
-### Phase 5 — Каталог и карточка актива
+### Phase 5 ✅ — Каталог и карточка актива
 
-- Каталог инструментов (simple/advanced режимы)
-- Карточка актива с контекстом, рисками и объяснениями
-- Watchlist со статусами и базовой аналитикой
+- Каталог `/[locale]/market` — simple/advanced, GraphQL codegen
+- Карточка `/[locale]/market/[symbol]` — образовательные блоки (шаблоны; AI — Phase 6)
+- Watchlist `/[locale]/watchlist` — `@uidotdev/usehooks` + localStorage, статусы, сводка
+- next-intl `ru`/`en`, переключатель языка
 
-### Phase 6 — Инвестиционный дневник + AI
+### Phase 6 (текущая) — Инвестиционный дневник + AI
 
 - Модуль `ai/` с adapter pattern и провайдерами Groq, Gemini, OpenRouter
 - Форма гипотез и фиксация решений
