@@ -1,0 +1,39 @@
+{
+  "name": "@repo/api",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "pnpm build --watch",
+    "build": "tsc -b -v",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
+  },
+  "main": "./dist/entry.js",
+  "types": "./dist/entry.d.ts",
+  "files": [
+    "./dist/**"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/entry.js",
+      "require": "./dist/entry.js"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "^10.4.0",
+    "@types/node": "^25.9.1",
+    "ts-loader": "^9.5.7",
+    "ts-node": "^10.9.2",
+    "typescript": "5.9.3"
+  }
+}

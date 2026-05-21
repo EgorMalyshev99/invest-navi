@@ -1,0 +1,27 @@
+{
+  "name": "invest-navi",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ИнвестНавигатор — AI-платформа для частных инвесторов на российском рынке",
+  "author": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "turbo": "^2.9.14"
+  },
+  "packageManager": "pnpm@11.1.3",
+  "engines": {
+    "node": ">=22"
+  }
+}
