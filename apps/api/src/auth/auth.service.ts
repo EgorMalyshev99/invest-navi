@@ -1,4 +1,3 @@
-import { isPasswordAcceptableForRegistration } from '@repo/api';
 import {
   BadRequestException,
   Inject,
@@ -9,9 +8,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { isPasswordAcceptableForRegistration } from '@repo/api';
 import { eq } from 'drizzle-orm';
 
-import { DRIZZLE, DrizzleDB, users } from '../database';
+import { DRIZZLE, users } from '../database';
 import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
 import { KnowledgeLevel } from './dto/knowledge-level.enum';
@@ -20,6 +20,8 @@ import { RegisterInput } from './dto/register.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { hashPassword, verifyPassword } from './lib/password';
 import { JwtPayload } from './types/jwt-payload.type';
+
+import type { DrizzleDB } from '../database';
 
 export interface AuthenticatedUser {
   userId: string;
