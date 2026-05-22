@@ -1,6 +1,6 @@
 {
   "name": "invest-navi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "ИнвестНавигатор — AI-платформа для частных инвесторов на российском рынке",
   "author": "",
@@ -8,6 +8,12 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "api:build": "turbo run build --filter=api",
+    "api:dev": "turbo run dev --filter=api",
+    "api:lint": "turbo run lint --filter=api",
+    "web:build": "turbo run build --filter=web",
+    "web:dev": "turbo run dev --filter=web",
+    "web:lint": "turbo run lint --filter=web",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\""
   },
