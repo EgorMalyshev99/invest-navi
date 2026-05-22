@@ -1,14 +1,13 @@
 'use client';
 
-import { BookmarkSimple, Check } from '@phosphor-icons/react';
+import { BookmarkSimpleIcon, CheckIcon } from '@phosphor-icons/react';
 import { useTranslations } from 'next-intl';
 
 import { useWatchlist } from '../model/use-watchlist';
 
 import type { Asset } from '@/entities/asset';
 
-import { Button } from '@/components/ui/button';
-
+import { Button } from '@/shared/ui/button';
 
 interface AddToWatchlistButtonProps {
   asset: Pick<Asset, 'symbol' | 'name'>;
@@ -27,7 +26,11 @@ export function AddToWatchlistButton({ asset, variant = 'outline' }: AddToWatchl
       onClick={() => (inList ? remove(asset.symbol) : add(asset))}
       className="gap-2"
     >
-      {inList ? <Check className="size-4" aria-hidden /> : <BookmarkSimple className="size-4" aria-hidden />}
+      {inList ? (
+        <CheckIcon className="size-4" aria-hidden />
+      ) : (
+        <BookmarkSimpleIcon className="size-4" aria-hidden />
+      )}
       {inList ? t('inWatchlist') : t('addWatchlist')}
     </Button>
   );

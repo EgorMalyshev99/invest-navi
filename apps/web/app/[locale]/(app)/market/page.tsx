@@ -3,9 +3,6 @@ import { setRequestLocale } from 'next-intl/server';
 import { AssetCatalog } from '@/widgets/asset-catalog';
 import { MarketIndicesStrip } from '@/widgets/market-indices-strip';
 
-/** Client widgets use @uidotdev/usehooks localStorage — skip static prerender. */
-export const dynamic = 'force-dynamic';
-
 interface MarketPageProps {
   params: Promise<{ locale: string }>;
 }

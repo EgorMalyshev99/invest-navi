@@ -1,0 +1,33 @@
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    accessToken
+    refreshToken
+  }
+}
+
+mutation Register($input: RegisterInput!) {
+  register(input: $input) {
+    accessToken
+    refreshToken
+  }
+}
+
+mutation UpdateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input) {
+    userId
+    email
+    name
+    knowledgeLevel
+    preferredLocale
+  }
+}
+
+query Me {
+  me {
+    userId
+    email
+    name
+    knowledgeLevel
+    preferredLocale
+  }
+}

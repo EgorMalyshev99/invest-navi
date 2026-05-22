@@ -1,11 +1,23 @@
-import { Inject, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { isPasswordAcceptableForRegistration } from '@repo/api';
+import {
+  BadRequestException,
+  Inject,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';
 
 import { DRIZZLE, DrizzleDB, users } from '../database';
 import { AuthTokens } from './dto/auth-tokens.type';
+import { AuthUser } from './dto/auth-user.type';
+import { KnowledgeLevel } from './dto/knowledge-level.enum';
+import { PreferredLocale } from './dto/preferred-locale.enum';
 import { RegisterInput } from './dto/register.input';
+import { UpdateProfileInput } from './dto/update-profile.input';
 import { hashPassword, verifyPassword } from './lib/password';
 import { JwtPayload } from './types/jwt-payload.type';
 
@@ -43,6 +55,12 @@ export class AuthService {
 
   async register(input: RegisterInput): Promise<AuthTokens> {
     const normalizedEmail = input.email.trim().toLowerCase();
+
+    if (!isPasswordAcceptableForRegistration(input.password)) {
+      throw new BadRequestException(
+        'Password is too weak. Use at least 8 characters with upper and lower case letters and a digit.',
+      );
+    }
 
     const existingUser = await this.db.query.users.findFirst({
       where: eq(users.email, normalizedEmail),
@@ -89,6 +107,56 @@ export class AuthService {
     }
 
     return this.issueTokens(payload.sub, payload.email);
+  }
+
+  async getProfile(userId: string): Promise<AuthUser> {
+    const user = await this.db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    if (!user?.email) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toAuthUser(user);
+  }
+
+  async updateProfile(userId: string, input: UpdateProfileInput): Promise<AuthUser> {
+    const updates: Partial<typeof users.$inferInsert> = {
+      updatedAt: new Date(),
+    };
+
+    if (input.name !== undefined) {
+      updates.name = input.name.trim() || null;
+    }
+    if (input.knowledgeLevel !== undefined) {
+      updates.knowledgeLevel = input.knowledgeLevel;
+    }
+    if (input.preferredLocale !== undefined) {
+      updates.preferredLocale = input.preferredLocale;
+    }
+
+    const [updated] = await this.db
+      .update(users)
+      .set(updates)
+      .where(eq(users.id, userId))
+      .returning();
+
+    if (!updated?.email) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toAuthUser(updated);
+  }
+
+  private toAuthUser(user: typeof users.$inferSelect): AuthUser {
+    return {
+      userId: user.id,
+      email: user.email!,
+      name: user.name,
+      knowledgeLevel: user.knowledgeLevel as KnowledgeLevel,
+      preferredLocale: user.preferredLocale as PreferredLocale,
+    };
   }
 
   private async issueTokens(userId: string, email: string): Promise<AuthTokens> {

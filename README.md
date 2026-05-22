@@ -150,10 +150,20 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 
 ### Phase 5 ✅ — Каталог и карточка актива
 
-- Каталог `/[locale]/market` — simple/advanced, GraphQL codegen
-- Карточка `/[locale]/market/[symbol]` — образовательные блоки (шаблоны; AI — Phase 6)
-- Watchlist `/[locale]/watchlist` — `@uidotdev/usehooks` + localStorage, статусы, сводка
+- Каталог `/market` — simple/advanced, GraphQL codegen
+- Карточка `/market/[symbol]` — образовательные блоки (шаблоны; AI — Phase 6)
+- Watchlist `/watchlist` — `@uidotdev/usehooks` + localStorage, статусы, сводка
 - next-intl `ru`/`en`, переключатель языка
+
+### Phase 5.5 ✅ — Auth, layouts, onboarding
+
+- Публичные маршруты: Landing `/`, `/login`, `/register` (2 шага: credentials → уровень знаний)
+- Защита кабинета: middleware + cookie JWT; без входа — только публичная зона
+- Layout: **header** (public) / **sidebar** (app); `ThemeToggle` в обеих зонах
+- Профиль `/profile`: `knowledgeLevel`, `preferredLocale` (`updateProfile`)
+- i18n: `localePrefix: 'never'` — в URL нет `/ru`/`/en`
+- БД: `pnpm --filter api db:migrate` (baseline `users`, `0001` profile + `diary_entries` prep)
+- FSD: shadcn в `apps/web/src/shared/ui/`
 
 ### Phase 6 (текущая) — Инвестиционный дневник + AI
 

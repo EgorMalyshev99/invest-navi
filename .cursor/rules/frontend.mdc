@@ -89,4 +89,5 @@ app/ (routing + page composition) → src/widgets → src/features → src/entit
 
 - `@/*` → `apps/web/src/*`
 - `@/widgets/*`, `@/features/*`, `@/entities/*`, `@/shared/*` — FSD слои
-- `@/components/*`, `@/lib/*`, `@/hooks/*` — shadcn/ui утилиты
+- `@/shared/ui/*` — shadcn/ui primitives (FSD `shared`); `@/lib/*`, `@/hooks/*` — утилиты
+- i18n: `localePrefix: 'never'` — пользовательские URL без префикса локали; сегмент `[locale]` в App Router для next-intl

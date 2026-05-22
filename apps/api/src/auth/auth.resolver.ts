@@ -7,6 +7,7 @@ import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
 import { LoginInput } from './dto/login.input';
 import { RegisterInput } from './dto/register.input';
+import { UpdateProfileInput } from './dto/update-profile.input';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
 
 @Resolver()
@@ -30,10 +31,16 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => AuthUser)
-  me(@CurrentUser() user: AuthenticatedUser): AuthUser {
-    return {
-      userId: user.userId,
-      email: user.email,
-    };
+  me(@CurrentUser() user: AuthenticatedUser): Promise<AuthUser> {
+    return this.authService.getProfile(user.userId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => AuthUser)
+  updateProfile(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('input') input: UpdateProfileInput,
+  ): Promise<AuthUser> {
+    return this.authService.updateProfile(user.userId, input);
   }
 }

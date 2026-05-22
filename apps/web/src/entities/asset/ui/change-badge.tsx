@@ -1,6 +1,6 @@
 'use client';
 
-import { TrendDown, TrendUp } from '@phosphor-icons/react';
+import { TrendDownIcon, TrendUpIcon } from '@phosphor-icons/react';
 
 import { cn } from '@/lib/utils';
 import { formatPercent } from '@/shared/lib/format';
@@ -24,8 +24,8 @@ export function ChangeBadge({ value, className }: ChangeBadgeProps) {
         className,
       )}
     >
-      {isPositive ? <TrendUp className="size-4" aria-hidden /> : null}
-      {isNegative ? <TrendDown className="size-4" aria-hidden /> : null}
+      {isPositive ? <TrendUpIcon className="size-4" aria-hidden /> : null}
+      {isNegative ? <TrendDownIcon className="size-4" aria-hidden /> : null}
       {formatPercent(value)}
     </span>
   );

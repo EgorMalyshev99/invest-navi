@@ -66,19 +66,26 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 
 ## Компоненты (shadcn/ui)
 
-Конфигурация: `apps/web/components.json` (стиль `radix-lyra`). Не добавлять другие UI-библиотеки.
+Конфигурация: `apps/web/components.json` (стиль `radix-nova`, примитивы **Radix** / `radix-ui`, иконки Phosphor). Не добавлять другие UI-библиотеки поверх shadcn.
 
 ### Установленные компоненты
 
-| Категория  | Компоненты                                                                                                                                                |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Typography | `Typography` (`apps/web/src/components/ui/typography.tsx`) на базе `cva`                                                                                  |
-| Формы      | `Field`, `Input`, `InputGroup`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Label`, `Calendar` (DatePicker = Popover + Calendar) |
-| Таблицы    | `Table` (+Header/Body/Row/Cell/Caption), `Pagination`                                                                                                     |
-| Диалоги    | `Dialog`, `Sheet`, `Drawer` (mobile), `Popover`, `Tooltip`                                                                                                |
-| Layout     | `Sidebar`, `Separator`, `Card` (+Header/Content/Footer)                                                                                                   |
-| Feedback   | `Sonner` (toasts), `Progress`, `Alert`, `Skeleton`                                                                                                        |
-| Прочее     | `Button`, `Avatar`                                                                                                                                        |
+Полные таблицы с файлами и назначением — в [DESIGN.md](../../DESIGN.md) (§ shadcn/ui).
+
+| Категория      | Компоненты (кратко)                                                                                                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Typography     | `Typography` (кастом, `cva`)                                                                                                                                                                         |
+| Формы          | `Field`, `Input`, `InputGroup`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Label`, `Calendar`, `NativeSelect`, `InputOTP`, `Combobox`; DatePicker = `Popover` + `Calendar` |
+| Кнопки         | `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`                                                                                                                                                     |
+| Таблицы        | `Table`, `Pagination`                                                                                                                                                                                |
+| Раскрывающиеся | `Accordion`, `Collapsible`                                                                                                                                                                           |
+| Диалоги        | `Dialog`, `Sheet`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog`, `HoverCard`                                                                                                                        |
+| Навигация      | `Sidebar`, `Separator`, `Breadcrumb`, `Tabs`, `NavigationMenu`, `ScrollArea`, `Resizable`                                                                                                            |
+| Карточки       | `Card`, `Skeleton`, `Avatar`, `Empty`, `Item`, `AspectRatio`                                                                                                                                         |
+| Feedback       | `Sonner`, `Progress`, `Alert`, `Spinner`                                                                                                                                                             |
+| Бейджи         | `Badge` + проектные (status, risk, type, change)                                                                                                                                                     |
+| Меню           | `DropdownMenu`, `ContextMenu`, `Menubar`, `Command`                                                                                                                                                  |
+| Данные         | `Chart` (Recharts)                                                                                                                                                                                   |
 
 ### Правила использования
 
@@ -108,6 +115,27 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 - RadioGroup: `value` + `onValueChange`, error-state на `RadioGroupItem`
 - Array forms: `useFieldArray` + key=`field.id` (не index)
 
+## Layout (публичная зона / кабинет)
+
+- **(public)** Landing, login, register — верхний **header** (`PublicShell`), `NavigationMenu`, `ThemeToggle` в header
+- **(app)** market, watchlist, profile — **sidebar** (`DashboardShell`), без top nav header; `LocaleSwitcher` + `ThemeToggle` в `DashboardContentFooter` (низ контента); профиль и выход — в footer sidebar; mobile — bottom nav
+- Примитивы: `apps/web/src/shared/ui/`; импорт `@/shared/ui/...`
+
+### Контейнер страницы (`container`)
+
+- Источник ширины и горизонтальных отступов — утилита Tailwind **`container`** (настройка в `apps/web/app/globals.css`: `--container-center`, `--container-padding`).
+- **Не использовать** для обёртки контента связку `max-w-*` + `mx-auto` + ручной `px-*` — это дублирует `container`.
+- `max-w-*` допустим только для **внутренних** узких элементов (модалки, popover), не для секций лендинга и shell.
+- `PublicShell` (header, footer): внутри `<header>` / `<footer>` — один `div.container`.
+
+### Лендинг — секции
+
+- Каждый смысловой блок — **отдельный компонент** в `widgets/landing-hero/ui/sections/`.
+- Родительский тег компонента — **`<section>`** (фон, `id` для якорей, вертикальные отступы `py-*`).
+- Контент секции — во вложенном **`div.container`** (не на самом `<section>`).
+- Декоративные full-bleed слои (градиент, blur) — `absolute` внутри `<section>`, поверх/под `container`.
+- Композиция страницы: `LandingHero` только собирает секции, без разметки секций внутри.
+
 ## Адаптивность
 
 - Mobile (`< 768px`): 1 column, bottom nav, таблицы → card-list
@@ -119,7 +147,8 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 Базовый подход, без фанатизма:
 
 - Layout-каркас: `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`
-- Внутри — `<div>` + shadcn/ui (не оборачивать каждый блок в `<section>`/`<article>`)
+- Внутри кабинета и форм — `<div>` + shadcn/ui (не оборачивать каждый блок в `<section>`/`<article>`)
+- **Исключение — лендинг:** каждый блок = отдельный `<section>` (см. «Лендинг — секции» выше)
 - shadcn/ui уже содержит aria-атрибуты — не дублировать
 
 ## Accessibility (базовый уровень)

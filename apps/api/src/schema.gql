@@ -45,6 +45,9 @@ type AuthTokens {
 
 type AuthUser {
   email: String!
+  knowledgeLevel: KnowledgeLevel!
+  name: String
+  preferredLocale: PreferredLocale!
   userId: String!
 }
 
@@ -63,6 +66,12 @@ enum InstrumentType {
   Etf
   Index
   Share
+}
+
+enum KnowledgeLevel {
+  ADVANCED
+  BEGINNER
+  INTERMEDIATE
 }
 
 input LoginInput {
@@ -86,6 +95,12 @@ type Mutation {
   login(input: LoginInput!): AuthTokens!
   refreshTokens(refreshToken: String!): AuthTokens!
   register(input: RegisterInput!): AuthTokens!
+  updateProfile(input: UpdateProfileInput!): AuthUser!
+}
+
+enum PreferredLocale {
+  EN
+  RU
 }
 
 type Query {
@@ -122,4 +137,10 @@ type Sector {
   currentValue: Float!
   dataSource: MarketDataSource!
   name: String!
+}
+
+input UpdateProfileInput {
+  knowledgeLevel: KnowledgeLevel
+  name: String
+  preferredLocale: PreferredLocale
 }

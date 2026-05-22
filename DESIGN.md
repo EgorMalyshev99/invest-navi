@@ -150,7 +150,7 @@
 
 ## Типографика
 
-Базовая реализация: `apps/web/src/components/ui/typography.tsx` (`cva` + `variant` + `numeric` + `asChild`).
+Базовая реализация: `apps/web/src/shared/ui/typography.tsx` (`cva` + `variant` + `numeric` + `asChild`).
 
 ### Принципы типографики
 
@@ -201,13 +201,17 @@
 
 ### shadcn/ui — установленная библиотека
 
-Конфигурация: `apps/web/components.json` (стиль `radix-lyra`, иконки `phosphor`).
-Компоненты живут в `apps/web/src/components/ui/`.
+Конфигурация: `apps/web/components.json` (стиль `radix-nova`, примитивы Radix / `radix-ui`, иконки `phosphor`). Визуальный пресет Nova: умеренные скругления и сбалансированная плотность (не Lyra с `rounded-none`).
+Компоненты живут в `apps/web/src/shared/ui/` (FSD-сегмент `shared`).
 Кастомизация — через CSS custom properties и Tailwind-классы.
+
+**Оглавление registry:** типографика → формы → кнопки → таблицы → раскрывающиеся секции → диалоги → навигация → карточки → обратная связь → бейджи → меню → визуализация → утилиты registry.
+
+> В продакшене (Phase 5–6) уже задействованы компоненты из таблиц ниже. Остальные файлы в `ui/` — готовый registry shadcn для следующих экранов (дневник, портфель, графики); подключать по мере появления сценариев.
 
 #### Типографика (Typography)
 
-Типографика реализуется через единый компонент `Typography` в `apps/web/src/components/ui/typography.tsx` на базе `cva`.
+Типографика реализуется через единый компонент `Typography` в `apps/web/src/shared/ui/typography.tsx` на базе `cva`.
 
 | API       | Описание                                                                                                         |
 | --------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -229,19 +233,23 @@
 
 **Подход:** `react-hook-form` + `zod` + shadcn Field/Form компоненты.
 
-| Компонент    | Файл              | Назначение                                 |
-| ------------ | ----------------- | ------------------------------------------ |
-| `Field`      | `field.tsx`       | Обёртка поля формы (label + input + error) |
-| `Input`      | `input.tsx`       | Текстовое поле                             |
-| `InputGroup` | `input-group.tsx` | Группа input с prefix/suffix               |
-| `Textarea`   | `textarea.tsx`    | Многострочный ввод                         |
-| `Select`     | `select.tsx`      | Dropdown-выбор                             |
-| `Checkbox`   | `checkbox.tsx`    | Чекбокс                                    |
-| `RadioGroup` | `radio-group.tsx` | Группа radio-кнопок                        |
-| `Switch`     | `switch.tsx`      | Toggle переключатель                       |
-| `Slider`     | `slider.tsx`      | Ползунок (уровень уверенности)             |
-| `Label`      | `label.tsx`       | Лейбл поля                                 |
-| `DatePicker` | composition       | Popover + Calendar (react-day-picker)      |
+| Компонент      | Файл                | Назначение                                       |
+| -------------- | ------------------- | ------------------------------------------------ |
+| `Field`        | `field.tsx`         | Обёртка поля формы (label + input + error)       |
+| `Input`        | `input.tsx`         | Текстовое поле                                   |
+| `InputGroup`   | `input-group.tsx`   | Группа input с prefix/suffix                     |
+| `Textarea`     | `textarea.tsx`      | Многострочный ввод                               |
+| `Select`       | `select.tsx`        | Dropdown-выбор                                   |
+| `Checkbox`     | `checkbox.tsx`      | Чекбокс                                          |
+| `RadioGroup`   | `radio-group.tsx`   | Группа radio-кнопок                              |
+| `Switch`       | `switch.tsx`        | Toggle переключатель                             |
+| `Slider`       | `slider.tsx`        | Ползунок (уровень уверенности)                   |
+| `Label`        | `label.tsx`         | Лейбл поля (связка с control через `htmlFor`)    |
+| `Calendar`     | `calendar.tsx`      | Календарь `react-day-picker` (основа DatePicker) |
+| `NativeSelect` | `native-select.tsx` | Нативный `<select>` для простых справочников     |
+| `InputOTP`     | `input-otp.tsx`     | Ввод кода подтверждения (OTP), по ячейкам        |
+| `Combobox`     | `combobox.tsx`      | Поиск по списку с автодополнением (registry)     |
+| `DatePicker`   | composition         | `Popover` + `Button` + `Calendar`                |
 
 **Правила форм:**
 
@@ -265,6 +273,21 @@
   </PopoverContent>
 </Popover>
 ```
+
+#### Кнопки и переключатели
+
+| Компонент     | Файл               | Назначение                                               |
+| ------------- | ------------------ | -------------------------------------------------------- |
+| `Button`      | `button.tsx`       | Основное действие (default, outline, ghost, destructive) |
+| `ButtonGroup` | `button-group.tsx` | Группа кнопок (фильтры, панель действий формы)           |
+| `Toggle`      | `toggle.tsx`       | Кнопка-переключатель состояния (вкл/выкл стиль)          |
+| `ToggleGroup` | `toggle-group.tsx` | Взаимоисключающий набор toggle (режимы каталога и т.п.)  |
+
+**Правила:**
+
+- Одна primary-кнопка на блок действий; destructive — только для необратимых операций.
+- `ToggleGroup` — для переключения представления без смены страницы (например, simple/advanced каталог).
+- Иконки в кнопках — Phosphor, размер согласован с `size` кнопки.
 
 #### Таблицы (Table)
 
@@ -301,13 +324,15 @@
 
 #### Диалоги и панели
 
-| Компонент | Файл          | Назначение                                        |
-| --------- | ------------- | ------------------------------------------------- |
-| `Dialog`  | `dialog.tsx`  | Модальное окно (создание гипотезы, подтверждения) |
-| `Sheet`   | `sheet.tsx`   | Боковая панель (AI-помощник, детали актива)       |
-| `Drawer`  | `drawer.tsx`  | Нижняя панель **на mobile** (замена Sheet/Dialog) |
-| `Popover` | `popover.tsx` | Всплывающий блок (подсказки к терминам)           |
-| `Tooltip` | `tooltip.tsx` | Краткое пояснение при hover                       |
+| Компонент     | Файл               | Назначение                                              |
+| ------------- | ------------------ | ------------------------------------------------------- |
+| `Dialog`      | `dialog.tsx`       | Модальное окно (создание гипотезы, подтверждения)       |
+| `Sheet`       | `sheet.tsx`        | Боковая панель (AI-помощник, детали актива)             |
+| `Drawer`      | `drawer.tsx`       | Нижняя панель **на mobile** (замена Sheet/Dialog)       |
+| `Popover`     | `popover.tsx`      | Всплывающий блок (подсказки к терминам)                 |
+| `Tooltip`     | `tooltip.tsx`      | Краткое пояснение при hover (1–2 строки)                |
+| `AlertDialog` | `alert-dialog.tsx` | Подтверждение деструктивного действия (удаление и т.п.) |
+| `HoverCard`   | `hover-card.tsx`   | Расширенная карточка при наведении (превью актива)      |
 
 **Правила:**
 
@@ -318,10 +343,15 @@
 
 #### Навигация и Layout
 
-| Компонент   | Файл            | Назначение                                            |
-| ----------- | --------------- | ----------------------------------------------------- |
-| `Sidebar`   | `sidebar.tsx`   | Основная навигация (desktop: full, tablet: collapsed) |
-| `Separator` | `separator.tsx` | Визуальный разделитель секций                         |
+| Компонент        | Файл                  | Назначение                                                |
+| ---------------- | --------------------- | --------------------------------------------------------- |
+| `Sidebar`        | `sidebar.tsx`         | Основная навигация (desktop: full, tablet: collapsed)     |
+| `Separator`      | `separator.tsx`       | Визуальный разделитель секций                             |
+| `Breadcrumb`     | `breadcrumb.tsx`      | Цепочка «Рынок → SBER» на вложенных экранах               |
+| `Tabs`           | `tabs.tsx`            | Вкладки внутри экрана (обзор / риски / дневник по активу) |
+| `NavigationMenu` | `navigation-menu.tsx` | Горизонтальное меню с выпадающими разделами (marketing)   |
+| `ScrollArea`     | `scroll-area.tsx`     | Прокручиваемая область с кастомным скроллбаром            |
+| `Resizable`      | `resizable.tsx`       | Изменяемые по ширине панели (dashboard, аналитика)        |
 
 **Правила навигации:**
 
@@ -331,12 +361,14 @@
 
 #### Карточки и контейнеры
 
-| Компонент  | Файл           | Назначение                                                    |
-| ---------- | -------------- | ------------------------------------------------------------- |
-| `Card`     | `card.tsx`     | Универсальный контейнер (CardHeader, CardContent, CardFooter) |
-| `Alert`    | `alert.tsx`    | Информационный/warning блок                                   |
-| `Skeleton` | `skeleton.tsx` | Placeholder при загрузке                                      |
-| `Avatar`   | `avatar.tsx`   | Аватар пользователя                                           |
+| Компонент     | Файл               | Назначение                                                    |
+| ------------- | ------------------ | ------------------------------------------------------------- |
+| `Card`        | `card.tsx`         | Универсальный контейнер (CardHeader, CardContent, CardFooter) |
+| `Skeleton`    | `skeleton.tsx`     | Placeholder при загрузке данных                               |
+| `Avatar`      | `avatar.tsx`       | Аватар пользователя                                           |
+| `Empty`       | `empty.tsx`        | Пустое состояние (пустой watchlist, нет результатов поиска)   |
+| `Item`        | `item.tsx`         | Строка списка с медиа/действиями (альтернатива card-list)     |
+| `AspectRatio` | `aspect-ratio.tsx` | Фиксированное соотношение сторон (превью, медиа)              |
 
 **Типы карточек (строятся на базе `Card`):**
 
@@ -344,28 +376,70 @@
 - **Metric card** — число + label + изменение (positive/negative/neutral)
 - **Insight card** — AI-пояснение с иконкой и мягким градиентным акцентом
 - **Asset card** — название актива, тип, цена, изменение, risk badge
-- **Alert card** — предупреждение о рисках (через `Alert`)
+- **Alert card** — предупреждение о рисках (через `Alert` из раздела «Обратная связь»)
 
 #### Обратная связь
 
-| Компонент  | Файл           | Назначение                             |
-| ---------- | -------------- | -------------------------------------- |
-| `Sonner`   | `sonner.tsx`   | Toast-уведомления (быстрые сообщения)  |
-| `Progress` | `progress.tsx` | Прогресс-бар (загрузка, уровень риска) |
+| Компонент  | Файл           | Назначение                                               |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `Sonner`   | `sonner.tsx`   | Toast-уведомления (успех, ошибка, info)                  |
+| `Progress` | `progress.tsx` | Прогресс выполнения / уровень заполнения                 |
+| `Alert`    | `alert.tsx`    | Статический блок: ошибка API, дисклеймер, предупреждение |
+| `Spinner`  | `spinner.tsx`  | Индикатор загрузки inline (кнопка, строка таблицы)       |
 
-#### Прочие
+**Правила:**
 
-| Компонент  | Файл           | Назначение                                              |
-| ---------- | -------------- | ------------------------------------------------------- |
-| `Button`   | `button.tsx`   | Кнопки (variants: default, outline, ghost, destructive) |
-| `Calendar` | `calendar.tsx` | Календарь (react-day-picker, часть DatePicker)          |
+- Toast (`Sonner`) — короткие подтверждения действий; не дублировать длинный текст из `Alert`.
+- `Alert` на экране — когда сообщение должно оставаться видимым (ошибка каталога, AI disclaimer).
+- `Spinner` + `Skeleton` — spinner для действий, skeleton для layout контента.
 
-#### Бейджи (кастомные, на базе shadcn)
+#### Бейджи
+
+| Компонент | Файл        | Назначение                              |
+| --------- | ----------- | --------------------------------------- |
+| `Badge`   | `badge.tsx` | Компактная метка (статус, тег, счётчик) |
+
+**Проектные бейджи** (entities, на базе `Badge` / `cva`):
 
 - **Status badge** — наблюдаю / изучаю / есть идея / в портфеле
-- **Risk badge** — низкий / средний / высокий (цветовая кодировка + текст)
+- **Risk badge** — низкий / средний / высокий (цвет + текст, не только цвет)
 - **Type badge** — акция / облигация / фонд / индекс / валюта
-- **Change badge** — +2.4% / −1.1% (growth/decline/neutral)
+- **Change badge** — +2.4% / −1.1% (growth/decline/neutral, `tabular-nums`)
+
+#### Меню и командная палитра
+
+| Компонент      | Файл                | Назначение                                          |
+| -------------- | ------------------- | --------------------------------------------------- |
+| `DropdownMenu` | `dropdown-menu.tsx` | Контекстное меню действий (строка watchlist, «⋯»)   |
+| `ContextMenu`  | `context-menu.tsx`  | Меню по правому клику                               |
+| `Menubar`      | `menubar.tsx`       | Горизонтальная строка меню (редко, desktop-утилиты) |
+| `Command`      | `command.tsx`       | Command palette / поиск по разделам и активам       |
+
+**Правила:**
+
+- `DropdownMenu` — основной паттерн для действий над строкой без перегрузки UI кнопками.
+- `Command` — глобальный поиск (⌘K): активы, разделы; композиция с `Dialog`.
+
+#### Визуализация данных
+
+| Компонент | Файл        | Назначение                                           |
+| --------- | ----------- | ---------------------------------------------------- |
+| `Chart`   | `chart.tsx` | Обёртка Recharts + тема токенов (тренды, allocation) |
+
+**Правила:**
+
+- Цвета серий — из семантических токенов (`primary`, `positive`, `negative`), не произвольный hex.
+- Подписи осей и легенда — `Typography` / `text-muted-foreground`.
+- Для котировок на графике — `tabular-nums`.
+
+#### Утилиты registry (по необходимости)
+
+| Компонент   | Файл            | Назначение                                 |
+| ----------- | --------------- | ------------------------------------------ |
+| `Kbd`       | `kbd.tsx`       | Отображение сочетаний клавиш (⌘K, Enter)   |
+| `Direction` | `direction.tsx` | Обёртка RTL/LTR при расширении `next-intl` |
+
+> `Combobox` в формах использует `@base-ui/react` — единственное исключение в registry; остальные примитивы — `radix-ui`.
 
 ### Бизнес-компоненты (проектные)
 
@@ -388,6 +462,36 @@
 ---
 
 ## Структура экранов
+
+### 0. Публичная зона (до входа)
+
+Маршруты: `/` (Landing), `/login`, `/register`. Layout: **верхний header** (`PublicShell`), не sidebar.
+
+| Элемент          | Компоненты / паттерн                                                                           |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| Header           | `NavigationMenu` — лого, ссылки, `LocaleSwitcher`, `ThemeToggle`                               |
+| Landing          | Секции (`<section>` + `div.container`), `Typography`, grid `Card`, CTA → Register / Login      |
+| Login / Register | Центрированный `Card`, `Field` + RHF + Zod; Register шаг 2 — `RadioGroup` (уровень знаний)     |
+| Темы             | Light + dark через семантические токены (`bg-background`, `bg-card`, …); пресет **radix-nova** |
+
+**Запрещено на публичных страницах:** хардкод dark-hex (`bg-[#080B12]`, `text-white` и т.п.) — только токены.
+
+#### Лендинг: контейнер и секции
+
+| Правило         | Реализация                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| Ширина контента | Tailwind `container` (`globals.css`: `--container-center`, `--container-padding`)          |
+| Не использовать | `max-w-*` + `mx-auto` + ручной `px-*` как обёртку секции или shell                         |
+| Структура       | Один смысловой блок = один компонент; корневой тег — `<section>`                           |
+| Контент         | `div.container` внутри секции; фон/`py-*`/`id` — на `<section>`                            |
+| Файлы           | `apps/web/src/widgets/landing-hero/ui/sections/*-section.tsx`; сборка в `landing-hero.tsx` |
+| Shell           | `PublicShell` header/footer — `div.container`                                              |
+
+`max-w-*` допустим для узких внутренних UI (модалки, popover), не для лендинга.
+
+### Кабинет (после входа)
+
+Маршруты: `/market`, `/watchlist`, `/profile`, … Layout: **sidebar** (`DashboardShell`), на mobile — bottom nav. Top header навигации в кабинете **не используется**. `ThemeToggle` — в footer sidebar.
 
 ### 1. Главный dashboard — «Картина рынка»
 
@@ -576,20 +680,19 @@
 
 Используем семантические теги только на уровне layout-каркаса страницы:
 
+**Публичная зона:** `<header>` + `<main>` (marketing header).
+
+**Кабинет:** `<aside>` (sidebar) + `<main>`; на mobile `<nav>` (bottom nav). Не смешивать marketing header с sidebar кабинета.
+
 ```html
-<header>
-  — шапка приложения
-  <nav>
-    — sidebar, bottom nav
-    <main>
-      — основной контент страницы
-      <aside>
-        — AI-панель (если отдельным блоком)
-        <footer>— подвал (если есть)</footer>
-      </aside>
-    </main>
-  </nav>
-</header>
+<!-- (public) -->
+<header>… NavigationMenu, ThemeToggle …</header>
+<main>…</main>
+
+<!-- (app) -->
+<aside>… Sidebar …</aside>
+<main>…</main>
+<nav>… bottom nav (mobile) …</nav>
 ```
 
 Внутри `<main>` — обычные `<div>` + shadcn/ui компоненты. Не нужно вручную добавлять `<section>`, `<article>` на каждый блок — это создаёт лишний шум без реальной пользы.
@@ -727,10 +830,10 @@
 **Пример использования:**
 
 ```tsx
-import { TrendUp, ChartLineUp, Wallet, Notebook } from '@phosphor-icons/react';
+import { TrendUpIcon, ChartLineUpIcon, WalletIcon, NotebookIcon } from '@phosphor-icons/react';
 
-<TrendUp size={20} weight="regular" className="text-positive" />
-<ChartLineUp size={24} weight="duotone" className="text-primary" />
+<TrendUpIcon size={20} weight="regular" className="text-positive" />
+<ChartLineUpIcon size={24} weight="duotone" className="text-primary" />
 ```
 
 ---
@@ -752,7 +855,8 @@ import { TrendUp, ChartLineUp, Wallet, Notebook } from '@phosphor-icons/react';
 ### Grid
 
 - Dashboard: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
-- Content pages: `max-w-7xl mx-auto` с padding
+- Marketing / landing / `PublicShell`: `container` (см. § Лендинг выше)
+- Прочие content pages: по возможности `container`; не `max-w-* mx-auto` для основной обёртки
 - Sidebar: `w-64` (desktop), `w-16` (collapsed), bottom nav (mobile)
 
 ---

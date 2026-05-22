@@ -1,5 +1,5 @@
-import { AppShell } from '@/widgets/app-shell';
+import { DashboardShell } from '@/widgets/dashboard-shell';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return <AppShell>{children}</AppShell>;
+  return <DashboardShell>{children}</DashboardShell>;
 }

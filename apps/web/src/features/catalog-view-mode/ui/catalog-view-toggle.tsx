@@ -1,13 +1,12 @@
 'use client';
 
-import { SlidersHorizontal, Sparkle } from '@phosphor-icons/react';
+import { SlidersHorizontalIcon, SparkleIcon } from '@phosphor-icons/react';
 import { useTranslations } from 'next-intl';
 
 import { useCatalogViewMode } from '../model/use-catalog-view-mode';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
+import { Button } from '@/shared/ui/button';
 
 export function CatalogViewToggle() {
   const t = useTranslations('catalog');
@@ -22,7 +21,7 @@ export function CatalogViewToggle() {
         className={cn('gap-1.5')}
         onClick={() => setMode('simple')}
       >
-        <Sparkle className="size-4" aria-hidden />
+        <SparkleIcon className="size-4" aria-hidden />
         {t('simple')}
       </Button>
       <Button
@@ -32,7 +31,7 @@ export function CatalogViewToggle() {
         className={cn('gap-1.5')}
         onClick={() => setMode('advanced')}
       >
-        <SlidersHorizontal className="size-4" aria-hidden />
+        <SlidersHorizontalIcon className="size-4" aria-hidden />
         {t('advanced')}
       </Button>
     </div>

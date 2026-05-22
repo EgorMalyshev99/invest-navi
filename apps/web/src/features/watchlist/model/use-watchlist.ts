@@ -1,15 +1,17 @@
 'use client';
 
-import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useMemo } from 'react';
 
 import type { WatchlistStatus, WatchlistStore } from './types';
 import type { Asset } from '@/entities/asset';
 
+import { usePersistedState } from '@/shared/lib/use-persisted-state';
+
 const STORAGE_KEY = 'invest-navi:watchlist';
+const EMPTY_STORE = {} as WatchlistStore;
 
 export function useWatchlist() {
-  const [store, setStore] = useLocalStorage<WatchlistStore>(STORAGE_KEY, {} as WatchlistStore);
+  const [store, setStore] = usePersistedState<WatchlistStore>(STORAGE_KEY, EMPTY_STORE);
 
   const entries = useMemo(
     () =>

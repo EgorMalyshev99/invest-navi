@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "radix-lyra",
+  "style": "radix-nova",
   "rsc": false,
   "tsx": true,
   "tailwind": {
@@ -13,9 +13,9 @@
   "iconLibrary": "phosphor",
   "rtl": false,
   "aliases": {
-    "components": "@/components",
+    "components": "@/shared",
     "utils": "@/lib/utils",
-    "ui": "@/components/ui",
+    "ui": "@/shared/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },

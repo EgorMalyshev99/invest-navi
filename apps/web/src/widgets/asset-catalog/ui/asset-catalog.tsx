@@ -3,18 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import {
   ChangeBadge,
   RiskBadge,
@@ -28,6 +16,18 @@ import { CatalogViewToggle, useCatalogViewMode } from '@/features/catalog-view-m
 import { AddToWatchlistButton } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
 import { formatCompactNumber, formatPercent, formatPrice } from '@/shared/lib/format';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Skeleton } from '@/shared/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/shared/ui/table';
 
 function SimpleAssetCard({ asset }: { asset: Asset }) {
   const education = buildAssetEducation(asset, []);

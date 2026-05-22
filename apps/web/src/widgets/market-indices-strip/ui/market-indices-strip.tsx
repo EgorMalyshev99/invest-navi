@@ -2,10 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ChangeBadge, fetchIndices, type MarketIndex } from '@/entities/asset';
 import { formatCompactNumber } from '@/shared/lib/format';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 function IndexCard({ index }: { index: MarketIndex }) {
   return (

@@ -3,12 +3,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChangeBadge, fetchAssets } from '@/entities/asset';
 import { useWatchlist, WatchlistStatusSelect } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
 export function WatchlistView() {
   const t = useTranslations('watchlist');

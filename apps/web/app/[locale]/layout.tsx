@@ -7,10 +7,10 @@ import { Providers } from '../providers';
 
 import type { Metadata } from 'next';
 
-import { ThemeProvider } from '@/components/theme-provider';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import { routing } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/shared/ui/theme-provider';
+import { TooltipProvider } from '@/shared/ui/tooltip';
 
 import '../globals.css';
 
@@ -56,7 +56,12 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <html lang={locale} suppressHydrationWarning className={cn(inter.variable)}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <TooltipProvider>
               <Providers>{children}</Providers>
             </TooltipProvider>

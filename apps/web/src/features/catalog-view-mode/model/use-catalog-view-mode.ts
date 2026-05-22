@@ -1,16 +1,14 @@
 'use client';
 
-import { useLocalStorage } from '@uidotdev/usehooks';
-
 import type { CatalogViewMode } from './types';
 
+import { usePersistedState } from '@/shared/lib/use-persisted-state';
+
 const STORAGE_KEY = 'invest-navi:catalog-view-mode';
+const DEFAULT_MODE = 'simple' satisfies CatalogViewMode;
 
 export function useCatalogViewMode() {
-  const [mode, setMode] = useLocalStorage<CatalogViewMode>(
-    STORAGE_KEY,
-    'simple' as CatalogViewMode,
-  );
+  const [mode, setMode] = usePersistedState<CatalogViewMode>(STORAGE_KEY, DEFAULT_MODE);
 
   return {
     mode: mode ?? 'simple',

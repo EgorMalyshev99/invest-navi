@@ -6,6 +6,20 @@ const FSD_LAYER_ERROR = 'FSD: importing from a higher layer is forbidden.';
 export default [
   ...nextJsConfig,
 
+  // shadcn/ui registry components (third-party patterns; keep app rules strict elsewhere)
+  {
+    files: ['src/shared/ui/**/*'],
+    rules: {
+      '@eslint-react/no-use-context': 'off',
+      '@eslint-react/no-context-provider': 'off',
+      '@eslint-react/no-array-index-key': 'off',
+      '@eslint-react/dom-no-dangerously-set-innerhtml': 'off',
+      '@eslint-react/use-state': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+      '@eslint-react/set-state-in-effect': 'off',
+    },
+  },
+
   // ── shared: bottom layer, cannot import from any higher layer ──
   {
     files: ['src/shared/**/*'],

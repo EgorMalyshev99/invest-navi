@@ -1,13 +1,9 @@
 'use client';
 
-import { ArrowLeft, Info } from '@phosphor-icons/react';
+import { ArrowLeftIcon, InfoIcon } from '@phosphor-icons/react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
   ChangeBadge,
   RiskBadge,
@@ -15,11 +11,14 @@ import {
   fetchAssetDetail,
   fetchAssetInsight,
 } from '@/entities/asset';
-import { AiInsightBlock, insightToBlocks } from '@/features/ai-insight';
+import { AiInsightBlock, InsightBlocksSections, insightToBlocks } from '@/features/ai-insight';
 import { buildAssetEducation, toEducationBlocks } from '@/features/asset-education';
 import { AddToWatchlistButton } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
 import { formatPrice } from '@/shared/lib/format';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { Button } from '@/shared/ui/button';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 interface AssetDetailProps {
   symbol: string;
@@ -56,7 +55,7 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
       <div className="space-y-4">
         <Button variant="ghost" asChild className="w-fit">
           <Link href="/market" className="gap-2">
-            <ArrowLeft className="size-4" aria-hidden />
+            <ArrowLeftIcon className="size-4" aria-hidden />
             {t('back')}
           </Link>
         </Button>
@@ -94,7 +93,7 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
       <div className="flex flex-col gap-4">
         <Button variant="ghost" asChild className="w-fit">
           <Link href="/market" className="gap-2">
-            <ArrowLeft className="size-4" aria-hidden />
+            <ArrowLeftIcon className="size-4" aria-hidden />
             {t('back')}
           </Link>
         </Button>
@@ -128,43 +127,53 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
       </div>
 
       <Alert className="border-primary/30 bg-primary/5">
-        <Info className="text-primary size-4" aria-hidden />
+        <InfoIcon className="text-primary size-4" aria-hidden />
         <AlertTitle>{t('educationTitle')}</AlertTitle>
         <AlertDescription>{isAi ? t('aiDisclaimerGenerated') : t('aiDisclaimer')}</AlertDescription>
       </Alert>
 
       {insightQuery.isLoading ? (
-        <div className="grid gap-4 lg:grid-cols-2">
-          {(['what-is', 'what-changed', 'why-matters', 'risks'] as const).map((id) => (
-            <Skeleton key={id} className="h-36 w-full" />
-          ))}
+        <div className="space-y-10">
+          <div className="space-y-4">
+            <Skeleton className="h-7 w-36" />
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {(['what-is', 'what-changed', 'why-matters'] as const).map((id) => (
+                <Skeleton key={id} className="h-36 w-full" />
+              ))}
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-7 w-44" />
+            <div className="grid gap-4 md:grid-cols-2">
+              {(['risks', 'for-investor'] as const).map((id) => (
+                <Skeleton key={id} className="h-36 w-full" />
+              ))}
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
-          {blocks.map((block) => (
+        <div className="space-y-10">
+          <InsightBlocksSections
+            blocks={blocks}
+            sectionTitles={{
+              overview: t('insightSectionOverview'),
+              fit: t('insightSectionFit'),
+            }}
+            isAi={isAi}
+            aiBadgeLabel={t('aiBadge')}
+            templateBadgeLabel={t('templateBadge')}
+          />
+          {vsIndexText ? (
             <AiInsightBlock
-              key={block.id}
-              title={block.title}
-              body={block.body}
+              title={t('vsIndex')}
+              body={vsIndexText}
               isAi={isAi}
               aiBadgeLabel={t('aiBadge')}
               templateBadgeLabel={t('templateBadge')}
-              className={block.id === 'risks' ? 'lg:col-span-2' : undefined}
             />
-          ))}
+          ) : null}
         </div>
       )}
-
-      {vsIndexText ? (
-        <Card className={isAi ? 'border-primary/20 bg-primary/5' : undefined}>
-          <CardHeader>
-            <CardTitle className="text-base">{t('vsIndex')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground text-sm leading-relaxed">{vsIndexText}</p>
-          </CardContent>
-        </Card>
-      ) : null}
     </div>
   );
 }
