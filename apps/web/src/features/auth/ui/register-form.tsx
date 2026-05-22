@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { analyzePassword, isPasswordAcceptableForRegistration } from '@repo/api';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import type { KnowledgeLevel } from '@/shared/api/graphql/generated/graphql';
 
@@ -50,7 +50,7 @@ export function RegisterForm() {
     mode: 'onSubmit',
   });
 
-  const password = form.watch('password');
+  const password = useWatch({ control: form.control, name: 'password', defaultValue: '' });
   const passwordStrength = analyzePassword(password ?? '');
   const canRegister =
     isPasswordAcceptableForRegistration(password ?? '') && !form.formState.isSubmitting;
