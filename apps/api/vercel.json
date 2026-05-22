@@ -3,10 +3,10 @@
   "installCommand": "cd ../.. && pnpm install",
   "buildCommand": "cd ../.. && pnpm --filter @repo/api build && pnpm --filter api build",
   "functions": {
-    "dist/src/vercel.js": {
+    "api/index.ts": {
       "maxDuration": 60,
       "memory": 1024
     }
   },
-  "rewrites": [{ "source": "/(.*)", "destination": "/dist/src/vercel.js" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }

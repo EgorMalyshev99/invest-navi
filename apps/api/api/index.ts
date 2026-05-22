@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { createExpressNestApp } from './create-app';
+import { createExpressNestApp } from '../src/create-app';
 
 import type { Request, Response } from 'express';
 
