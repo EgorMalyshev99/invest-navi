@@ -16,9 +16,9 @@ export type InstrumentType =
   | 'Share';
 
 export type KnowledgeLevel =
-  | 'advanced'
-  | 'beginner'
-  | 'intermediate';
+  | 'ADVANCED'
+  | 'BEGINNER'
+  | 'INTERMEDIATE';
 
 export type LoginInput = {
   email: string;
@@ -31,8 +31,8 @@ export type MarketDataSource =
   | 'Tinkoff';
 
 export type PreferredLocale =
-  | 'en'
-  | 'ru';
+  | 'EN'
+  | 'RU';
 
 export type RegisterInput = {
   email: string;

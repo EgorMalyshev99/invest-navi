@@ -3,9 +3,8 @@
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { useLocale, useTranslations } from 'next-intl';
 
-import type { PreferredLocale } from '@/shared/api/graphql/generated/graphql';
-
 import { updateProfile } from '@/features/auth/api/auth-api';
+import { toGraphqlPreferredLocale } from '@/features/auth/lib/graphql-enums';
 import { getLocaleLabelCode, type AppLocale } from '@/features/locale-switcher/model/locales';
 import { LocaleFlag } from '@/features/locale-switcher/ui/locale-flag';
 import { usePathname, useRouter } from '@/i18n/navigation';
@@ -37,7 +36,7 @@ export function LocaleSwitcher({ align = 'end', className }: LocaleSwitcherProps
     router.replace(pathname, { locale: nextLocale });
     if (getAccessToken()) {
       try {
-        await updateProfile({ preferredLocale: nextLocale as PreferredLocale });
+        await updateProfile({ preferredLocale: toGraphqlPreferredLocale(nextLocale) });
       } catch {
         // Locale cookie still updated by router
       }

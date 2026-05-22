@@ -6,9 +6,8 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import type { KnowledgeLevel } from '@/shared/api/graphql/generated/graphql';
-
 import { register, updateProfile } from '@/features/auth/api/auth-api';
+import { toGraphqlKnowledgeLevel } from '@/features/auth/lib/graphql-enums';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import {
   knowledgeLevelSchema,
@@ -30,12 +29,6 @@ import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
 import { Typography } from '@/shared/ui/typography';
 
 const LEVELS: KnowledgeLevelValue[] = ['beginner', 'intermediate', 'advanced'];
-
-const levelToEnum: Record<KnowledgeLevelValue, KnowledgeLevel> = {
-  beginner: 'beginner',
-  intermediate: 'intermediate',
-  advanced: 'advanced',
-};
 
 export function RegisterForm() {
   const t = useTranslations('auth');
@@ -77,7 +70,7 @@ export function RegisterForm() {
       return;
     }
     try {
-      await updateProfile({ knowledgeLevel: levelToEnum[parsed.data] });
+      await updateProfile({ knowledgeLevel: toGraphqlKnowledgeLevel(parsed.data) });
       router.replace('/market');
       router.refresh();
     } catch (e) {

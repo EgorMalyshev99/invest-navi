@@ -7,9 +7,14 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { KnowledgeLevel, PreferredLocale } from '@/shared/api/graphql/generated/graphql';
-
 import { fetchMe, updateProfile } from '@/features/auth/api/auth-api';
+import {
+  fromGraphqlKnowledgeLevel,
+  fromGraphqlPreferredLocale,
+  toGraphqlKnowledgeLevel,
+  toGraphqlPreferredLocale,
+} from '@/features/auth/lib/graphql-enums';
+import { knowledgeLevelSchema } from '@/features/auth/model/schemas';
 import { GraphqlRequestError } from '@/shared/api/graphql';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
@@ -24,7 +29,7 @@ import { Typography } from '@/shared/ui/typography';
 
 const profileSchema = z.object({
   name: z.string().max(120).optional(),
-  knowledgeLevel: z.enum(['beginner', 'intermediate', 'advanced']),
+  knowledgeLevel: knowledgeLevelSchema,
   preferredLocale: z.enum(['ru', 'en']),
 });
 
@@ -55,8 +60,8 @@ export function ProfileForm() {
     if (data?.me) {
       form.reset({
         name: data.me.name ?? '',
-        knowledgeLevel: data.me.knowledgeLevel,
-        preferredLocale: data.me.preferredLocale,
+        knowledgeLevel: fromGraphqlKnowledgeLevel(data.me.knowledgeLevel),
+        preferredLocale: fromGraphqlPreferredLocale(data.me.preferredLocale),
       });
     }
   }, [data, form]);
@@ -67,8 +72,8 @@ export function ProfileForm() {
     try {
       await updateProfile({
         name: values.name || undefined,
-        knowledgeLevel: values.knowledgeLevel as KnowledgeLevel,
-        preferredLocale: values.preferredLocale as PreferredLocale,
+        knowledgeLevel: toGraphqlKnowledgeLevel(values.knowledgeLevel),
+        preferredLocale: toGraphqlPreferredLocale(values.preferredLocale),
       });
       await queryClient.invalidateQueries({ queryKey: ['me'] });
       setSaved(true);
