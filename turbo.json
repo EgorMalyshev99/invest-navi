@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["CORS_ORIGIN"],
+  "globalEnv": ["CORS_ORIGIN", "PORT", "DATABASE_URL"],
   "tasks": {
     "dev": {
       "cache": false,
