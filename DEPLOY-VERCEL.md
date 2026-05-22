@@ -13,7 +13,9 @@ This branch targets **Vercel** for both `apps/web` and `apps/api`. Use **`main`*
 
 ## API (`apps/api`)
 
-- Entry: `api/index.ts` (Vercel Serverless Function); all routes rewrite to `/api`. Local dev uses `main.ts`.
+- Entry: `src/main.ts` (Vercel zero-config NestJS; must import `@nestjs/core`). Do not add a separate `api/` handler.
+- `vercel.json` only runs `@repo/api` build; Nest compile is handled by Vercel.
+- Local dev: `pnpm --filter api dev` (same `main.ts`).
 - Local dev: `pnpm --filter api dev` (still uses `main.ts` + port 3000).
 - GraphQL: `/graphql` (Apollo default).
 - Set env vars in Vercel (same as `.env.example`): `DATABASE_URL`, JWT, `CORS_ORIGIN`, market/AI keys.
