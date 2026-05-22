@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { AuthService, AuthenticatedUser } from './auth.service';
+import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
@@ -9,6 +9,8 @@ import { LoginInput } from './dto/login.input';
 import { RegisterInput } from './dto/register.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
+
+import type { AuthenticatedUser } from './auth.service';
 
 @Resolver()
 export class AuthResolver {
