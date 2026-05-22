@@ -24,6 +24,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.21",
+    "express": "^5.1.0",
     "@repo/api": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "graphql": "^16.14.0",

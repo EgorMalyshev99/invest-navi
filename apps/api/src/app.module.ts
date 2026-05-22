@@ -19,7 +19,8 @@ import { MarketModule } from './market';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      // Vercel: read-only FS — generate schema in memory. Local/Railway: write src/schema.gql.
+      autoSchemaFile: process.env.VERCEL === '1' ? true : join(process.cwd(), 'src/schema.gql'),
       context: ({ req }) => ({ req }),
       sortSchema: true,
     }),
