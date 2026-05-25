@@ -41,6 +41,10 @@ dist
 .settings/
 *.sublime-workspace
 
+# AI
+.cursor
+AGENTS.md
+
 # Debug
 logs
 *.log
