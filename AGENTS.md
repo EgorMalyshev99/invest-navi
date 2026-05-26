@@ -180,7 +180,8 @@ Phase 3 ✅ — Auth (email/password + JWT), GraphQL base.
 Phase 4 ✅ — MOEX ISS + T-Invest API, entities Asset/Sector/Index, `packages/api` contracts, market cache.
 Phase 5 ✅ — Web: каталог, карточка актива, watchlist, next-intl, GraphQL codegen.
 Phase 5.5 ✅ — Auth gate (middleware), Landing + login/register (2-step), PublicShell (header) / DashboardShell (sidebar), profile (`knowledgeLevel`, `preferredLocale`), Drizzle migrations baseline + diary prep, FSD `shared/ui`.
-Текущая фаза — **Phase 6**: инвестиционный дневник + AI.
+Phase 6 ✅ — инвестиционный дневник + AI (`diary` GraphQL, `/diary`, `diaryHypothesisFeedback`, ретроспектива).
+Текущая фаза — **Phase 7**: портфель и облигационный помощник.
 OAuth (Yandex ID, VK ID) запланирован отдельным шагом в Phase 9 после получения токенов.
 
 ## Полезные команды
@@ -198,5 +199,4 @@ pnpm format
 - [PRODUCT.md](./docs/PRODUCT.md) — полное описание бизнес-логики, разделов, сценариев
 - [DESIGN.md](./docs/DESIGN.md) — дизайн-концепция, палитра, компоненты, адаптивность
 - [README.md](./README.md)
-- [.cursor/rules/](./.cursor/rules/)
-- [.cursor/skills/](./.cursor/skills/)
+- [.agents/rules/](./.agents/rules/)

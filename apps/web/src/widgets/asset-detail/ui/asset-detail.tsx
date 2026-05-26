@@ -113,8 +113,10 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
 
         <div className="flex flex-wrap gap-2">
           <AddToWatchlistButton asset={asset} />
-          <Button type="button" variant="secondary" disabled title={t('comingSoon')}>
-            {t('createHypothesis')}
+          <Button type="button" variant="secondary" asChild>
+            <Link href={`/diary?symbol=${encodeURIComponent(symbol)}`}>
+              {t('createHypothesis')}
+            </Link>
           </Button>
         </div>
       </div>

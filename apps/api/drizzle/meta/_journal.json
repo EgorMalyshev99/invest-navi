@@ -15,6 +15,20 @@
       "when": 1779433365590,
       "tag": "0001_profile_and_diary",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779815205334,
+      "tag": "0002_hard_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779815807127,
+      "tag": "0003_fair_war_machine",
+      "breakpoints": true
     }
   ]
 }

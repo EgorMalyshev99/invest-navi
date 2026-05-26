@@ -45,8 +45,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const links = [
     { href: '/market' as const, label: t('market'), icon: ChartLineUpIcon },
     { href: '/watchlist' as const, label: t('watchlist'), icon: ListHeartIcon },
-    { href: '/diary' as const, label: t('diary'), icon: BookOpenIcon, disabled: true },
-    { href: '/portfolio' as const, label: t('portfolio'), icon: SquaresFourIcon, disabled: true },
+    { href: '/diary' as const, label: t('diary'), icon: BookOpenIcon },
+    { href: '/portfolio' as const, label: t('portfolio'), icon: SquaresFourIcon },
     { href: '/ai' as const, label: t('ai'), icon: RobotIcon, disabled: true },
   ];
 

@@ -13,7 +13,7 @@ Next.js 16 App Router, React 19, FSD, TanStack Query/Table, Highcharts, shadcn/u
 
 ## Дизайн
 
-Концепция: [DESIGN.md](../../DESIGN.md). Правила: `.cursor/rules/design.mdc`.
+Концепция: [DESIGN.md](../../docs/DESIGN.md). Правила: `.agents/rules/design.mdc`.
 
 - Шрифт: **Inter** (`next/font/google`, subsets: latin + cyrillic)
 - Иконки: **Phosphor Icons** (`@phosphor-icons/react`), не lucide

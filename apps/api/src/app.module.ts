@@ -13,8 +13,10 @@ import { AuthModule } from './auth';
 import { GqlExceptionFilter } from './common/filters/gql-exception.filter';
 import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
 import { DatabaseModule } from './database';
+import { DiaryModule } from './diary';
 import { HealthModule } from './health';
 import { MarketModule } from './market';
+import { PortfolioModule } from './portfolio';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { MarketModule } from './market';
     AuthModule,
     MarketModule,
     AiModule,
+    DiaryModule,
+    PortfolioModule,
   ],
   controllers: [],
   providers: [

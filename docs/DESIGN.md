@@ -2,7 +2,7 @@
 
 Дизайн-концепция платформы. Этот документ — источник истины по визуальному стилю, цветовой палитре, типографике, компонентам и адаптивности.
 
-> Продуктовая логика — в [PRODUCT.md](./PRODUCT.md). Техническая архитектура — в [AGENTS.md](./AGENTS.md).
+> Продуктовая логика — в [PRODUCT.md](./PRODUCT.md).
 
 ---
 
@@ -889,11 +889,3 @@ import { TrendUpIcon, ChartLineUpIcon, WalletIcon, NotebookIcon } from '@phospho
 ```
 
 Проектные токены без аналога в shadcn: `surface-elevated`, `disabled`, `positive`, `warning`, `negative`, `info`, `risk-high`.
-
----
-
-## Связанные документы
-
-- [PRODUCT.md](./PRODUCT.md) — бизнес-логика, разделы, сценарии
-- [AGENTS.md](./AGENTS.md) — архитектура и правила разработки
-- [README.md](./README.md) — технический quick start

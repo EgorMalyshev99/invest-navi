@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
 
-import { DRIZZLE, diaryEntries } from '../index';
+import { DRIZZLE } from '../drizzle.provider';
+import { diaryEntries } from '../schema/diary-entries';
 
 import type { DrizzleDB } from '../drizzle.provider';
 
