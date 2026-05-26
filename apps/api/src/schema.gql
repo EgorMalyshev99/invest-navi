@@ -51,6 +51,103 @@ type AuthUser {
   userId: String!
 }
 
+input CreateDiaryEntryInput {
+  action: DiaryAction!
+  assetSymbol: String!
+  confidence: Int
+  failureCriteria: String
+  horizon: DiaryHorizon!
+  rationale: String
+  risks: String
+  successCriteria: String
+}
+
+input CreatePortfolioPositionInput {
+  assetSymbol: String!
+
+  """ISO date YYYY-MM-DD"""
+  entryDate: String!
+  entryPrice: Float!
+  goal: String
+  quantity: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum DiaryAction {
+  BUY
+  HOLD
+  OBSERVE
+  SELL
+}
+
+type DiaryEntry {
+  action: DiaryAction!
+  assetSymbol: String!
+  confidence: Int
+  createdAt: DateTime!
+  failureCriteria: String
+  horizon: DiaryHorizon!
+  id: String!
+  rationale: String
+  reviewAt: DateTime
+  risks: String
+  snapshotIndexValue: Float
+  snapshotPrice: Float
+  status: DiaryStatus!
+  successCriteria: String
+  updatedAt: DateTime!
+}
+
+enum DiaryHorizon {
+  LONG
+  ONE_MONTH
+  ONE_YEAR
+  THREE_MONTHS
+}
+
+type DiaryHypothesisFeedback {
+  gaps: [String!]!
+  provider: String
+  questions: [String!]!
+  source: AssetInsightSource!
+  strengths: [String!]!
+  summary: String!
+}
+
+input DiaryHypothesisFeedbackInput {
+  action: DiaryAction!
+  assetSymbol: String!
+  confidence: Int
+  failureCriteria: String
+  horizon: DiaryHorizon!
+  locale: String = "ru"
+  rationale: String
+  risks: String
+  successCriteria: String
+}
+
+type DiaryRetrospective {
+  daysElapsed: Int!
+  entryId: String!
+  indexChangePercent: Float
+  isReady: Boolean!
+  priceChangePercent: Float
+  provider: String
+  questions: [String!]!
+  source: AssetInsightSource!
+  summary: String!
+}
+
+enum DiaryStatus {
+  ACTIVE
+  CANCELLED
+  COMPLETED
+}
+
 type Index {
   changePercent: Float!
   code: String!
@@ -92,10 +189,65 @@ type MarketProvidersStatus {
 }
 
 type Mutation {
+  createDiaryEntry(input: CreateDiaryEntryInput!): DiaryEntry!
+  createPortfolioPosition(input: CreatePortfolioPositionInput!): PortfolioPosition!
+  deletePortfolioPosition(id: String!): Boolean!
   login(input: LoginInput!): AuthTokens!
   refreshTokens(refreshToken: String!): AuthTokens!
   register(input: RegisterInput!): AuthTokens!
+  updateDiaryEntry(id: String!, input: UpdateDiaryEntryInput!): DiaryEntry!
+  updatePortfolioPosition(id: String!, input: UpdatePortfolioPositionInput!): PortfolioPosition!
   updateProfile(input: UpdateProfileInput!): AuthUser!
+}
+
+type PortfolioAllocationSlice {
+  key: String!
+  label: String
+  value: Float!
+  weightPercent: Float!
+}
+
+type PortfolioPosition {
+  assetName: String
+  assetSymbol: String!
+  costBasis: Float!
+  createdAt: DateTime!
+  currency: String
+  currentPrice: Float
+  entryDate: String!
+  entryPrice: Float!
+  goal: String
+  id: String!
+  instrumentType: InstrumentType
+  marketValue: Float
+  quantity: Float!
+  unrealizedPl: Float
+  unrealizedPlPercent: Float
+  updatedAt: DateTime!
+}
+
+type PortfolioRiskHint {
+  code: String!
+  severity: PortfolioRiskSeverity!
+  symbol: String
+  weightPercent: Float
+}
+
+enum PortfolioRiskSeverity {
+  Info
+  Warning
+}
+
+type PortfolioSummary {
+  byCurrency: [PortfolioAllocationSlice!]!
+  byInstrumentType: [PortfolioAllocationSlice!]!
+  bySymbol: [PortfolioAllocationSlice!]!
+  positionsCount: Int!
+  riskHints: [PortfolioRiskHint!]!
+  totalCostBasis: Float!
+  totalMarketValue: Float!
+  totalUnrealizedPl: Float!
+  totalUnrealizedPlPercent: Float
 }
 
 enum PreferredLocale {
@@ -110,6 +262,10 @@ type Query {
 
   """Top MOEX assets by traded value (Tinkoff enrichment when configured)"""
   assets(limit: Int = 20): [Asset!]!
+  diaryEntries(status: DiaryStatus): [DiaryEntry!]!
+  diaryEntry(id: String!): DiaryEntry!
+  diaryHypothesisFeedback(input: DiaryHypothesisFeedbackInput!): DiaryHypothesisFeedback!
+  diaryRetrospective(entryId: String!, locale: String = "ru"): DiaryRetrospective!
 
   """Core MOEX indices (IMOEX, RGBI)"""
   indices: [Index!]!
@@ -120,6 +276,9 @@ type Query {
 
   """Basic health check for GraphQL API"""
   ping: String!
+  portfolioPosition(id: String!): PortfolioPosition!
+  portfolioPositions: [PortfolioPosition!]!
+  portfolioSummary: PortfolioSummary!
 
   """MOEX sector indices"""
   sectors: [Sector!]!
@@ -137,6 +296,27 @@ type Sector {
   currentValue: Float!
   dataSource: MarketDataSource!
   name: String!
+}
+
+input UpdateDiaryEntryInput {
+  action: DiaryAction
+  confidence: Int
+  failureCriteria: String
+  horizon: DiaryHorizon
+  rationale: String
+  risks: String
+  status: DiaryStatus
+  successCriteria: String
+}
+
+input UpdatePortfolioPositionInput {
+  assetSymbol: String
+
+  """ISO date YYYY-MM-DD"""
+  entryDate: String
+  entryPrice: Float
+  goal: String
+  quantity: Float
 }
 
 input UpdateProfileInput {

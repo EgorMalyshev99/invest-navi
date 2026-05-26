@@ -6,7 +6,6 @@ import type { InstrumentType } from '../model/types';
 
 import { cn } from '@/lib/utils';
 
-
 interface TypeBadgeProps {
   type: InstrumentType;
   className?: string;

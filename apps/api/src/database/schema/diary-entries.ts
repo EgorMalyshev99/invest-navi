@@ -1,4 +1,4 @@
-import { pgTable, smallint, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { numeric, pgTable, smallint, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { diaryActionEnum, diaryHorizonEnum, diaryStatusEnum } from './enums';
 import { users } from './users';
@@ -17,6 +17,8 @@ export const diaryEntries = pgTable('diary_entries', {
   failureCriteria: text('failure_criteria'),
   confidence: smallint('confidence'),
   status: diaryStatusEnum('status').default('active').notNull(),
+  snapshotPrice: numeric('snapshot_price', { precision: 20, scale: 6 }),
+  snapshotIndexValue: numeric('snapshot_index_value', { precision: 20, scale: 6 }),
   reviewAt: timestamp('review_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),

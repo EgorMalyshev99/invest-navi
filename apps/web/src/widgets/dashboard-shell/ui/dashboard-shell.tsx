@@ -11,6 +11,8 @@ import {
 } from '@phosphor-icons/react';
 import { useTranslations } from 'next-intl';
 
+import { DashboardContentFooter } from './dashboard-content-footer';
+
 import { logout } from '@/features/auth/api/auth-api';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
@@ -30,8 +32,6 @@ import {
   SidebarTrigger,
 } from '@/shared/ui/sidebar';
 
-import { DashboardContentFooter } from './dashboard-content-footer';
-
 interface DashboardShellProps {
   children: React.ReactNode;
 }
@@ -45,8 +45,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const links = [
     { href: '/market' as const, label: t('market'), icon: ChartLineUpIcon },
     { href: '/watchlist' as const, label: t('watchlist'), icon: ListHeartIcon },
-    { href: '/diary' as const, label: t('diary'), icon: BookOpenIcon, disabled: true },
-    { href: '/portfolio' as const, label: t('portfolio'), icon: SquaresFourIcon, disabled: true },
+    { href: '/diary' as const, label: t('diary'), icon: BookOpenIcon },
+    { href: '/portfolio' as const, label: t('portfolio'), icon: SquaresFourIcon },
     { href: '/ai' as const, label: t('ai'), icon: RobotIcon, disabled: true },
   ];
 

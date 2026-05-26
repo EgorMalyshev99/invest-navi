@@ -1,0 +1,78 @@
+fragment PortfolioPositionFields on PortfolioPosition {
+  id
+  assetSymbol
+  assetName
+  instrumentType
+  currency
+  quantity
+  entryPrice
+  entryDate
+  goal
+  currentPrice
+  marketValue
+  costBasis
+  unrealizedPl
+  unrealizedPlPercent
+  createdAt
+  updatedAt
+}
+
+fragment PortfolioSummaryFields on PortfolioSummary {
+  positionsCount
+  totalCostBasis
+  totalMarketValue
+  totalUnrealizedPl
+  totalUnrealizedPlPercent
+  byInstrumentType {
+    key
+    label
+    weightPercent
+    value
+  }
+  bySymbol {
+    key
+    label
+    weightPercent
+    value
+  }
+  byCurrency {
+    key
+    label
+    weightPercent
+    value
+  }
+  riskHints {
+    code
+    severity
+    symbol
+    weightPercent
+  }
+}
+
+query PortfolioPositions {
+  portfolioPositions {
+    ...PortfolioPositionFields
+  }
+}
+
+query PortfolioSummary {
+  portfolioSummary {
+    ...PortfolioSummaryFields
+  }
+}
+
+mutation CreatePortfolioPosition($input: CreatePortfolioPositionInput!) {
+  createPortfolioPosition(input: $input) {
+    ...PortfolioPositionFields
+  }
+}
+
+mutation UpdatePortfolioPosition($id: String!, $input: UpdatePortfolioPositionInput!) {
+  updatePortfolioPosition(id: $id, input: $input) {
+    ...PortfolioPositionFields
+  }
+}
+
+mutation DeletePortfolioPosition($id: String!) {
+  deletePortfolioPosition(id: $id)
+}

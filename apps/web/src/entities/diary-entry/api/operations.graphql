@@ -1,0 +1,66 @@
+fragment DiaryEntryFields on DiaryEntry {
+  id
+  assetSymbol
+  action
+  horizon
+  rationale
+  risks
+  successCriteria
+  failureCriteria
+  confidence
+  status
+  snapshotPrice
+  snapshotIndexValue
+  reviewAt
+  createdAt
+  updatedAt
+}
+
+query DiaryEntries($status: DiaryStatus) {
+  diaryEntries(status: $status) {
+    ...DiaryEntryFields
+  }
+}
+
+query DiaryEntry($id: String!) {
+  diaryEntry(id: $id) {
+    ...DiaryEntryFields
+  }
+}
+
+mutation CreateDiaryEntry($input: CreateDiaryEntryInput!) {
+  createDiaryEntry(input: $input) {
+    ...DiaryEntryFields
+  }
+}
+
+mutation UpdateDiaryEntry($id: String!, $input: UpdateDiaryEntryInput!) {
+  updateDiaryEntry(id: $id, input: $input) {
+    ...DiaryEntryFields
+  }
+}
+
+query DiaryHypothesisFeedback($input: DiaryHypothesisFeedbackInput!) {
+  diaryHypothesisFeedback(input: $input) {
+    summary
+    strengths
+    gaps
+    questions
+    source
+    provider
+  }
+}
+
+query DiaryRetrospective($entryId: String!, $locale: String) {
+  diaryRetrospective(entryId: $entryId, locale: $locale) {
+    entryId
+    isReady
+    daysElapsed
+    priceChangePercent
+    indexChangePercent
+    summary
+    questions
+    source
+    provider
+  }
+}

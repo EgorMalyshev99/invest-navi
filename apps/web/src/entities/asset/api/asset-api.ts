@@ -7,7 +7,6 @@ import {
   IndicesDocument,
 } from '@/shared/api/graphql/generated/graphql';
 
-
 export async function fetchAssets(limit = 50): Promise<Asset[]> {
   const data = await graphqlRequest(AssetsDocument, { limit });
   return data.assets;

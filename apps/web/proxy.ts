@@ -6,7 +6,7 @@ import { ACCESS_TOKEN_COOKIE } from './src/shared/lib/auth-cookies';
 
 const intlMiddleware = createMiddleware(routing);
 
-const PROTECTED_PREFIXES = ['/market', '/watchlist', '/profile'];
+const PROTECTED_PREFIXES = ['/market', '/watchlist', '/profile', '/diary'];
 const AUTH_PATHS = ['/login', '/register'];
 
 function stripLocalePrefix(pathname: string): string {

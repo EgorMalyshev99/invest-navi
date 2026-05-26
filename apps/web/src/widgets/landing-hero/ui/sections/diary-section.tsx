@@ -3,11 +3,11 @@
 import { NotebookIcon } from '@phosphor-icons/react';
 import { useTranslations } from 'next-intl';
 
+import { DiaryCycleFlow } from '../diary-cycle-flow';
+
 import { Badge } from '@/shared/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Typography } from '@/shared/ui/typography';
-
-import { DiaryCycleFlow } from '../diary-cycle-flow';
 
 const DIARY_POINT_KEYS = ['p1', 'p2', 'p3', 'p4'] as const;
 
@@ -38,7 +38,7 @@ export function DiarySection() {
             </div>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3">
+            <ul className="flex flex-col gap-3">
               {DIARY_POINT_KEYS.map((key) => (
                 <li key={key} className="flex gap-3 text-sm leading-relaxed">
                   <span

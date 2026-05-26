@@ -165,12 +165,13 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 - БД: `pnpm --filter api db:migrate` (baseline `users`, `0001` profile + `diary_entries` prep)
 - FSD: shadcn в `apps/web/src/shared/ui/`
 
-### Phase 6 (текущая) — Инвестиционный дневник + AI
+### Phase 6 ✅ — Инвестиционный дневник + AI
 
 - Модуль `ai/` с adapter pattern и провайдерами Groq, Gemini, OpenRouter
-- Форма гипотез и фиксация решений
-- AI-подсказки к гипотезе (риски, критерии валидации)
-- Ретроспектива 30/60/90 дней
+- `assetInsight` на карточке актива; `diaryHypothesisFeedback` для черновика гипотезы
+- GraphQL `diary/` — CRUD записей, снимок цены/индекса, `reviewAt` по горизонту
+- Web `/diary` — форма гипотезы, AI-разбор, ретроспектива, фильтры статусов
+- Связка с `/market/[symbol]` → «Гипотеза в дневнике»
 
 ### Phase 7 — Портфель и облигационный помощник
 
@@ -195,10 +196,6 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 
 ## Документация
 
-- [PRODUCT.md](./PRODUCT.md) — бизнес-логика, целевая аудитория, разделы платформы, сценарии
+- [PRODUCT.md](./docs/PRODUCT.md) — бизнес-логика, целевая аудитория, разделы платформы, сценарии
 - [AGENTS.md](./AGENTS.md) — правила для AI-агентов и конвенции разработки
-- [.cursor/rules/](./.cursor/rules/) — правила Cursor IDE (frontend / backend)
-
-## Лицензия
-
-UNLICENSED — private project.
+- [.agents/rules/](./.agents/rules/) — правила Cursor IDE (frontend / backend)

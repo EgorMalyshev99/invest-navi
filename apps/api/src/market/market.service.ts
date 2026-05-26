@@ -1,5 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { MarketDataSource, type AssetSnapshot, type MarketProvidersStatus } from '@repo/api';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  clampMarketAssetsLimit,
+  MarketDataSource,
+  type AssetSnapshot,
+  type MarketProvidersStatus,
+} from '@repo/api';
 
 import { Asset } from './entities/asset.type';
 import { MarketIndex } from './entities/index.type';
@@ -18,13 +23,14 @@ export class MarketService {
   ) {}
 
   async getAssets(limit = 20): Promise<Asset[]> {
-    const cacheKey = `market:assets:${limit}:${this.tinkoff.isConfigured()}`;
+    const safeLimit = clampMarketAssetsLimit(limit);
+    const cacheKey = `market:assets:${safeLimit}:${this.tinkoff.isConfigured()}`;
     const cached = this.cache.get<Asset[]>(cacheKey);
     if (cached) {
       return cached;
     }
 
-    const moexAssets = await this.moex.getAssets(limit);
+    const moexAssets = await this.moex.getAssets(safeLimit);
     const enriched = this.tinkoff.isConfigured()
       ? await this.tinkoff.enrichAssets(moexAssets)
       : moexAssets;
@@ -35,20 +41,21 @@ export class MarketService {
   }
 
   async getAsset(symbol: string): Promise<Asset> {
-    const cacheKey = `market:asset:${symbol.toUpperCase()}`;
+    const normalizedSymbol = this.normalizeSymbol(symbol);
+    const cacheKey = `market:asset:${normalizedSymbol}`;
     const cached = this.cache.get<Asset>(cacheKey);
     if (cached) {
       return cached;
     }
 
-    const moexAsset = await this.moex.getAssetBySymbol(symbol);
+    const moexAsset = await this.moex.getAssetBySymbol(normalizedSymbol);
     const tinkoffAsset = this.tinkoff.isConfigured()
-      ? await this.tinkoff.findShareAsset(symbol)
+      ? await this.tinkoff.findShareAsset(normalizedSymbol)
       : null;
 
     const merged = this.mergeAssetSnapshots(moexAsset, tinkoffAsset);
     if (!merged) {
-      throw new NotFoundException(`Asset "${symbol}" not found`);
+      throw new NotFoundException(`Asset "${normalizedSymbol}" not found`);
     }
 
     const result = this.toAsset(merged);
@@ -113,6 +120,14 @@ export class MarketService {
       dividendYieldPercent: tinkoff.dividendYieldPercent,
       dataSource: MarketDataSource.Merged,
     };
+  }
+
+  private normalizeSymbol(symbol: string): string {
+    const normalized = symbol.trim().toUpperCase();
+    if (!/^[A-Z0-9.-]{1,20}$/.test(normalized)) {
+      throw new BadRequestException('Invalid asset symbol');
+    }
+    return normalized;
   }
 
   private toAsset(snapshot: AssetSnapshot): Asset {

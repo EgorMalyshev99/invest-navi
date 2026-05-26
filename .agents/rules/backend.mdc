@@ -67,7 +67,8 @@ Env:
 ## Drizzle
 
 - Схема в `database/schema/`
-- Миграции: `drizzle-kit generate` / `migrate`
+- Генерация миграции: `pnpm --filter api db:generate` (обновляет SQL-файлы в `apps/api/drizzle/`)
+- Применение миграций: `pnpm --filter api db:migrate`
 - `DATABASE_URL` из env
 
 ## packages/api

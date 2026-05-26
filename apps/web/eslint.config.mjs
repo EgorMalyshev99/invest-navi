@@ -53,6 +53,21 @@ export default [
     },
   },
 
+  // shadcn layout: prefer gap over space-y/x (exclude generated shared/ui)
+  {
+    files: ['src/features/**/*', 'src/widgets/**/*', 'src/entities/**/*', 'app/**/*'],
+    ignores: ['src/shared/ui/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'warn',
+        {
+          selector: 'Literal[value=/\\bspace-[xy]-(?!0\\b)/]',
+          message: 'Prefer flex with gap-* instead of space-x-* or space-y-*.',
+        },
+      ],
+    },
+  },
+
   // ── features: can use entities+shared, cannot import widgets ──
   {
     files: ['src/features/**/*'],
