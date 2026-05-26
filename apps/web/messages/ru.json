@@ -92,6 +92,15 @@
     "preferencesAria": "Настройки интерфейса",
     "preferencesControls": "Язык и тема"
   },
+  "errors": {
+    "errorTitle": "Что-то пошло не так",
+    "errorDescription": "Не удалось загрузить страницу. Попробуйте ещё раз.",
+    "retry": "Повторить",
+    "notFoundTitle": "Страница не найдена",
+    "notFoundDescription": "Запрошенный адрес не существует или был перемещён.",
+    "goHome": "На главную",
+    "goMarket": "К каталогу"
+  },
   "theme": {
     "toggle": "Тема",
     "light": "Светлая",

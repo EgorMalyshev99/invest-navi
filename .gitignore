@@ -8,6 +8,7 @@ node_modules
 # Local env files
 .env
 .env.prod
+.env.local
 
 # Testing
 .nyc_output
@@ -31,7 +32,8 @@ build
 dist
 
 # IDEs and editors
-/.idea
+.idea
+.vscode
 .project
 .classpath
 .c9/
@@ -39,12 +41,10 @@ dist
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# AI
+.cursor
+AGENTS.md
+skills-lock.json
 
 # Debug
 logs

@@ -1,8 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { LocaleSwitcherSkeleton } from '@/features/locale-switcher/ui/locale-switcher-skeleton';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { Link } from '@/i18n/navigation';
 import { BrandLink } from '@/shared/ui/brand-link';
@@ -47,7 +49,9 @@ export function PublicShell({ children, variant = 'marketing' }: PublicShellProp
             </nav>
           ) : null}
           <div className="flex items-center gap-2">
-            <LocaleSwitcher />
+            <Suspense fallback={<LocaleSwitcherSkeleton />}>
+              <LocaleSwitcher />
+            </Suspense>
             <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
               <Link href="/login">{t('login')}</Link>
@@ -65,7 +69,9 @@ export function PublicShell({ children, variant = 'marketing' }: PublicShellProp
             <p className="text-muted-foreground text-center text-sm sm:text-left">
               {tFooter('copyright', { year: COPYRIGHT_YEAR })}
             </p>
-            <LocaleSwitcher align="end" />
+            <Suspense fallback={<LocaleSwitcherSkeleton />}>
+              <LocaleSwitcher align="end" />
+            </Suspense>
           </div>
         </footer>
       ) : null}
