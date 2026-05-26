@@ -1,0 +1,165 @@
+---
+description: Design system — palette, fonts, icons, layout conventions
+globs:
+  - 'apps/web/**/*.tsx'
+  - 'apps/web/**/*.css'
+  - 'packages/ui/**/*.tsx'
+  - 'packages/ui/**/*.css'
+---
+
+# Дизайн-система ИнвестНавигатор
+
+Полная концепция: [DESIGN.md](../../DESIGN.md)
+
+## Визуальный стиль
+
+Dark modern fintech, premium SaaS. Спокойный, не кричащий. Больше воздуха, аккуратные карточки.
+
+**Не делать:** трейдинг-терминал, крипто/gaming неон, агрессивные CTA, FOMO-элементы.
+
+## Палитра — единая система токенов
+
+Источник: `apps/web/app/globals.css` (`:root`). В коде — **только shadcn-имена + 7 проектных**, без дубликатов (`text-text-primary`, `accent-primary` и т.п.).
+
+## Темы
+
+- Поддерживаются `light` (`:root`) и `dark` (`.dark`) через единый набор CSS-токенов в `apps/web/app/globals.css`.
+- Системная тема по умолчанию: `next-themes` с `defaultTheme="system"` и `attribute="class"`.
+- Не хардкодить значения под тему в компонентах.
+- Использовать только семантические классы (`bg-background`, `text-foreground`, `border-border`, `bg-secondary`, `bg-card`), чтобы переключение темы работало автоматически.
+
+| Концепт               | Tailwind                      |
+| --------------------- | ----------------------------- |
+| Фон app               | `bg-background`               |
+| Surface / sidebar     | `bg-secondary`                |
+| Карточка              | `bg-card`                     |
+| Поднятая поверхность  | `bg-surface-elevated`         |
+| Основной текст        | `text-foreground`             |
+| Вторичный текст       | `text-secondary-foreground`   |
+| Muted / neutral       | `text-muted-foreground`       |
+| Disabled              | `text-disabled`               |
+| Акцент голубой        | `text-primary` / `bg-primary` |
+| Акцент фиолетовый     | `text-accent` / `bg-accent`   |
+| Рост / positive       | `text-positive`               |
+| Падение / negative    | `text-negative`               |
+| Ошибка UI             | `text-destructive`            |
+| Warning / risk-medium | `text-warning`                |
+| Risk high             | `text-risk-high`              |
+| Info                  | `text-info`                   |
+| Граница               | `border-border`               |
+| Мягкая граница        | `border-muted`                |
+
+Градиент: `#38BDF8` → `#818CF8` (`from-primary to-accent`).
+
+## Шрифт
+
+- **Inter** через `next/font/google`, subsets: `latin`, `cyrillic`
+- Variable: `--font-inter` → `--font-sans`
+- Финансовые данные: `font-variant-numeric: tabular-nums` (class `tabular-nums`)
+
+## Иконки
+
+- **Phosphor Icons** (`@phosphor-icons/react`)
+- Стили: `Regular` (UI), `Duotone` (акценты), `Bold` (active nav)
+- Размеры: 16px (sm), 20px (md), 24px (lg), 32px (xl)
+- Standalone icons без текста — обязательный `aria-label`
+
+## Компоненты (shadcn/ui)
+
+Конфигурация: `apps/web/components.json` (стиль `radix-nova`, примитивы **Radix** / `radix-ui`, иконки Phosphor). Не добавлять другие UI-библиотеки поверх shadcn.
+
+### Установленные компоненты
+
+Полные таблицы с файлами и назначением — в [DESIGN.md](../../DESIGN.md) (§ shadcn/ui).
+
+| Категория      | Компоненты (кратко)                                                                                                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Typography     | `Typography` (кастом, `cva`)                                                                                                                                                                         |
+| Формы          | `Field`, `Input`, `InputGroup`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Label`, `Calendar`, `NativeSelect`, `InputOTP`, `Combobox`; DatePicker = `Popover` + `Calendar` |
+| Кнопки         | `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`                                                                                                                                                     |
+| Таблицы        | `Table`, `Pagination`                                                                                                                                                                                |
+| Раскрывающиеся | `Accordion`, `Collapsible`                                                                                                                                                                           |
+| Диалоги        | `Dialog`, `Sheet`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog`, `HoverCard`                                                                                                                        |
+| Навигация      | `Sidebar`, `Separator`, `Breadcrumb`, `Tabs`, `NavigationMenu`, `ScrollArea`, `Resizable`                                                                                                            |
+| Карточки       | `Card`, `Skeleton`, `Avatar`, `Empty`, `Item`, `AspectRatio`                                                                                                                                         |
+| Feedback       | `Sonner`, `Progress`, `Alert`, `Spinner`                                                                                                                                                             |
+| Бейджи         | `Badge` + проектные (status, risk, type, change)                                                                                                                                                     |
+| Меню           | `DropdownMenu`, `ContextMenu`, `Menubar`, `Command`                                                                                                                                                  |
+| Данные         | `Chart` (Recharts)                                                                                                                                                                                   |
+
+### Правила использования
+
+- Формы: `react-hook-form` + `zod` + `Field` wrapper; лейблы всегда visible
+- DatePicker: композиция `Popover` + `Calendar`, нет отдельного компонента
+- Typography: использовать `Typography` с `variant`-системой (`display`, `h1`...`inlineCode`)
+- Для финансовых чисел: `Typography` с `numeric="tabular"` или класс `tabular-nums`
+- Dialog vs Sheet: Dialog для модальных действий, Sheet для side-panel
+- Mobile: `Drawer` вместо Dialog/Sheet где уместно
+- Tooltip: короткие подсказки (1–2 строки); Popover: объёмный контент
+- Таблицы: на mobile (`< 768px`) заменяются на card-list
+- Числа: `tabular-nums` в ячейках с ценами/процентами
+- Toast: `Sonner` для быстрых уведомлений (успех, ошибка, info)
+- Стили — только Tailwind v4 utility classes
+- Цвета — через токены из таблицы выше (не хардкодить hex в `className`)
+
+### Формы — точный паттерн RHF
+
+- `useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) })`
+- Для `Controller`:
+  - `Field data-invalid={fieldState.invalid}`
+  - control с `aria-invalid={fieldState.invalid}`
+  - `fieldState.invalid && <FieldError errors={[fieldState.error]} />`
+- Select: `value={field.value}` + `onValueChange={field.onChange}`
+- Switch: `checked={field.value}` + `onCheckedChange={field.onChange}`
+- Checkbox group: `FieldGroup data-slot="checkbox-group"` и обновление массива через `field.onChange`
+- RadioGroup: `value` + `onValueChange`, error-state на `RadioGroupItem`
+- Array forms: `useFieldArray` + key=`field.id` (не index)
+
+## Layout (публичная зона / кабинет)
+
+- **(public)** Landing, login, register — верхний **header** (`PublicShell`), `NavigationMenu`, `ThemeToggle` в header
+- **(app)** market, watchlist, profile — **sidebar** (`DashboardShell`), без top nav header; `LocaleSwitcher` + `ThemeToggle` в `DashboardContentFooter` (низ контента); профиль и выход — в footer sidebar; mobile — bottom nav
+- Примитивы: `apps/web/src/shared/ui/`; импорт `@/shared/ui/...`
+
+### Контейнер страницы (`container`)
+
+- Источник ширины и горизонтальных отступов — утилита Tailwind **`container`** (настройка в `apps/web/app/globals.css`: `--container-center`, `--container-padding`).
+- **Не использовать** для обёртки контента связку `max-w-*` + `mx-auto` + ручной `px-*` — это дублирует `container`.
+- `max-w-*` допустим только для **внутренних** узких элементов (модалки, popover), не для секций лендинга и shell.
+- `PublicShell` (header, footer): внутри `<header>` / `<footer>` — один `div.container`.
+
+### Лендинг — секции
+
+- Каждый смысловой блок — **отдельный компонент** в `widgets/landing-hero/ui/sections/`.
+- Родительский тег компонента — **`<section>`** (фон, `id` для якорей, вертикальные отступы `py-*`).
+- Контент секции — во вложенном **`div.container`** (не на самом `<section>`).
+- Декоративные full-bleed слои (градиент, blur) — `absolute` внутри `<section>`, поверх/под `container`.
+- Композиция страницы: `LandingHero` только собирает секции, без разметки секций внутри.
+
+## Адаптивность
+
+- Mobile (`< 768px`): 1 column, bottom nav, таблицы → card-list
+- Tablet (`768px–1024px`): 2 columns, collapsed sidebar
+- Desktop (`> 1024px`): full sidebar, multi-column
+
+## Семантика
+
+Базовый подход, без фанатизма:
+
+- Layout-каркас: `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`
+- Внутри кабинета и форм — `<div>` + shadcn/ui (не оборачивать каждый блок в `<section>`/`<article>`)
+- **Исключение — лендинг:** каждый блок = отдельный `<section>` (см. «Лендинг — секции» выше)
+- shadcn/ui уже содержит aria-атрибуты — не дублировать
+
+## Accessibility (базовый уровень)
+
+- Контраст — палитра подобрана для WCAG AA
+- Focus — дефолтные focus-visible от shadcn/ui
+- Не только цвет — positive/negative сопровождать иконкой (↑/↓) или текстом
+- Формы — `<label>` + `htmlFor`, кнопки — `<button>`, не `<div onClick>`
+
+## AI-блоки
+
+- Мягкий градиентный border (`primary` → `accent`, opacity 20–30%)
+- Иконка sparkles/brain
+- Disclaimer: «Это не инвестиционная рекомендация»
