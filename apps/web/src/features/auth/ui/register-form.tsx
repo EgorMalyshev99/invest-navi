@@ -22,7 +22,14 @@ import { GraphqlRequestError } from '@/shared/api/graphql';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Field, FieldError, FieldLabel } from '@/shared/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
@@ -80,7 +87,7 @@ export function RegisterForm() {
 
   if (step === 2) {
     return (
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
         <Typography variant="h3">{t('step2Title')}</Typography>
         <Typography variant="muted">{t('step2Subtitle')}</Typography>
         {error ? (
@@ -88,36 +95,39 @@ export function RegisterForm() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         ) : null}
-        <RadioGroup
-          value={knowledgeLevel}
-          onValueChange={(v) => setKnowledgeLevel(v as KnowledgeLevelValue)}
-        >
-          <div className="grid gap-3">
-            {LEVELS.map((level) => (
-              <Label key={level} htmlFor={level} className="cursor-pointer">
-                <Card
-                  className={cn(
-                    'transition-colors',
-                    knowledgeLevel === level && 'border-primary ring-primary/20 ring-2',
-                  )}
-                >
-                  <CardHeader className="flex flex-row items-start gap-3 space-y-0 pb-2">
-                    <RadioGroupItem
-                      value={level}
-                      id={level}
-                      className="mt-1"
-                      aria-invalid={false}
-                    />
-                    <div>
-                      <CardTitle className="text-base">{t(`levels.${level}.title`)}</CardTitle>
-                      <CardDescription>{t(`levels.${level}.description`)}</CardDescription>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </Label>
-            ))}
-          </div>
-        </RadioGroup>
+        <FieldSet>
+          <FieldLegend>{t('step2Title')}</FieldLegend>
+          <RadioGroup
+            value={knowledgeLevel}
+            onValueChange={(v) => setKnowledgeLevel(v as KnowledgeLevelValue)}
+          >
+            <div className="grid gap-3">
+              {LEVELS.map((level) => (
+                <Label key={level} htmlFor={level} className="cursor-pointer">
+                  <Card
+                    className={cn(
+                      'transition-colors',
+                      knowledgeLevel === level && 'border-primary ring-primary/20 ring-2',
+                    )}
+                  >
+                    <CardHeader className="flex flex-row items-start gap-3 space-y-0 pb-2">
+                      <RadioGroupItem
+                        value={level}
+                        id={level}
+                        className="mt-1"
+                        aria-invalid={false}
+                      />
+                      <div>
+                        <CardTitle className="text-base">{t(`levels.${level}.title`)}</CardTitle>
+                        <CardDescription>{t(`levels.${level}.description`)}</CardDescription>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Label>
+              ))}
+            </div>
+          </RadioGroup>
+        </FieldSet>
         <Button type="button" className="w-full" onClick={onStep2}>
           {t('finishRegistration')}
         </Button>
@@ -126,53 +136,55 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={onStep1} className="space-y-4" autoComplete="on">
+    <form onSubmit={onStep1} className="flex flex-col gap-4" autoComplete="on">
       <Typography variant="muted">{t('step1Subtitle')}</Typography>
       {error ? (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
-      <Field data-invalid={!!form.formState.errors.email}>
-        <FieldLabel htmlFor="reg-email">{t('email')}</FieldLabel>
-        <Input
-          id="reg-email"
-          type="email"
-          autoComplete="email"
-          autoCapitalize="none"
-          spellCheck={false}
-          aria-invalid={!!form.formState.errors.email}
-          {...form.register('email')}
-        />
-        <FieldError>{translateFieldError(form.formState.errors.email, t)}</FieldError>
-      </Field>
-      <Field data-invalid={!!form.formState.errors.password}>
-        <FieldLabel htmlFor="reg-password">{t('password')}</FieldLabel>
-        <Input
-          id="reg-password"
-          type="password"
-          autoComplete="new-password"
-          aria-invalid={!!form.formState.errors.password}
-          {...form.register('password')}
-        />
-        <PasswordStrengthMeter password={password ?? ''} className="pt-1" />
-        <FieldError>{translateFieldError(form.formState.errors.password, t)}</FieldError>
-      </Field>
-      <Field data-invalid={!!form.formState.errors.passwordConfirm}>
-        <FieldLabel htmlFor="reg-password-confirm">{t('passwordConfirm')}</FieldLabel>
-        <Input
-          id="reg-password-confirm"
-          type="password"
-          autoComplete="new-password"
-          aria-invalid={!!form.formState.errors.passwordConfirm}
-          {...form.register('passwordConfirm')}
-        />
-        <FieldError>{translateFieldError(form.formState.errors.passwordConfirm, t)}</FieldError>
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="reg-name">{t('nameOptional')}</FieldLabel>
-        <Input id="reg-name" type="text" autoComplete="name" {...form.register('name')} />
-      </Field>
+      <FieldGroup>
+        <Field data-invalid={!!form.formState.errors.email}>
+          <FieldLabel htmlFor="reg-email">{t('email')}</FieldLabel>
+          <Input
+            id="reg-email"
+            type="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
+            aria-invalid={!!form.formState.errors.email}
+            {...form.register('email')}
+          />
+          <FieldError>{translateFieldError(form.formState.errors.email, t)}</FieldError>
+        </Field>
+        <Field data-invalid={!!form.formState.errors.password}>
+          <FieldLabel htmlFor="reg-password">{t('password')}</FieldLabel>
+          <Input
+            id="reg-password"
+            type="password"
+            autoComplete="new-password"
+            aria-invalid={!!form.formState.errors.password}
+            {...form.register('password')}
+          />
+          <PasswordStrengthMeter password={password ?? ''} className="pt-1" />
+          <FieldError>{translateFieldError(form.formState.errors.password, t)}</FieldError>
+        </Field>
+        <Field data-invalid={!!form.formState.errors.passwordConfirm}>
+          <FieldLabel htmlFor="reg-password-confirm">{t('passwordConfirm')}</FieldLabel>
+          <Input
+            id="reg-password-confirm"
+            type="password"
+            autoComplete="new-password"
+            aria-invalid={!!form.formState.errors.passwordConfirm}
+            {...form.register('passwordConfirm')}
+          />
+          <FieldError>{translateFieldError(form.formState.errors.passwordConfirm, t)}</FieldError>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="reg-name">{t('nameOptional')}</FieldLabel>
+          <Input id="reg-name" type="text" autoComplete="name" {...form.register('name')} />
+        </Field>
+      </FieldGroup>
       <Button type="submit" className="w-full" disabled={!canRegister}>
         {t('continue')}
       </Button>

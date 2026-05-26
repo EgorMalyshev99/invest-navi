@@ -12,7 +12,7 @@ export default async function MarketPage({ params }: MarketPageProps) {
   setRequestLocale(locale);
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       <MarketIndicesStrip />
       <AssetCatalog />
     </div>

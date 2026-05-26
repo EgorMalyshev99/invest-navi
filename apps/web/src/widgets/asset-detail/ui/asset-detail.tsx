@@ -1,15 +1,14 @@
 'use client';
 
 import { ArrowLeftIcon, InfoIcon } from '@phosphor-icons/react';
-import { useQuery } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 
 import {
   ChangeBadge,
   RiskBadge,
   TypeBadge,
-  fetchAssetDetail,
-  fetchAssetInsight,
+  useAssetDetailQuery,
+  useAssetInsightQuery,
 } from '@/entities/asset';
 import { AiInsightBlock, InsightBlocksSections, insightToBlocks } from '@/features/ai-insight';
 import { buildAssetEducation, toEducationBlocks } from '@/features/asset-education';
@@ -28,21 +27,15 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
   const locale = useLocale();
   const t = useTranslations('asset');
   const tCatalog = useTranslations('catalog');
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['asset', symbol],
-    queryFn: () => fetchAssetDetail(symbol),
-  });
+  const { data, isLoading, isError, refetch } = useAssetDetailQuery(symbol);
 
-  const insightQuery = useQuery({
-    queryKey: ['asset-insight', symbol, locale],
-    queryFn: () => fetchAssetInsight(symbol, locale),
+  const insightQuery = useAssetInsightQuery(symbol, locale, {
     enabled: Boolean(data?.asset),
-    staleTime: 60_000,
   });
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="flex flex-col gap-4">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-32 w-full" />
         <Skeleton className="h-48 w-full" />
@@ -52,10 +45,10 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
 
   if (isError || !data) {
     return (
-      <div className="space-y-4">
+      <div className="flex flex-col gap-4">
         <Button variant="ghost" asChild className="w-fit">
           <Link href="/market" className="gap-2">
-            <ArrowLeftIcon className="size-4" aria-hidden />
+            <ArrowLeftIcon data-icon="inline-start" aria-hidden />
             {t('back')}
           </Link>
         </Button>
@@ -89,17 +82,17 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
   const vsIndexText = insight?.vsIndex ?? education.vsIndexText;
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <Button variant="ghost" asChild className="w-fit">
           <Link href="/market" className="gap-2">
-            <ArrowLeftIcon className="size-4" aria-hidden />
+            <ArrowLeftIcon data-icon="inline-start" aria-hidden />
             {t('back')}
           </Link>
         </Button>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center gap-2">
               <TypeBadge type={asset.instrumentType} />
               <RiskBadge level={education.riskLevel} />
@@ -110,7 +103,7 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
             <h1 className="text-3xl font-bold tracking-tight">{asset.name}</h1>
             <p className="text-muted-foreground font-mono text-sm tabular-nums">{asset.symbol}</p>
           </div>
-          <div className="space-y-2 text-left sm:text-right">
+          <div className="flex flex-col gap-2 text-left sm:text-right">
             <p className="font-mono text-3xl font-semibold tabular-nums">
               {formatPrice(asset.lastPrice, asset.currency ?? 'RUB')}
             </p>
@@ -133,8 +126,8 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
       </Alert>
 
       {insightQuery.isLoading ? (
-        <div className="space-y-10">
-          <div className="space-y-4">
+        <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-4">
             <Skeleton className="h-7 w-36" />
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {(['what-is', 'what-changed', 'why-matters'] as const).map((id) => (
@@ -142,7 +135,7 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
               ))}
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <Skeleton className="h-7 w-44" />
             <div className="grid gap-4 md:grid-cols-2">
               {(['risks', 'for-investor'] as const).map((id) => (
@@ -152,7 +145,7 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
           </div>
         </div>
       ) : (
-        <div className="space-y-10">
+        <div className="flex flex-col gap-10">
           <InsightBlocksSections
             blocks={blocks}
             sectionTitles={{

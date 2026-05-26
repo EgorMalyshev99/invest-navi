@@ -12,7 +12,7 @@ import { Link, useRouter } from '@/i18n/navigation';
 import { GraphqlRequestError } from '@/shared/api/graphql';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
-import { Field, FieldError, FieldLabel } from '@/shared/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 
 export function LoginForm() {
@@ -38,36 +38,38 @@ export function LoginForm() {
   });
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4" autoComplete="on">
+    <form onSubmit={onSubmit} className="flex flex-col gap-4" autoComplete="on">
       {error ? (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
-      <Field data-invalid={!!form.formState.errors.email}>
-        <FieldLabel htmlFor="login-email">{t('email')}</FieldLabel>
-        <Input
-          id="login-email"
-          type="email"
-          autoComplete="email"
-          autoCapitalize="none"
-          spellCheck={false}
-          aria-invalid={!!form.formState.errors.email}
-          {...form.register('email')}
-        />
-        <FieldError>{translateFieldError(form.formState.errors.email, t)}</FieldError>
-      </Field>
-      <Field data-invalid={!!form.formState.errors.password}>
-        <FieldLabel htmlFor="login-password">{t('password')}</FieldLabel>
-        <Input
-          id="login-password"
-          type="password"
-          autoComplete="current-password"
-          aria-invalid={!!form.formState.errors.password}
-          {...form.register('password')}
-        />
-        <FieldError>{translateFieldError(form.formState.errors.password, t)}</FieldError>
-      </Field>
+      <FieldGroup>
+        <Field data-invalid={!!form.formState.errors.email}>
+          <FieldLabel htmlFor="login-email">{t('email')}</FieldLabel>
+          <Input
+            id="login-email"
+            type="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
+            aria-invalid={!!form.formState.errors.email}
+            {...form.register('email')}
+          />
+          <FieldError>{translateFieldError(form.formState.errors.email, t)}</FieldError>
+        </Field>
+        <Field data-invalid={!!form.formState.errors.password}>
+          <FieldLabel htmlFor="login-password">{t('password')}</FieldLabel>
+          <Input
+            id="login-password"
+            type="password"
+            autoComplete="current-password"
+            aria-invalid={!!form.formState.errors.password}
+            {...form.register('password')}
+          />
+          <FieldError>{translateFieldError(form.formState.errors.password, t)}</FieldError>
+        </Field>
+      </FieldGroup>
       <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
         {t('loginSubmit')}
       </Button>

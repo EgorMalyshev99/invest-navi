@@ -11,6 +11,8 @@ import {
 } from '@phosphor-icons/react';
 import { useTranslations } from 'next-intl';
 
+import { DashboardContentFooter } from './dashboard-content-footer';
+
 import { logout } from '@/features/auth/api/auth-api';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
@@ -29,8 +31,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/shared/ui/sidebar';
-
-import { DashboardContentFooter } from './dashboard-content-footer';
 
 interface DashboardShellProps {
   children: React.ReactNode;

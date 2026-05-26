@@ -15,6 +15,7 @@
     "web:dev": "turbo run dev --filter=web",
     "web:lint": "turbo run lint --filter=web",
     "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\""
   },
   "devDependencies": {

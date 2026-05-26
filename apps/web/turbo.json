@@ -1,0 +1,11 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "codegen"]
+    },
+    "codegen": {
+      "inputs": ["codegen.ts", "src/**/*.graphql", "../api/src/schema.gql"]
+    }
+  }
+}

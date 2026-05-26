@@ -8,7 +8,7 @@ export function DashboardShellSkeleton() {
         aria-hidden
       >
         <Skeleton className="h-9 w-36" />
-        <div className="mt-8 space-y-2">
+        <div className="mt-8 flex flex-col gap-2">
           {(['nav-a', 'nav-b', 'nav-c', 'nav-d'] as const).map((id) => (
             <Skeleton key={id} className="h-9 w-full" />
           ))}
@@ -20,7 +20,7 @@ export function DashboardShellSkeleton() {
           <Skeleton className="h-8 w-8 shrink-0 rounded-lg" />
         </div>
         <main className="flex flex-1 flex-col px-4 py-6 md:px-8">
-          <div className="space-y-8">
+          <div className="flex flex-col gap-8">
             <div className="grid gap-3 sm:grid-cols-2">
               <Skeleton className="h-24 w-full" />
               <Skeleton className="h-24 w-full" />

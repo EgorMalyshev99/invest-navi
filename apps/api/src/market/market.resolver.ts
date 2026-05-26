@@ -1,4 +1,5 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { SkipThrottle } from '@nestjs/throttler';
 
 import { Asset } from './entities/asset.type';
 import { MarketIndex } from './entities/index.type';
@@ -6,6 +7,7 @@ import { MarketProvidersStatusType } from './entities/providers-status.type';
 import { Sector } from './entities/sector.type';
 import { MarketService } from './market.service';
 
+@SkipThrottle()
 @Resolver()
 export class MarketResolver {
   constructor(private readonly marketService: MarketService) {}

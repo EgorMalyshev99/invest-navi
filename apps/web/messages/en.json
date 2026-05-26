@@ -59,7 +59,8 @@
     "analyticsTitle": "Summary",
     "analyticsInsightTitle": "Insight",
     "goMarket": "Open catalog",
-    "remove": "Remove"
+    "remove": "Remove",
+    "columnStatus": "Status"
   },
   "watchlistStatus": {
     "watching": "Watching",

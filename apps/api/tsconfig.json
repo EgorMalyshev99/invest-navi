@@ -4,5 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "strictNullChecks": true
-  }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,8 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-
-import { ChangeBadge, fetchIndices, type MarketIndex } from '@/entities/asset';
+import { ChangeBadge, type MarketIndex, useIndicesQuery } from '@/entities/asset';
 import { formatCompactNumber } from '@/shared/lib/format';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -13,7 +11,7 @@ function IndexCard({ index }: { index: MarketIndex }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium">{index.name}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-1">
+      <CardContent className="flex flex-col gap-1">
         <p className="font-mono text-xl font-semibold tabular-nums">
           {index.currentValue > 0 ? formatCompactNumber(index.currentValue) : '—'}
         </p>
@@ -24,10 +22,7 @@ function IndexCard({ index }: { index: MarketIndex }) {
 }
 
 export function MarketIndicesStrip() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['indices'],
-    queryFn: fetchIndices,
-  });
+  const { data, isLoading, isError } = useIndicesQuery();
 
   if (isLoading) {
     return (

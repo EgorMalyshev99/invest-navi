@@ -1,10 +1,9 @@
 'use client';
 
-import type { EducationBlock } from '@/features/asset-education';
-
+import { AiInsightBlock } from './ai-insight-block';
 import { blocksForInsightSection, INSIGHT_SECTIONS } from '../lib/insight-sections';
 
-import { AiInsightBlock } from './ai-insight-block';
+import type { EducationBlock } from '@/features/asset-education';
 
 interface InsightBlocksSectionsProps {
   blocks: EducationBlock[];
@@ -22,7 +21,7 @@ export function InsightBlocksSections({
   templateBadgeLabel,
 }: InsightBlocksSectionsProps) {
   return (
-    <div className="space-y-10">
+    <div className="flex flex-col gap-10">
       {INSIGHT_SECTIONS.map((section) => {
         const sectionBlocks = blocksForInsightSection(blocks, section.blockIds);
         if (sectionBlocks.length === 0) {
@@ -32,7 +31,7 @@ export function InsightBlocksSections({
         const headingId = `insight-section-${section.key}`;
 
         return (
-          <section key={section.key} className="space-y-4" aria-labelledby={headingId}>
+          <section key={section.key} className="flex flex-col gap-4" aria-labelledby={headingId}>
             <h2 id={headingId} className="text-lg font-semibold tracking-tight">
               {sectionTitles[section.key]}
             </h2>

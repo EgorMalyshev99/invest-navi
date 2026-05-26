@@ -1,6 +1,11 @@
 export { fetchAssetInsight } from './api/asset-insight-api';
 export type { AssetInsightResult, AssetInsightSource } from './api/asset-insight-api';
+export { assetDetailQueryOptions, useAssetDetailQuery } from './api/use-asset-detail-query';
+export { assetInsightQueryOptions, useAssetInsightQuery } from './api/use-asset-insight-query';
+export { assetsQueryOptions, useAssetsQuery } from './api/use-assets-query';
 export { fetchAssetDetail, fetchAssets, fetchIndices } from './api/asset-api';
+export { indicesQueryOptions, useIndicesQuery } from './api/use-indices-query';
+export { assetKeys } from './model/query-keys';
 export type { Asset, MarketIndex, SectorIndex } from './model/types';
 export type { InstrumentType } from './model/types';
 export { getSectorLabel } from './lib/sector-labels';

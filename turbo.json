@@ -1,7 +1,19 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["CORS_ORIGIN", "PORT", "DATABASE_URL"],
+  "globalEnv": [
+    "NODE_ENV",
+    "CORS_ORIGIN",
+    "PORT",
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "JWT_REFRESH_SECRET",
+    "AI_PROVIDER",
+    "GROQ_API_KEY",
+    "GEMINI_API_KEY",
+    "OPENROUTER_API_KEY",
+    "TINKOFF_TOKEN"
+  ],
   "tasks": {
     "dev": {
       "cache": false,
@@ -12,6 +24,9 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {},
+    "check-types": {
+      "dependsOn": ["^build"]
+    },
     "codegen": {
       "outputs": ["src/shared/api/graphql/generated/**"]
     }

@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Inject,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -8,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { isPasswordAcceptableForRegistration } from '@repo/api';
-import { eq } from 'drizzle-orm';
+import { assertLoginInput, assertRegisterInput, assertUpdateProfileName } from '@repo/api';
 
-import { DRIZZLE, users } from '../database';
+import { resolveJwtSecrets, type JwtSecrets } from '../config/jwt.config';
+import { users } from '../database';
 import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
 import { KnowledgeLevel } from './dto/knowledge-level.enum';
@@ -20,8 +19,7 @@ import { RegisterInput } from './dto/register.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { hashPassword, verifyPassword } from './lib/password';
 import { JwtPayload } from './types/jwt-payload.type';
-
-import type { DrizzleDB } from '../database';
+import { UsersRepository } from '../database/repositories/users.repository';
 
 export interface AuthenticatedUser {
   userId: string;
@@ -30,25 +28,27 @@ export interface AuthenticatedUser {
 
 @Injectable()
 export class AuthService {
+  private readonly jwtSecrets: JwtSecrets;
+
   constructor(
-    @Inject(DRIZZLE) private readonly db: DrizzleDB,
+    private readonly usersRepository: UsersRepository,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.jwtSecrets = resolveJwtSecrets(configService);
+  }
 
   async login(email: string, password: string): Promise<AuthTokens> {
-    const normalizedEmail = email.trim().toLowerCase();
+    const { email: normalizedEmail, password: validPassword } = this.validateLogin(email, password);
 
-    const user = await this.db.query.users.findFirst({
-      where: eq(users.email, normalizedEmail),
-    });
+    const user = await this.usersRepository.findByEmail(normalizedEmail);
 
     if (!user?.passwordHash || !user.email) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const validPassword = await verifyPassword(password, user.passwordHash);
-    if (!validPassword) {
+    const passwordMatches = await verifyPassword(validPassword, user.passwordHash);
+    if (!passwordMatches) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -56,35 +56,21 @@ export class AuthService {
   }
 
   async register(input: RegisterInput): Promise<AuthTokens> {
-    const normalizedEmail = input.email.trim().toLowerCase();
+    const { email: normalizedEmail, password, name } = this.validateRegister(input);
 
-    if (!isPasswordAcceptableForRegistration(input.password)) {
-      throw new BadRequestException(
-        'Password is too weak. Use at least 8 characters with upper and lower case letters and a digit.',
-      );
-    }
-
-    const existingUser = await this.db.query.users.findFirst({
-      where: eq(users.email, normalizedEmail),
-    });
+    const existingUser = await this.usersRepository.findByEmail(normalizedEmail);
 
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
 
-    const passwordHash = await hashPassword(input.password);
+    const passwordHash = await hashPassword(password);
 
-    const [createdUser] = await this.db
-      .insert(users)
-      .values({
-        email: normalizedEmail,
-        name: input.name?.trim() || null,
-        passwordHash,
-      })
-      .returning({
-        id: users.id,
-        email: users.email,
-      });
+    const [createdUser] = await this.usersRepository.create({
+      email: normalizedEmail,
+      name,
+      passwordHash,
+    });
 
     if (!createdUser?.email) {
       throw new UnauthorizedException('Unable to create user');
@@ -94,10 +80,14 @@ export class AuthService {
   }
 
   async refreshTokens(refreshToken: string): Promise<AuthTokens> {
+    if (!refreshToken?.trim()) {
+      throw new BadRequestException('Refresh token is required');
+    }
+
     let payload: JwtPayload;
 
     try {
-      payload = await this.jwtService.verifyAsync<JwtPayload>(refreshToken, {
+      payload = await this.jwtService.verifyAsync<JwtPayload>(refreshToken.trim(), {
         secret: this.refreshSecret,
       });
     } catch {
@@ -112,9 +102,7 @@ export class AuthService {
   }
 
   async getProfile(userId: string): Promise<AuthUser> {
-    const user = await this.db.query.users.findFirst({
-      where: eq(users.id, userId),
-    });
+    const user = await this.usersRepository.findById(userId);
 
     if (!user?.email) {
       throw new NotFoundException('User not found');
@@ -129,7 +117,7 @@ export class AuthService {
     };
 
     if (input.name !== undefined) {
-      updates.name = input.name.trim() || null;
+      updates.name = this.validateProfileName(input.name);
     }
     if (input.knowledgeLevel !== undefined) {
       updates.knowledgeLevel = input.knowledgeLevel;
@@ -138,11 +126,7 @@ export class AuthService {
       updates.preferredLocale = input.preferredLocale;
     }
 
-    const [updated] = await this.db
-      .update(users)
-      .set(updates)
-      .where(eq(users.id, userId))
-      .returning();
+    const [updated] = await this.usersRepository.update(userId, updates);
 
     if (!updated?.email) {
       throw new NotFoundException('User not found');
@@ -189,11 +173,11 @@ export class AuthService {
   }
 
   private get accessSecret(): string {
-    return this.configService.get<string>('JWT_SECRET') ?? 'dev-access-secret';
+    return this.jwtSecrets.accessSecret;
   }
 
   private get refreshSecret(): string {
-    return this.configService.get<string>('JWT_REFRESH_SECRET') ?? 'dev-refresh-secret';
+    return this.jwtSecrets.refreshSecret;
   }
 
   private get accessExpiresInSeconds(): number {
@@ -202,5 +186,33 @@ export class AuthService {
 
   private get refreshExpiresInSeconds(): number {
     return this.configService.get<number>('JWT_REFRESH_EXPIRES_IN_SECONDS') ?? 604800;
+  }
+
+  private validateLogin(email: string, password: string) {
+    try {
+      return assertLoginInput({ email, password });
+    } catch (error) {
+      throw new BadRequestException(error instanceof Error ? error.message : 'Invalid login input');
+    }
+  }
+
+  private validateRegister(input: RegisterInput) {
+    try {
+      return assertRegisterInput(input);
+    } catch (error) {
+      throw new BadRequestException(
+        error instanceof Error ? error.message : 'Invalid registration input',
+      );
+    }
+  }
+
+  private validateProfileName(name: string | null | undefined): string | null {
+    try {
+      return assertUpdateProfileName(name);
+    } catch (error) {
+      throw new BadRequestException(
+        error instanceof Error ? error.message : 'Invalid profile input',
+      );
+    }
   }
 }

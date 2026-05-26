@@ -59,7 +59,8 @@
     "analyticsTitle": "Сводка",
     "analyticsInsightTitle": "Сводка",
     "goMarket": "Открыть каталог",
-    "remove": "Убрать"
+    "remove": "Убрать",
+    "columnStatus": "Статус"
   },
   "watchlistStatus": {
     "watching": "Наблюдаю",

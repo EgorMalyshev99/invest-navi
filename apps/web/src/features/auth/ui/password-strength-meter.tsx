@@ -31,7 +31,7 @@ export function PasswordStrengthMeter({ password, className }: PasswordStrengthM
   const progressValue = password.length > 0 ? strength.score : 0;
 
   return (
-    <div className={cn('space-y-3', className)} aria-live="polite">
+    <div className={cn('flex flex-col gap-3', className)} aria-live="polite">
       <div className="flex items-center justify-between gap-2">
         <Typography variant="small" className="text-muted-foreground">
           {t('passwordStrength')}
