@@ -5,7 +5,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 
 import { Providers } from '../providers';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { routing } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
@@ -21,7 +21,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'ИнвестНавигатор',
+  title: {
+    default: 'ИнвестНавигатор',
+    template: '%s | ИнвестНавигатор',
+  },
   description:
     'AI-платформа для частных инвесторов на российском рынке — понимание активов, рисков и осознанных решений',
   icons: {
@@ -31,6 +34,13 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: '/favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#080B12' },
+  ],
 };
 
 export function generateStaticParams() {

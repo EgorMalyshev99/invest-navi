@@ -1,8 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { LocaleSwitcherSkeleton } from '@/features/locale-switcher/ui/locale-switcher-skeleton';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { Separator } from '@/shared/ui/separator';
 
@@ -19,7 +21,9 @@ export function DashboardContentFooter() {
         role="group"
         aria-label={t('preferencesControls')}
       >
-        <LocaleSwitcher align="start" className="h-9 px-2.5" />
+        <Suspense fallback={<LocaleSwitcherSkeleton className="h-9 px-2.5" />}>
+          <LocaleSwitcher align="start" className="h-9 px-2.5" />
+        </Suspense>
         <Separator orientation="vertical" className="bg-border/80 mx-0.5 h-7" />
         <ThemeToggle />
       </div>

@@ -44,6 +44,7 @@ dist
 # AI
 .cursor
 AGENTS.md
+skills-lock.json
 
 # Debug
 logs
