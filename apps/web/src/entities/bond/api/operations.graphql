@@ -1,0 +1,42 @@
+fragment BondFields on Bond {
+  symbol
+  name
+  lastPrice
+  changePercent
+  lotSize
+  valueToday
+  couponPercent
+  maturityDate
+  yieldAtPrice
+  faceValue
+  currency
+  dataSource
+}
+
+query Bonds($limit: Int) {
+  bonds(limit: $limit) {
+    ...BondFields
+  }
+}
+
+query Bond($symbol: String!) {
+  bond(symbol: $symbol) {
+    ...BondFields
+  }
+}
+
+query BondInsight($symbol: String!, $locale: String) {
+  bondInsight(symbol: $symbol, locale: $locale) {
+    symbol
+    name
+    source
+    provider
+    overview
+    couponAndMaturity
+    yieldContext
+    rateSensitivity
+    risks
+    questionsBeforeBuy
+    liquidityNote
+  }
+}

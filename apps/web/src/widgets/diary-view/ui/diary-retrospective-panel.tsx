@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { useDiaryRetrospectiveQuery } from '@/entities/diary-entry';
 import { AiInsightBlock } from '@/features/ai-insight';
+import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Skeleton } from '@/shared/ui/skeleton';
 
@@ -67,7 +68,7 @@ export function DiaryRetrospectivePanel({ entryId }: DiaryRetrospectivePanelProp
         </ul>
       ) : null}
 
-      <p className="text-muted-foreground text-xs">{t('aiDisclaimer')}</p>
+      <AiDisclaimer variant={isAi ? 'generated' : 'template'} />
     </div>
   );
 }

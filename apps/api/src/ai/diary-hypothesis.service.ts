@@ -5,6 +5,7 @@ import { DiaryHypothesisFeedbackInput } from './dto/diary-hypothesis-feedback.in
 import { AssetInsightSource } from './entities/asset-insight-source.enum';
 import { DiaryHypothesisFeedback } from './entities/diary-hypothesis-feedback.type';
 import { buildDiaryHypothesisPrompt, buildFallbackDiaryFeedback } from './lib/build-diary-prompt';
+import { applyDiaryFeedbackCompliance, formatComplianceViolations } from './lib/compliance';
 import { parseDiaryFeedbackJson } from './lib/parse-diary-feedback';
 import { AiProviderFactory } from './providers/ai-provider.factory';
 
@@ -38,13 +39,20 @@ export class DiaryHypothesisService {
         ]);
         const parsed = parseDiaryFeedbackJson(raw);
         if (parsed) {
-          return {
-            ...parsed,
-            source: AssetInsightSource.AI,
-            provider: provider.name,
-          };
+          const compliance = applyDiaryFeedbackCompliance(parsed);
+          if (compliance.ok && compliance.content) {
+            return {
+              ...compliance.content,
+              source: AssetInsightSource.AI,
+              provider: provider.name,
+            };
+          }
+          this.logger.warn(
+            `Diary feedback compliance rejected for ${draft.assetSymbol}: ${formatComplianceViolations(compliance.violations)}`,
+          );
+        } else {
+          this.logger.warn(`Diary feedback parse failed for ${draft.assetSymbol}`);
         }
-        this.logger.warn(`Diary feedback parse failed for ${draft.assetSymbol}`);
       } catch (error) {
         this.logger.warn(
           `Diary feedback AI failed: ${error instanceof Error ? error.message : String(error)}`,

@@ -25,3 +25,19 @@ export function formatPercent(value: number, options?: { signed?: boolean }): st
 export function formatCompactNumber(value: number): string {
   return compactFormatter.format(value);
 }
+
+const fxFormatter = new Intl.NumberFormat('ru-RU', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 4,
+});
+
+/** MOEX FX: foreign currency per 1 RUB or small RUB/USD reference. */
+export function formatFxRate(value: number, code: string): string {
+  if (value <= 0) {
+    return '—';
+  }
+  if (code === 'RUB') {
+    return `${fxFormatter.format(value)} USD`;
+  }
+  return `${fxFormatter.format(value)} ₽`;
+}

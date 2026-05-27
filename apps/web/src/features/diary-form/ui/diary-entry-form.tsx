@@ -19,7 +19,9 @@ import {
   diaryEntryFormSchema,
   type DiaryEntryFormValues,
 } from '@/features/diary-form/model/schemas';
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { GraphqlRequestError } from '@/shared/api/graphql';
+import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -120,6 +122,14 @@ export function DiaryEntryForm({ initialSymbol, onCreated }: DiaryEntryFormProps
 
   return (
     <form className="flex flex-col gap-6" onSubmit={onSubmit}>
+      <p className="text-muted-foreground text-xs leading-relaxed">
+        {t.rich('subtitleGlossary', {
+          diversification: () => (
+            <GlossaryTerm termId="diversification">{t('diversificationLabel')}</GlossaryTerm>
+          ),
+          volatility: () => <GlossaryTerm termId="volatility">{t('volatilityLabel')}</GlossaryTerm>,
+        })}
+      </p>
       <FieldGroup>
         <Controller
           name="assetSymbol"
@@ -300,7 +310,7 @@ export function DiaryEntryForm({ initialSymbol, onCreated }: DiaryEntryFormProps
               </CardContent>
             </Card>
           ) : null}
-          <p className="text-muted-foreground text-xs">{t('aiDisclaimer')}</p>
+          <AiDisclaimer variant={isAiFeedback ? 'generated' : 'template'} />
         </div>
       ) : null}
     </form>

@@ -16,6 +16,7 @@ import {
   usePortfolioPositionsQuery,
   usePortfolioSummaryQuery,
 } from '@/entities/portfolio-position';
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { PortfolioPositionForm } from '@/features/portfolio-form';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
@@ -72,6 +73,13 @@ export function PortfolioView() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground mt-1 text-sm">{t('subtitle')}</p>
+          <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+            {t.rich('subtitleGlossary', {
+              diversification: () => (
+                <GlossaryTerm termId="diversification">{t('diversificationLabel')}</GlossaryTerm>
+              ),
+            })}
+          </p>
         </div>
         <Button
           type="button"

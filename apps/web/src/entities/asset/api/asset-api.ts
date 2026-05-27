@@ -1,10 +1,12 @@
-import type { Asset, MarketIndex, SectorIndex } from '../model/types';
+import type { Asset, FxRate, MarketIndex, SectorIndex } from '../model/types';
 
 import { graphqlRequest } from '@/shared/api/graphql';
 import {
   AssetDocument,
   AssetsDocument,
+  FxRatesDocument,
   IndicesDocument,
+  SectorsDocument,
 } from '@/shared/api/graphql/generated/graphql';
 
 export async function fetchAssets(limit = 50): Promise<Asset[]> {
@@ -28,4 +30,14 @@ export async function fetchAssetDetail(symbol: string): Promise<{
 export async function fetchIndices(): Promise<MarketIndex[]> {
   const data = await graphqlRequest(IndicesDocument);
   return data.indices;
+}
+
+export async function fetchSectors(): Promise<SectorIndex[]> {
+  const data = await graphqlRequest(SectorsDocument);
+  return data.sectors;
+}
+
+export async function fetchFxRates(): Promise<FxRate[]> {
+  const data = await graphqlRequest(FxRatesDocument);
+  return data.fxRates;
 }

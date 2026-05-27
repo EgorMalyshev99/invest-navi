@@ -63,6 +63,8 @@ Env:
 
 - Не генерировать buy/sell рекомендации
 - System prompt: образовательный тон, оговорки, вопросы пользователю
+- **Compliance gate** (обязательно): `apps/api/src/ai/lib/compliance/` — после `parse*Json` вызывать `apply*Compliance`; при нарушении — fallback + `Logger.warn` с кодами нарушений
+- Тесты комплаенса: `pnpm --filter api test`
 
 ## Drizzle
 
@@ -84,4 +86,5 @@ Env:
 
 ## Тесты
 
-> Отложено: Jest / E2E не в репозитории. При возврате — unit `*.spec.ts` рядом с модулем, E2E в `apps/api/test/`.
+- Unit (compliance AI): `pnpm --filter api test` — `src/ai/lib/compliance/*.spec.ts`
+- Jest / E2E API — отложено (Phase 10)

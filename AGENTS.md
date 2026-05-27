@@ -121,6 +121,10 @@ export default function MarketPage() {
 - Не утверждать причину движения цены как факт — формулировки «вероятно», «возможные факторы»
 - AI: модуль `ai/` с `AiProvider` interface и реализациями **Groq**, **Gemini**, **OpenRouter**
 - Выбор провайдера: `AI_PROVIDER` (`groq` | `gemini` | `openrouter`); ключи — `GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY`
+- **AI compliance pipeline** (обязательно для новых AI-эндпоинтов): `LLM → parse JSON → compliance gate → response | safe fallback`; для plain-text (`educationalAnswer`): `LLM → scanComplianceText → response | safe fallback`
+  - Код: `apps/api/src/ai/lib/compliance/` (`scanComplianceText`, `apply*Compliance`)
+  - При нарушении в сыром AI-тексте (buy/sell/hold, гарантии доходности, сравнение с вкладом без риска) — лог + **fallback**, не отдавать сырой ответ
+  - Тесты: `pnpm --filter api test`
 - Секреты только через env; не коммитить `.env`
 
 ## База данных (Drizzle)
@@ -178,10 +182,11 @@ Phase 1 ✅ — инфраструктура (monorepo, ESLint, Prettier, док
 Phase 2 ✅ — Tailwind v4, shadcn/ui, Drizzle + PostgreSQL, FSD-скелет.
 Phase 3 ✅ — Auth (email/password + JWT), GraphQL base.
 Phase 4 ✅ — MOEX ISS + T-Invest API, entities Asset/Sector/Index, `packages/api` contracts, market cache.
-Phase 5 ✅ — Web: каталог, карточка актива, watchlist, next-intl, GraphQL codegen.
-Phase 5.5 ✅ — Auth gate (middleware), Landing + login/register (2-step), PublicShell (header) / DashboardShell (sidebar), profile (`knowledgeLevel`, `preferredLocale`), Drizzle migrations baseline + diary prep, FSD `shared/ui`.
+Phase 5 ✅ — Web: маркет, auth и кабинет (каталог, watchlist, auth gate, shells, profile, next-intl, codegen, FSD `shared/ui`, миграции).
 Phase 6 ✅ — инвестиционный дневник + AI (`diary` GraphQL, `/diary`, `diaryHypothesisFeedback`, ретроспектива).
-Текущая фаза — **Phase 7**: портфель и облигационный помощник.
+Phase 7 ✅ — портфель (`/portfolio`, `portfolioSummary`) и облигационный помощник (`/bonds`, `bondInsight`).
+Phase 8 ✅ — обучение (`/learn`, `/risks`, `/overview`), контекстный глоссарий, `knowledgeLevel` в hub/overview, MVP `/ai` (`educationalAnswer` + compliance).
+Текущая фаза — **Phase 9**: OAuth (Yandex ID, VK ID) после получения токенов. Еженедельный обзор рынка и cron — **Phase 10**.
 OAuth (Yandex ID, VK ID) запланирован отдельным шагом в Phase 9 после получения токенов.
 
 ## Полезные команды
@@ -192,6 +197,7 @@ pnpm --filter @repo/api build
 pnpm dev
 pnpm lint
 pnpm format
+pnpm --filter api test
 ```
 
 ## Ссылки

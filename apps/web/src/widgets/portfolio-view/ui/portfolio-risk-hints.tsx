@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import type { PortfolioSummaryFieldsFragment } from '@/shared/api/graphql/generated/graphql';
 
-type PortfolioRiskHint = PortfolioSummaryFieldsFragment['riskHints'][number];
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
@@ -13,10 +13,14 @@ interface PortfolioRiskHintsProps {
   hints: PortfolioRiskHint[];
 }
 
-function hintMessage(
-  t: ReturnType<typeof useTranslations<'portfolio'>>,
-  hint: PortfolioRiskHint,
-): string {
+type PortfolioRiskHint = PortfolioSummaryFieldsFragment['riskHints'][number];
+
+function HintDescription({
+  hint,
+}: {
+  hint: PortfolioRiskHint;
+}) {
+  const t = useTranslations('portfolio');
   const params = {
     symbol: hint.symbol ?? '',
     weight: hint.weightPercent?.toFixed(1) ?? '',
@@ -30,7 +34,12 @@ function hintMessage(
     case 'HIGH_EQUITY_WEIGHT':
       return t('hint.highEquityWeight', params);
     case 'HIGH_CURRENCY_CONCENTRATION':
-      return t('hint.highCurrencyConcentration', params);
+      return t.rich('hint.highCurrencyConcentrationGlossary', {
+        weight: params.weight,
+        volatility: () => (
+          <GlossaryTerm termId="volatility">{t('hintVolatilityLabel')}</GlossaryTerm>
+        ),
+      });
     case 'PARTIAL_PRICE_DATA':
       return t('hint.partialPriceData');
     default:
@@ -65,7 +74,9 @@ export function PortfolioRiskHints({ hints }: PortfolioRiskHintsProps) {
               <AlertTitle className="text-sm font-medium">
                 {isWarning ? t('hintSeverityWarning') : t('hintSeverityInfo')}
               </AlertTitle>
-              <AlertDescription>{hintMessage(t, hint)}</AlertDescription>
+              <AlertDescription>
+                <HintDescription hint={hint} />
+              </AlertDescription>
             </Alert>
           );
         })}

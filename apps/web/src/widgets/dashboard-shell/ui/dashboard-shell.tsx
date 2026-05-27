@@ -2,8 +2,12 @@
 
 import {
   BookOpenIcon,
+  CertificateIcon,
   ChartLineUpIcon,
+  CompassIcon,
+  GraduationCapIcon,
   ListHeartIcon,
+  ShieldWarningIcon,
   RobotIcon,
   SignOutIcon,
   SquaresFourIcon,
@@ -42,12 +46,24 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const router = useRouter();
   const isMobile = useIsMobile();
 
+  const mobileNavHrefs: ReadonlySet<string> = new Set([
+    '/overview',
+    '/market',
+    '/watchlist',
+    '/diary',
+    '/learn',
+  ]);
+
   const links = [
-    { href: '/market' as const, label: t('market'), icon: ChartLineUpIcon },
+    { href: '/overview' as const, label: t('overview'), icon: CompassIcon },
+    { href: '/market' as const, label: t('catalog'), icon: ChartLineUpIcon },
     { href: '/watchlist' as const, label: t('watchlist'), icon: ListHeartIcon },
     { href: '/diary' as const, label: t('diary'), icon: BookOpenIcon },
     { href: '/portfolio' as const, label: t('portfolio'), icon: SquaresFourIcon },
-    { href: '/ai' as const, label: t('ai'), icon: RobotIcon, disabled: true },
+    { href: '/bonds' as const, label: t('bonds'), icon: CertificateIcon },
+    { href: '/learn' as const, label: t('learn'), icon: GraduationCapIcon },
+    { href: '/risks' as const, label: t('risks'), icon: ShieldWarningIcon },
+    { href: '/ai' as const, label: t('ai'), icon: RobotIcon },
   ];
 
   const handleLogout = () => {
@@ -61,7 +77,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         <Sidebar collapsible="icon" className="border-border">
           <SidebarHeader className="border-border border-b px-2 py-3 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-1">
             <BrandLink
-              href="/market"
+              href="/overview"
               label={t('brand')}
               showLabel="sidebar"
               className="group-data-[collapsible=icon]:justify-center"
@@ -71,27 +87,20 @@ export function DashboardShell({ children }: DashboardShellProps) {
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {links.map(({ href, label, icon: Icon, disabled }) => {
+                  {links.map(({ href, label, icon: Icon }) => {
                     const active = pathname === href || pathname.startsWith(`${href}/`);
                     return (
                       <SidebarMenuItem key={href}>
-                        {disabled ? (
-                          <SidebarMenuButton disabled tooltip={label}>
-                            <Icon className="size-5" aria-hidden />
+                        <SidebarMenuButton asChild isActive={active}>
+                          <Link href={href}>
+                            <Icon
+                              className="size-5"
+                              weight={active ? 'bold' : 'regular'}
+                              aria-hidden
+                            />
                             <span>{label}</span>
-                          </SidebarMenuButton>
-                        ) : (
-                          <SidebarMenuButton asChild isActive={active}>
-                            <Link href={href}>
-                              <Icon
-                                className="size-5"
-                                weight={active ? 'bold' : 'regular'}
-                                aria-hidden
-                              />
-                              <span>{label}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        )}
+                          </Link>
+                        </SidebarMenuButton>
                       </SidebarMenuItem>
                     );
                   })}
@@ -130,7 +139,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
         <div className="flex min-w-0 flex-1 flex-col">
           <div className="border-border flex h-14 items-center gap-2 border-b px-4 md:hidden">
             <SidebarTrigger />
-            <BrandLink href="/market" label={t('brand')} showLabel={false} logoClassName="size-8" />
+            <BrandLink
+              href="/overview"
+              label={t('brand')}
+              showLabel={false}
+              logoClassName="size-8"
+            />
           </div>
           <main className="flex min-h-0 flex-1 flex-col px-4 py-6 pb-28 md:px-8 md:pb-8">
             <div className="flex min-h-0 flex-1 flex-col">{children}</div>
@@ -139,7 +153,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
           {isMobile ? (
             <nav className="border-border bg-card/90 fixed inset-x-0 bottom-0 z-40 flex justify-around border-t px-2 py-2 backdrop-blur">
               {links
-                .filter((l) => !l.disabled)
+                .filter((l) => mobileNavHrefs.has(l.href))
                 .map(({ href, label, icon: Icon }) => {
                   const active = pathname === href || pathname.startsWith(`${href}/`);
                   return (

@@ -37,6 +37,7 @@ export class DiaryResolver {
   }
 
   @UseGuards(GqlAuthGuard)
+  @Throttle({ default: { limit: 15, ttl: 60_000 } })
   @Query(() => DiaryRetrospective, { name: 'diaryRetrospective' })
   diaryRetrospective(
     @CurrentUser() user: AuthenticatedUser,

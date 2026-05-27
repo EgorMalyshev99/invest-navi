@@ -8,6 +8,7 @@ import { AssetInsightSource } from './entities/asset-insight-source.enum';
 import { AssetInsight } from './entities/asset-insight.type';
 import { buildFallbackInsight } from './lib/build-fallback-insight';
 import { buildAssetInsightPrompt } from './lib/build-prompt';
+import { applyAssetInsightCompliance, formatComplianceViolations } from './lib/compliance';
 import { parseInsightJson } from './lib/parse-insight';
 import { AiProviderFactory } from './providers/ai-provider.factory';
 
@@ -62,10 +63,21 @@ export class AssetInsightService {
         const parsed = parseInsightJson(raw);
 
         if (parsed) {
-          return this.toGraphqlInsight(asset.symbol, parsed, AssetInsightSource.AI, provider.name);
+          const compliance = applyAssetInsightCompliance(parsed);
+          if (compliance.ok && compliance.content) {
+            return this.toGraphqlInsight(
+              asset.symbol,
+              compliance.content,
+              AssetInsightSource.AI,
+              provider.name,
+            );
+          }
+          this.logger.warn(
+            `AI insight compliance rejected for ${asset.symbol}: ${formatComplianceViolations(compliance.violations)}`,
+          );
+        } else {
+          this.logger.warn(`AI insight parse failed for ${asset.symbol}`);
         }
-
-        this.logger.warn(`AI insight parse failed for ${asset.symbol}`);
       } catch (error) {
         this.logger.warn(
           `AI insight failed for ${asset.symbol}: ${error instanceof Error ? error.message : String(error)}`,

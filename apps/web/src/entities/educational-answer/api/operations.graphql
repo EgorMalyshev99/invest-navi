@@ -1,0 +1,7 @@
+mutation EducationalAnswer($input: EducationalAnswerInput!) {
+  educationalAnswer(input: $input) {
+    answer
+    source
+    provider
+  }
+}

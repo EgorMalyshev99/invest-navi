@@ -12,9 +12,11 @@ import {
 } from '@/entities/asset';
 import { AiInsightBlock, InsightBlocksSections, insightToBlocks } from '@/features/ai-insight';
 import { buildAssetEducation, toEducationBlocks } from '@/features/asset-education';
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { AddToWatchlistButton } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
 import { formatPrice } from '@/shared/lib/format';
+import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -102,6 +104,16 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
             </div>
             <h1 className="text-3xl font-bold tracking-tight">{asset.name}</h1>
             <p className="text-muted-foreground font-mono text-sm tabular-nums">{asset.symbol}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {t.rich('glossaryHint', {
+                volatility: () => (
+                  <GlossaryTerm termId="volatility">{t('glossaryVolatilityLabel')}</GlossaryTerm>
+                ),
+                dividend: () => (
+                  <GlossaryTerm termId="dividend">{t('glossaryDividendLabel')}</GlossaryTerm>
+                ),
+              })}
+            </p>
           </div>
           <div className="flex flex-col gap-2 text-left sm:text-right">
             <p className="font-mono text-3xl font-semibold tabular-nums">
@@ -124,7 +136,9 @@ export function AssetDetail({ symbol }: AssetDetailProps) {
       <Alert className="border-primary/30 bg-primary/5">
         <InfoIcon className="text-primary size-4" aria-hidden />
         <AlertTitle>{t('educationTitle')}</AlertTitle>
-        <AlertDescription>{isAi ? t('aiDisclaimerGenerated') : t('aiDisclaimer')}</AlertDescription>
+        <AlertDescription>
+          <AiDisclaimer variant={isAi ? 'generated' : 'template'} className="text-sm" />
+        </AlertDescription>
       </Alert>
 
       {insightQuery.isLoading ? (
