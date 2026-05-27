@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^11.1.21",
     "@nestjs/terminus": "^11.1.1",
     "@nestjs/throttler": "^6.5.0",
+    "express": "^5.1.0",
     "@repo/api": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "graphql": "^16.14.0",
