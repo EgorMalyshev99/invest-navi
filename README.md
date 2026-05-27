@@ -102,8 +102,6 @@ pnpm format
 pnpm --filter web codegen   # после изменения schema.gql или *.graphql
 ```
 
-> Тесты (Jest, E2E) пока не подключены — вернём на отдельном этапе.
-
 ## Переменные окружения
 
 Создайте `.env.local` в корне и в приложениях по мере появления интеграций (Phase 2+):
@@ -148,51 +146,48 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 - In-memory кэш (`MARKET_CACHE_TTL_SECONDS`)
 - Shared-контракты в `packages/api` (`AssetSnapshot`, enums)
 
-### Phase 5 ✅ — Каталог и карточка актива
+### Phase 5 ✅ — Web: маркет, auth и кабинет
 
-- Каталог `/market` — simple/advanced, GraphQL codegen
-- Карточка `/market/[symbol]` — образовательные блоки (шаблоны; AI — Phase 6)
-- Watchlist `/watchlist` — `@uidotdev/usehooks` + localStorage, статусы, сводка
-- next-intl `ru`/`en`, переключатель языка
-
-### Phase 5.5 ✅ — Auth, layouts, onboarding
-
-- Публичные маршруты: Landing `/`, `/login`, `/register` (2 шага: credentials → уровень знаний)
-- Защита кабинета: middleware + cookie JWT; без входа — только публичная зона
-- Layout: **header** (public) / **sidebar** (app); `ThemeToggle` в обеих зонах
-- Профиль `/profile`: `knowledgeLevel`, `preferredLocale` (`updateProfile`)
-- i18n: `localePrefix: 'never'` — в URL нет `/ru`/`/en`
-- БД: `pnpm --filter api db:migrate` (baseline `users`, `0001` profile + `diary_entries` prep)
-- FSD: shadcn в `apps/web/src/shared/ui/`
+- Каталог `/market`, карточка `/market/[symbol]`, watchlist `/watchlist`; GraphQL codegen
+- Auth gate: Landing `/`, `/login`, `/register` (2 шага), middleware + JWT cookie; PublicShell (header) / DashboardShell (sidebar)
+- Профиль `/profile`: `knowledgeLevel`, `preferredLocale`; next-intl `ru`/`en`, `localePrefix: 'never'`
+- FSD `shared/ui`, миграции Drizzle (`pnpm --filter api db:migrate`)
 
 ### Phase 6 ✅ — Инвестиционный дневник + AI
 
 - Модуль `ai/` с adapter pattern и провайдерами Groq, Gemini, OpenRouter
+- **Compliance gate** на API: проверка AI-ответов (без buy/sell/hold, без гарантий, оговорки при сравнении с вкладом) → safe fallback; тесты `pnpm --filter api test`
+- Единые дисклеймеры в UI (`compliance.*` в next-intl, компонент `AiDisclaimer`)
 - `assetInsight` на карточке актива; `diaryHypothesisFeedback` для черновика гипотезы
 - GraphQL `diary/` — CRUD записей, снимок цены/индекса, `reviewAt` по горизонту
 - Web `/diary` — форма гипотезы, AI-разбор, ретроспектива, фильтры статусов
 - Связка с `/market/[symbol]` → «Гипотеза в дневнике»
 
-### Phase 7 — Портфель и облигационный помощник
+### Phase 7 ✅ — Портфель и облигационный помощник
 
-- Портфель пользователя (ручной ввод на первом этапе)
-- Оценка структуры и концентрации рисков
-- Раздел облигаций: купон, дюрация, риск эмитента
-- Еженедельный обзор рынка
+- Портфель: ручной ввод позиций, `/portfolio`, GraphQL CRUD + `portfolioSummary` (структура, концентрация, образовательные risk hints)
+- Облигации: MOEX ISS, `/bonds` и `/bonds/[symbol]`, `bondInsight` (AI + шаблон), вводный блок без сравнения с вкладом без оговорок
 
-### Phase 8 — Обучающий слой и риск-навигация
+### Phase 8 ✅ — Обучающий слой и риск-навигация
 
-- Раздел «Обучение» — работа с инвестициями: основы, инструменты рынка, типичные ошибки, пошаговые сценарии для новичков (без торговых рекомендаций)
-- «Картина рынка» как основной обучающий entrypoint
-- База знаний — структурированные материалы по инструментам, терминам и рискам
-- Отдельный раздел рисков с примерами
-- Контекстные подсказки по терминам прямо в UI
+- Раздел «Обучение» (`/learn`, глоссарий) — 8 статей, перекрёстные ссылки в разделы приложения
+- «Картина рынка» (`/overview`) — entrypoint, блок «путь новичка», карточка для `knowledgeLevel: beginner`
+- Раздел рисков (`/risks`) с примерами и ссылками на статьи
+- Контекстный глоссарий (`GlossaryTerm`) на market, portfolio, asset/bond detail, diary, bonds intro
+- Персонализация hub обучения по `knowledgeLevel` в профиле
+- MVP AI Q&A (`/ai`, GraphQL `educationalAnswer`) — compliance pipeline, disclaimer
 
 ### Phase 9 — OAuth (после получения токенов)
 
 - Финальное подключение Yandex ID и VK ID
 - Связывание OAuth-аккаунтов с существующим пользователем
 - Полировка UX входа и регистрации
+
+### Phase 10 — Лендинг, обзор рынка и тесты
+
+- Обновить контент лендинга (`/`) с учётом реализованного функционала: актуальные разделы, сценарии, преимущества и CTA
+- Еженедельный AI-обзор рынка (полуавтоматический кэш; cron — по необходимости позже)
+- Добавить тесты: Jest, `@repo/jest-config`, unit/integration; E2E API (supertest)
 
 ## Документация
 

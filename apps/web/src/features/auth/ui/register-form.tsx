@@ -78,7 +78,7 @@ export function RegisterForm() {
     }
     try {
       await updateProfile({ knowledgeLevel: toGraphqlKnowledgeLevel(parsed.data) });
-      router.replace('/market');
+      router.replace('/overview');
       router.refresh();
     } catch (e) {
       setError(e instanceof GraphqlRequestError ? e.message : t('registerError'));

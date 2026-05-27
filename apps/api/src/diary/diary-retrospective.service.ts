@@ -1,11 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
+import { DiaryRetrospective } from './entities/diary-retrospective.type';
 import { AssetInsightSource } from '../ai/entities/asset-insight-source.enum';
 import { buildDiaryRetroPrompt, buildFallbackRetro } from '../ai/lib/build-retro-prompt';
+import { applyRetroInsightCompliance, formatComplianceViolations } from '../ai/lib/compliance';
+import { parseRetroInsightJson } from '../ai/lib/parse-retro-insight';
 import { AiProviderFactory } from '../ai/providers/ai-provider.factory';
 import { DiaryEntriesRepository } from '../database/repositories/diary-entries.repository';
 import { MarketService } from '../market/market.service';
-import { DiaryRetrospective } from './entities/diary-retrospective.type';
 
 function parseNumeric(value: string | null | undefined): number | undefined {
   if (value === null || value === undefined) {
@@ -116,19 +118,27 @@ export class DiaryRetrospectiveService {
           { role: 'system', content: system },
           { role: 'user', content: user },
         ]);
-        const parsed = this.parseRetroJson(raw);
+        const parsed = parseRetroInsightJson(raw);
         if (parsed) {
-          return {
-            entryId: row.id,
-            isReady: true,
-            daysElapsed,
-            priceChangePercent,
-            indexChangePercent,
-            summary: parsed.summary,
-            questions: parsed.questions,
-            source: AssetInsightSource.AI,
-            provider: provider.name,
-          };
+          const compliance = applyRetroInsightCompliance(parsed);
+          if (compliance.ok && compliance.content) {
+            return {
+              entryId: row.id,
+              isReady: true,
+              daysElapsed,
+              priceChangePercent,
+              indexChangePercent,
+              summary: compliance.content.summary,
+              questions: compliance.content.questions,
+              source: AssetInsightSource.AI,
+              provider: provider.name,
+            };
+          }
+          this.logger.warn(
+            `Diary retro compliance rejected for ${row.id}: ${formatComplianceViolations(compliance.violations)}`,
+          );
+        } else {
+          this.logger.warn(`Diary retro parse failed for ${row.id}`);
         }
       } catch (error) {
         this.logger.warn(
@@ -148,27 +158,5 @@ export class DiaryRetrospectiveService {
       questions: fallback.questions,
       source: AssetInsightSource.FALLBACK,
     };
-  }
-
-  private parseRetroJson(raw: string): { summary: string; questions: string[] } | null {
-    const trimmed = raw.trim();
-    const jsonStart = trimmed.indexOf('{');
-    const jsonEnd = trimmed.lastIndexOf('}');
-    if (jsonStart === -1 || jsonEnd === -1) {
-      return null;
-    }
-    try {
-      const parsed = JSON.parse(trimmed.slice(jsonStart, jsonEnd + 1)) as Record<string, unknown>;
-      const summary = typeof parsed.summary === 'string' ? parsed.summary.trim() : '';
-      if (!summary) {
-        return null;
-      }
-      const questions = Array.isArray(parsed.questions)
-        ? parsed.questions.filter((q): q is string => typeof q === 'string' && q.trim().length > 0)
-        : [];
-      return { summary, questions };
-    } catch {
-      return null;
-    }
   }
 }

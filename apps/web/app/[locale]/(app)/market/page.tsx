@@ -1,7 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 
 import { AssetCatalog } from '@/widgets/asset-catalog';
-import { MarketIndicesStrip } from '@/widgets/market-indices-strip';
 
 interface MarketPageProps {
   params: Promise<{ locale: string }>;
@@ -11,10 +10,5 @@ export default async function MarketPage({ params }: MarketPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return (
-    <div className="flex flex-col gap-8">
-      <MarketIndicesStrip />
-      <AssetCatalog />
-    </div>
-  );
+  return <AssetCatalog />;
 }

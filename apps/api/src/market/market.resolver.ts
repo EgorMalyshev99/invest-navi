@@ -2,6 +2,8 @@ import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { SkipThrottle } from '@nestjs/throttler';
 
 import { Asset } from './entities/asset.type';
+import { Bond } from './entities/bond.type';
+import { FxRate } from './entities/fx-rate.type';
 import { MarketIndex } from './entities/index.type';
 import { MarketProvidersStatusType } from './entities/providers-status.type';
 import { Sector } from './entities/sector.type';
@@ -26,6 +28,18 @@ export class MarketResolver {
     return this.marketService.getAsset(symbol);
   }
 
+  @Query(() => [Bond], { description: 'Top MOEX bonds by traded value (TQOB board)' })
+  bonds(
+    @Args('limit', { type: () => Int, nullable: true, defaultValue: 20 }) limit: number,
+  ): Promise<Bond[]> {
+    return this.marketService.getBonds(limit);
+  }
+
+  @Query(() => Bond, { description: 'Single bond by MOEX security id' })
+  bond(@Args('symbol') symbol: string): Promise<Bond> {
+    return this.marketService.getBond(symbol);
+  }
+
   @Query(() => [MarketIndex], { description: 'Core MOEX indices (IMOEX, RGBI)' })
   indices(): Promise<MarketIndex[]> {
     return this.marketService.getIndices();
@@ -34,6 +48,13 @@ export class MarketResolver {
   @Query(() => [Sector], { description: 'MOEX sector indices' })
   sectors(): Promise<Sector[]> {
     return this.marketService.getSectors();
+  }
+
+  @Query(() => [FxRate], {
+    description: 'MOEX FX pairs vs RUB (USD, EUR, CNY) and RUB/USD reference',
+  })
+  fxRates(): Promise<FxRate[]> {
+    return this.marketService.getFxRates();
   }
 
   @Query(() => MarketProvidersStatusType, {

@@ -3,10 +3,13 @@ import {
   clampMarketAssetsLimit,
   MarketDataSource,
   type AssetSnapshot,
+  type BondSnapshot,
   type MarketProvidersStatus,
 } from '@repo/api';
 
 import { Asset } from './entities/asset.type';
+import { Bond } from './entities/bond.type';
+import { FxRate } from './entities/fx-rate.type';
 import { MarketIndex } from './entities/index.type';
 import { MarketProvidersStatusType } from './entities/providers-status.type';
 import { Sector } from './entities/sector.type';
@@ -63,9 +66,53 @@ export class MarketService {
     return result;
   }
 
+  async getBonds(limit = 20): Promise<Bond[]> {
+    const safeLimit = clampMarketAssetsLimit(limit);
+    const cacheKey = `market:bonds:${safeLimit}`;
+    const cached = this.cache.get<Bond[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    const snapshots = await this.moex.getBonds(safeLimit);
+    const result = snapshots.map((item) => this.toBond(item));
+    this.cache.set(cacheKey, result);
+    return result;
+  }
+
+  async getBond(symbol: string): Promise<Bond> {
+    const normalizedSymbol = this.normalizeSymbol(symbol);
+    const cacheKey = `market:bond:${normalizedSymbol}`;
+    const cached = this.cache.get<Bond>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    const snapshot = await this.moex.getBondBySymbol(normalizedSymbol);
+    if (!snapshot) {
+      throw new NotFoundException(`Bond "${normalizedSymbol}" not found`);
+    }
+
+    const result = this.toBond(snapshot);
+    this.cache.set(cacheKey, result);
+    return result;
+  }
+
   async getIndices(): Promise<MarketIndex[]> {
     const indices = await this.moex.getIndices();
     return indices.map((item) => ({
+      code: item.code,
+      name: item.name,
+      currentValue: item.currentValue,
+      changePercent: item.changePercent,
+      valueToday: item.valueToday,
+      dataSource: item.dataSource,
+    }));
+  }
+
+  async getFxRates(): Promise<FxRate[]> {
+    const rates = await this.moex.getFxRates();
+    return rates.map((item) => ({
       code: item.code,
       name: item.name,
       currentValue: item.currentValue,
@@ -128,6 +175,23 @@ export class MarketService {
       throw new BadRequestException('Invalid asset symbol');
     }
     return normalized;
+  }
+
+  private toBond(snapshot: BondSnapshot): Bond {
+    return {
+      symbol: snapshot.symbol,
+      name: snapshot.name,
+      lastPrice: snapshot.lastPrice,
+      changePercent: snapshot.changePercent,
+      lotSize: snapshot.lotSize,
+      valueToday: snapshot.valueToday,
+      couponPercent: snapshot.couponPercent,
+      maturityDate: snapshot.maturityDate,
+      yieldAtPrice: snapshot.yieldAtPrice,
+      faceValue: snapshot.faceValue,
+      currency: snapshot.currency,
+      dataSource: snapshot.dataSource,
+    };
   }
 
   private toAsset(snapshot: AssetSnapshot): Asset {

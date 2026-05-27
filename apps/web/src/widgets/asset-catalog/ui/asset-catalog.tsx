@@ -7,6 +7,7 @@ import { AssetCatalogTable } from './asset-catalog-table';
 import { ChangeBadge, RiskBadge, TypeBadge, type Asset, useAssetsQuery } from '@/entities/asset';
 import { buildAssetEducation } from '@/features/asset-education';
 import { CatalogViewToggle, useCatalogViewMode } from '@/features/catalog-view-mode';
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { AddToWatchlistButton } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
 import { formatPrice } from '@/shared/lib/format';
@@ -59,6 +60,16 @@ export function AssetCatalog() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground mt-1 text-sm">{t('subtitle')}</p>
+          <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+            {t.rich('subtitleGlossary', {
+              diversification: () => (
+                <GlossaryTerm termId="diversification">{t('diversificationLabel')}</GlossaryTerm>
+              ),
+              volatility: () => (
+                <GlossaryTerm termId="volatility">{t('volatilityLabel')}</GlossaryTerm>
+              ),
+            })}
+          </p>
         </div>
         <CatalogViewToggle />
       </div>

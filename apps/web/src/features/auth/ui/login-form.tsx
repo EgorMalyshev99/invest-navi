@@ -30,7 +30,7 @@ export function LoginForm() {
     setError(null);
     try {
       await login(values);
-      router.replace('/market');
+      router.replace('/overview');
       router.refresh();
     } catch (e) {
       setError(e instanceof GraphqlRequestError ? e.message : t('loginError'));

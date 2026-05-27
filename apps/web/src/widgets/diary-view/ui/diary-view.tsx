@@ -16,7 +16,9 @@ import {
   fromGraphqlDiaryStatus,
   toGraphqlDiaryStatus,
 } from '@/features/diary-form/lib/graphql-enums';
+import { GlossaryTerm } from '@/features/glossary-tip';
 import { Link } from '@/i18n/navigation';
+import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -58,6 +60,16 @@ export function DiaryView() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground mt-1 text-sm">{t('subtitle')}</p>
+          <p className="text-muted-foreground mt-2 max-w-xl text-sm leading-relaxed">
+            {t.rich('subtitleGlossary', {
+              diversification: () => (
+                <GlossaryTerm termId="diversification">{t('diversificationLabel')}</GlossaryTerm>
+              ),
+              volatility: () => (
+                <GlossaryTerm termId="volatility">{t('volatilityLabel')}</GlossaryTerm>
+              ),
+            })}
+          </p>
         </div>
         <Button type="button" className="gap-2" onClick={() => setShowForm((value) => !value)}>
           <PlusIcon className="size-4" aria-hidden />
@@ -195,6 +207,8 @@ export function DiaryView() {
           )}
         </TabsContent>
       </Tabs>
+
+      <AiDisclaimer variant="educational" />
     </section>
   );
 }

@@ -58,6 +58,27 @@ query Indices {
   }
 }
 
+query Sectors {
+  sectors {
+    code
+    name
+    currentValue
+    changePercent
+    dataSource
+  }
+}
+
+query FxRates {
+  fxRates {
+    code
+    name
+    currentValue
+    changePercent
+    valueToday
+    dataSource
+  }
+}
+
 query AssetInsight($symbol: String!, $locale: String) {
   assetInsight(symbol: $symbol, locale: $locale) {
     symbol

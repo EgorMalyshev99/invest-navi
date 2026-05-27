@@ -4,6 +4,8 @@ import {
   InstrumentType,
   MarketDataSource,
   type AssetSnapshot,
+  type BondSnapshot,
+  type FxRateSnapshot,
   type IndexSnapshot,
   type SectorSnapshot,
 } from '@repo/api';
@@ -18,6 +20,15 @@ interface MoexTable {
 const DEFAULT_MOEX_ISS_BASE_URL = 'https://iss.moex.com/iss';
 const CORE_INDEX_CODES = new Set(['IMOEX', 'RGBI']);
 const SECTOR_CODES = new Set(['MOEXCH', 'MOEXCN', 'MOEXFN', 'MOEXMM', 'MOEXOG', 'MOEXTL']);
+
+const FX_MOEX_PAIRS: Array<{ code: string; secId: string; name: string }> = [
+  { code: 'USD', secId: 'USD000UTSTOM', name: 'USD/RUB' },
+  { code: 'EUR', secId: 'EUR_RUB__TOM', name: 'EUR/RUB' },
+  { code: 'CNY', secId: 'CNYRUB_TOM', name: 'CNY/RUB' },
+  { code: 'RUB', secId: 'USD000UTSTOM', name: 'RUB/USD' },
+];
+
+const FX_MOEX_SEC_IDS = new Set(FX_MOEX_PAIRS.map((pair) => pair.secId));
 
 @Injectable()
 export class MoexProvider {
@@ -93,6 +104,62 @@ export class MoexProvider {
     const normalized = symbol.trim().toUpperCase();
     const assets = await this.getAssets(100);
     return assets.find((item) => item.symbol === normalized) ?? null;
+  }
+
+  async getBonds(limit = 20): Promise<BondSnapshot[]> {
+    const cacheKey = `moex:bonds:${limit}`;
+    const cached = this.cache.get<BondSnapshot[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const payload = await this.fetchMoex<{
+        securities: MoexTable;
+        marketdata: MoexTable;
+      }>(
+        '/engines/stock/markets/bonds/boards/TQOB/securities.json?iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SHORTNAME,COUPONPERCENT,MATDATE,PREVPRICE,LOTSIZE,FACEUNIT,FACEVALUE&marketdata.columns=SECID,LAST,YIELDATWAPRICE,VALTODAY',
+      );
+
+      const bonds = this.mapBondSnapshots(payload);
+      bonds.sort((a, b) => b.valueToday - a.valueToday);
+      const sliced = bonds.slice(0, Math.max(1, Math.min(limit, 100)));
+      this.cache.set(cacheKey, sliced);
+      return sliced;
+    } catch (error) {
+      this.logger.warn(`MOEX bonds failed: ${this.toErrorMessage(error)}`);
+      const fallback = this.getFallbackBonds();
+      this.cache.set(cacheKey, fallback);
+      return fallback;
+    }
+  }
+
+  async getBondBySymbol(symbol: string): Promise<BondSnapshot | null> {
+    const normalized = symbol.trim().toUpperCase();
+    const cacheKey = `moex:bond:${normalized}`;
+    const cached = this.cache.get<BondSnapshot>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const payload = await this.fetchMoex<{
+        securities: MoexTable;
+        marketdata: MoexTable;
+      }>(
+        `/engines/stock/markets/bonds/boards/TQOB/securities/${normalized}.json?iss.meta=off&iss.only=securities,marketdata&marketdata.columns=SECID,LAST,YIELDATWAPRICE,VALTODAY`,
+      );
+
+      const bonds = this.mapBondSnapshots(payload);
+      const bond = bonds[0] ?? null;
+      if (bond) {
+        this.cache.set(cacheKey, bond);
+      }
+      return bond;
+    } catch (error) {
+      this.logger.warn(`MOEX bond ${normalized} failed: ${this.toErrorMessage(error)}`);
+      return null;
+    }
   }
 
   async getIndices(): Promise<IndexSnapshot[]> {
@@ -190,6 +257,92 @@ export class MoexProvider {
     }
   }
 
+  async getFxRates(): Promise<FxRateSnapshot[]> {
+    const cacheKey = 'moex:fx';
+    const cached = this.cache.get<FxRateSnapshot[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const payload = await this.fetchMoex<{
+        securities: MoexTable;
+        marketdata: MoexTable;
+      }>(
+        '/engines/currency/markets/selt/boards/CETS/securities.json?iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SHORTNAME,PREVPRICE&marketdata.columns=SECID,LAST,VALTODAY',
+      );
+
+      const securities = this.toRowMap(payload.securities);
+      const marketData = this.toRowMap(payload.marketdata);
+
+      const bySecId = new Map<string, FxRateSnapshot>();
+
+      for (const marketRow of marketData.values()) {
+        const secId = String(marketRow.SECID ?? '').toUpperCase();
+        if (!FX_MOEX_SEC_IDS.has(secId)) {
+          continue;
+        }
+
+        const security = securities.get(secId);
+        const lastPrice = this.toNumber(marketRow.LAST);
+        const prevPrice = this.toNumber(security?.PREVPRICE);
+        const currentValue = lastPrice > 0 ? lastPrice : prevPrice;
+        const changePercent =
+          prevPrice > 0 && currentValue > 0
+            ? ((currentValue - prevPrice) / prevPrice) * 100
+            : 0;
+
+        bySecId.set(secId, {
+          code: secId,
+          name: String(security?.SHORTNAME ?? secId),
+          currentValue,
+          changePercent,
+          valueToday: this.toNumber(marketRow.VALTODAY),
+          dataSource: MarketDataSource.Moex,
+        });
+      }
+
+      const rates: FxRateSnapshot[] = [];
+
+      for (const pair of FX_MOEX_PAIRS) {
+        const row = bySecId.get(pair.secId);
+        if (!row || row.currentValue <= 0) {
+          continue;
+        }
+
+        if (pair.code === 'RUB') {
+          rates.push({
+            code: pair.code,
+            name: pair.name,
+            currentValue: 1 / row.currentValue,
+            changePercent: row.changePercent !== 0 ? -row.changePercent : 0,
+            valueToday: row.valueToday,
+            dataSource: MarketDataSource.Moex,
+          });
+          continue;
+        }
+
+        rates.push({
+          code: pair.code,
+          name: pair.name,
+          currentValue: row.currentValue,
+          changePercent: row.changePercent,
+          valueToday: row.valueToday,
+          dataSource: MarketDataSource.Moex,
+        });
+      }
+
+      const result = rates.length > 0 ? rates : this.getFallbackFxRates();
+      this.cache.set(cacheKey, result);
+      return result;
+    } catch (error) {
+      this.logger.warn(`MOEX FX failed: ${this.toErrorMessage(error)}`);
+      const fallback = this.getFallbackFxRates();
+      this.cache.set(cacheKey, fallback);
+      return fallback;
+    }
+  }
+
   private get baseUrl(): string {
     return this.configService.get<string>('MOEX_ISS_BASE_URL') ?? DEFAULT_MOEX_ISS_BASE_URL;
   }
@@ -232,6 +385,89 @@ export class MoexProvider {
     return error instanceof Error ? error.message : String(error);
   }
 
+  private mapBondSnapshots(payload: {
+    securities: MoexTable;
+    marketdata: MoexTable;
+  }): BondSnapshot[] {
+    const securities = this.toRowMap(payload.securities);
+    const marketData = this.toRowMap(payload.marketdata);
+    const bonds: BondSnapshot[] = [];
+
+    for (const marketRow of marketData.values()) {
+      const symbol = String(marketRow.SECID ?? '').toUpperCase();
+      const security = securities.get(symbol);
+      const lastPrice = this.toNumber(marketRow.LAST);
+      const prevPrice = this.toNumber(security?.PREVPRICE);
+      const valueToday = this.toNumber(marketRow.VALTODAY);
+      const lotSize = Math.round(this.toNumber(security?.LOTSIZE));
+
+      if (!symbol || !lastPrice) {
+        continue;
+      }
+
+      const maturityRaw = security?.MATDATE;
+      const maturityDate =
+        typeof maturityRaw === 'string' && maturityRaw.length >= 10
+          ? maturityRaw.slice(0, 10)
+          : undefined;
+
+      bonds.push({
+        symbol,
+        name: String(security?.SHORTNAME ?? symbol),
+        lastPrice,
+        changePercent: prevPrice ? ((lastPrice - prevPrice) / prevPrice) * 100 : 0,
+        lotSize: lotSize || 1,
+        valueToday,
+        couponPercent: this.toOptionalNumber(security?.COUPONPERCENT),
+        maturityDate,
+        yieldAtPrice: this.toOptionalNumber(marketRow.YIELDATWAPRICE),
+        faceValue: this.toOptionalNumber(security?.FACEVALUE),
+        currency: this.mapFaceUnit(security?.FACEUNIT),
+        dataSource: MarketDataSource.Moex,
+      });
+    }
+
+    return bonds;
+  }
+
+  private mapFaceUnit(value: unknown): string | undefined {
+    const unit = String(value ?? '').toUpperCase();
+    if (unit === 'SUR' || unit === 'RUB') {
+      return 'RUB';
+    }
+    if (unit === 'CNY') {
+      return 'CNY';
+    }
+    if (unit === 'USD') {
+      return 'USD';
+    }
+    return unit || undefined;
+  }
+
+  private toOptionalNumber(value: unknown): number | undefined {
+    const parsed = this.toNumber(value);
+    return parsed > 0 ? parsed : undefined;
+  }
+
+  private getFallbackBonds(): BondSnapshot[] {
+    return [
+      {
+        symbol: 'SU26207RMFS9',
+        name: 'ОФЗ 26207',
+        lastPrice: 96.9,
+        changePercent: 0,
+        lotSize: 1,
+        valueToday: 0,
+        couponPercent: 8.15,
+        maturityDate: '2027-02-03',
+        yieldAtPrice: 13.3,
+        faceValue: 1000,
+        currency: 'RUB',
+        dataSource: MarketDataSource.Moex,
+      },
+    ];
+  }
+
   private getFallbackAssets(): AssetSnapshot[] {
     return [
       {
@@ -270,6 +506,43 @@ export class MoexProvider {
       {
         code: 'RGBI',
         name: 'Индекс гос. облигаций',
+        currentValue: 0,
+        changePercent: 0,
+        valueToday: 0,
+        dataSource: MarketDataSource.Moex,
+      },
+    ];
+  }
+
+  private getFallbackFxRates(): FxRateSnapshot[] {
+    return [
+      {
+        code: 'USD',
+        name: 'USD/RUB',
+        currentValue: 0,
+        changePercent: 0,
+        valueToday: 0,
+        dataSource: MarketDataSource.Moex,
+      },
+      {
+        code: 'EUR',
+        name: 'EUR/RUB',
+        currentValue: 0,
+        changePercent: 0,
+        valueToday: 0,
+        dataSource: MarketDataSource.Moex,
+      },
+      {
+        code: 'CNY',
+        name: 'CNY/RUB',
+        currentValue: 0,
+        changePercent: 0,
+        valueToday: 0,
+        dataSource: MarketDataSource.Moex,
+      },
+      {
+        code: 'RUB',
+        name: 'RUB/USD',
         currentValue: 0,
         changePercent: 0,
         valueToday: 0,

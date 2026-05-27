@@ -6,7 +6,18 @@ import { ACCESS_TOKEN_COOKIE } from './src/shared/lib/auth-cookies';
 
 const intlMiddleware = createMiddleware(routing);
 
-const PROTECTED_PREFIXES = ['/market', '/watchlist', '/profile', '/diary'];
+const PROTECTED_PREFIXES = [
+  '/overview',
+  '/market',
+  '/watchlist',
+  '/profile',
+  '/diary',
+  '/portfolio',
+  '/bonds',
+  '/learn',
+  '/risks',
+  '/ai',
+];
 const AUTH_PATHS = ['/login', '/register'];
 
 function stripLocalePrefix(pathname: string): string {
@@ -29,7 +40,7 @@ export default function proxy(request: NextRequest) {
   }
 
   if (isAuthRoute && accessToken) {
-    return NextResponse.redirect(new URL('/market', request.url));
+    return NextResponse.redirect(new URL('/overview', request.url));
   }
 
   return intlMiddleware(request);

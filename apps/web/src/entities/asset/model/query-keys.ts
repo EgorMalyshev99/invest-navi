@@ -4,4 +4,6 @@ export const assetKeys = {
   detail: (symbol: string) => ['asset', symbol] as const,
   insight: (symbol: string, locale: string) => ['asset-insight', symbol, locale] as const,
   indices: ['indices'] as const,
+  sectors: ['sectors'] as const,
+  fxRates: ['fxRates'] as const,
 };
