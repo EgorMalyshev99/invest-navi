@@ -2,7 +2,7 @@ import { print } from 'graphql';
 
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
-import { graphqlUrl } from '@/shared/config/env';
+import { getGraphqlUrl } from '@/shared/config/env';
 import { getAccessToken } from '@/shared/lib/auth-cookies';
 
 export class GraphqlRequestError extends Error {
@@ -30,7 +30,7 @@ export async function graphqlRequest<TResult, TVariables = Record<string, never>
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  const response = await fetch(graphqlUrl, {
+  const response = await fetch(getGraphqlUrl(), {
     method: 'POST',
     headers,
     body: JSON.stringify({

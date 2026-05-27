@@ -36,7 +36,7 @@ apps/api/src/
 
 ## Auth
 
-- OAuth: Yandex ID, VK ID
+- OAuth: Yandex ID, Google
 - Email/password — дополнительно
 - Access + refresh tokens; refresh rotation (Phase 3)
 
@@ -69,9 +69,10 @@ Env:
 ## Drizzle
 
 - Схема в `database/schema/`
-- Генерация миграции: `pnpm --filter api db:generate` (обновляет SQL-файлы в `apps/api/drizzle/`)
-- Применение миграций: `pnpm --filter api db:migrate`
-- `DATABASE_URL` из env
+- **Миграции только через Drizzle Kit** — после изменения схемы: `pnpm --filter api db:generate`
+- **Не создавать и не править вручную** файлы в `apps/api/drizzle/*.sql`, `drizzle/meta/_journal.json`, `drizzle/meta/*_snapshot.json` — их пишет `db:generate`
+- Применение: `pnpm --filter api db:migrate` (нужен `DATABASE_URL` в env)
+- Локально: `DATABASE_URL` в `apps/api/.env` или корневом `.env`
 
 ## packages/api
 

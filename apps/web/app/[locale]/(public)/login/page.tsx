@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 import { LoginForm } from '@/features/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -16,7 +17,9 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
         </CardContent>
       </Card>
     </div>

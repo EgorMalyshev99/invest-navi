@@ -18,7 +18,7 @@
 | Frontend    | Next.js App Router, **упрощённый FSD** (app/ → widgets → features → entities → shared)                      |
 | Backend     | NestJS, **GraphQL code-first** (Apollo)                                                                     |
 | ORM         | Drizzle + PostgreSQL                                                                                        |
-| Auth        | Yandex ID + VK ID + email/password; bearer + refresh                                                        |
+| Auth        | Yandex ID + Google OAuth + email/password; bearer + refresh                                                 |
 | i18n        | next-intl — `ru`, `en`; `localePrefix: 'never'` (URL без `/ru`/`/en`; cookie + `preferredLocale` в профиле) |
 | Market data | MOEX ISS + Tinkoff Invest API                                                                               |
 | AI          | Adapter pattern: Groq, Google Gemini, OpenRouter (`AI_PROVIDER` + API keys в env)                           |
@@ -129,8 +129,9 @@ export default function MarketPage() {
 
 ## База данных (Drizzle)
 
-- Миграции в version control
-- Схема в `apps/api/src/database/schema/`
+- Миграции в version control; схема в `apps/api/src/database/schema/`
+- После изменения схемы: `pnpm --filter api db:generate` — **не писать** `drizzle/*.sql` и `drizzle/meta/*` вручную
+- Применение: `pnpm --filter api db:migrate`
 - `noUncheckedIndexedAccess` учитывать при работе с массивами
 
 ## Дизайн-система
@@ -186,8 +187,7 @@ Phase 5 ✅ — Web: маркет, auth и кабинет (каталог, watch
 Phase 6 ✅ — инвестиционный дневник + AI (`diary` GraphQL, `/diary`, `diaryHypothesisFeedback`, ретроспектива).
 Phase 7 ✅ — портфель (`/portfolio`, `portfolioSummary`) и облигационный помощник (`/bonds`, `bondInsight`).
 Phase 8 ✅ — обучение (`/learn`, `/risks`, `/overview`), контекстный глоссарий, `knowledgeLevel` в hub/overview, MVP `/ai` (`educationalAnswer` + compliance).
-Текущая фаза — **Phase 9**: OAuth (Yandex ID, VK ID) после получения токенов. Еженедельный обзор рынка и cron — **Phase 10**.
-OAuth (Yandex ID, VK ID) запланирован отдельным шагом в Phase 9 после получения токенов.
+Текущая фаза — **Phase 9**: OAuth (Yandex ID, Google). Еженедельный обзор рынка и cron — **Phase 10**.
 
 ## Полезные команды
 

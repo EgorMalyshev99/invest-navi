@@ -21,7 +21,7 @@ AI-платформа для частных инвесторов на росси
 | Monorepo     | Turborepo, pnpm                                                                                                                           |
 | Frontend     | Next.js 16 (App Router), React 19, FSD, TanStack Query/Table, Highcharts, shadcn/ui, Tailwind v4, next-intl (ru/en), Zod, React Hook Form |
 | Backend      | NestJS 11, GraphQL (code-first, Apollo), Drizzle ORM, PostgreSQL                                                                          |
-| Auth         | OAuth (Yandex ID, VK ID) + email/password, bearer + refresh tokens                                                                        |
+| Auth         | OAuth (Yandex ID, Google) + email/password, bearer + refresh tokens                                                                       |
 | Данные рынка | MOEX ISS API, Tinkoff Invest API                                                                                                          |
 | AI           | Adapter pattern: Groq, Google Gemini, OpenRouter                                                                                          |
 | Realtime     | socket.io (при необходимости)                                                                                                             |
@@ -106,16 +106,16 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 
 Создайте `.env.local` в корне и в приложениях по мере появления интеграций (Phase 2+):
 
-| Переменная                          | Описание                                               |
-| ----------------------------------- | ------------------------------------------------------ |
-| `DATABASE_URL`                      | PostgreSQL (Drizzle)                                   |
-| `JWT_SECRET` / `JWT_REFRESH_SECRET` | Auth tokens                                            |
-| `YANDEX_CLIENT_ID` / `VK_CLIENT_ID` | OAuth                                                  |
-| `MOEX_*` / `TINKOFF_*`              | Рыночные данные                                        |
-| `AI_PROVIDER`                       | Активный LLM: `groq`, `gemini`, `openrouter`           |
-| `GROQ_API_KEY`                      | [Groq](https://console.groq.com/)                      |
-| `GEMINI_API_KEY`                    | [Google AI Studio](https://aistudio.google.com/apikey) |
-| `OPENROUTER_API_KEY`                | [OpenRouter](https://openrouter.ai/keys)               |
+| Переменная                              | Описание                                               |
+| --------------------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`                          | PostgreSQL (Drizzle)                                   |
+| `JWT_SECRET` / `JWT_REFRESH_SECRET`     | Auth tokens                                            |
+| `YANDEX_CLIENT_ID` / `GOOGLE_CLIENT_ID` | OAuth                                                  |
+| `MOEX_*` / `TINKOFF_*`                  | Рыночные данные                                        |
+| `AI_PROVIDER`                           | Активный LLM: `groq`, `gemini`, `openrouter`           |
+| `GROQ_API_KEY`                          | [Groq](https://console.groq.com/)                      |
+| `GEMINI_API_KEY`                        | [Google AI Studio](https://aistudio.google.com/apikey) |
+| `OPENROUTER_API_KEY`                    | [OpenRouter](https://openrouter.ai/keys)               |
 
 ## Roadmap
 
@@ -179,7 +179,7 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 
 ### Phase 9 — OAuth (после получения токенов)
 
-- Финальное подключение Yandex ID и VK ID
+- Yandex ID и Google OAuth
 - Связывание OAuth-аккаунтов с существующим пользователем
 - Полировка UX входа и регистрации
 
