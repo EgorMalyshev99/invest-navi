@@ -111,6 +111,10 @@ export class AuthService {
     return this.toAuthUser(user);
   }
 
+  async issueTokensForUser(userId: string, email: string): Promise<AuthTokens> {
+    return this.issueTokens(userId, email);
+  }
+
   async updateProfile(userId: string, input: UpdateProfileInput): Promise<AuthUser> {
     const updates: Partial<typeof users.$inferInsert> = {
       updatedAt: new Date(),

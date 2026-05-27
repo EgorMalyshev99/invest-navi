@@ -15,6 +15,8 @@ import {
   type KnowledgeLevelValue,
   type RegisterStep1FormValues,
 } from '@/features/auth/model/schemas';
+import { OAuthDivider } from '@/features/auth/ui/oauth-divider';
+import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
 import { PasswordStrengthMeter } from '@/features/auth/ui/password-strength-meter';
 import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -138,6 +140,8 @@ export function RegisterForm() {
   return (
     <form onSubmit={onStep1} className="flex flex-col gap-4" autoComplete="on">
       <Typography variant="muted">{t('step1Subtitle')}</Typography>
+      <OAuthSocialButtons />
+      <OAuthDivider />
       {error ? (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>

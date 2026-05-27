@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,6 +9,8 @@ import { useForm } from 'react-hook-form';
 import { login } from '@/features/auth/api/auth-api';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import { loginSchema, type LoginFormValues } from '@/features/auth/model/schemas';
+import { OAuthDivider } from '@/features/auth/ui/oauth-divider';
+import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
 import { Link, useRouter } from '@/i18n/navigation';
 import { GraphqlRequestError } from '@/shared/api/graphql';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
@@ -18,7 +21,10 @@ import { Input } from '@/shared/ui/input';
 export function LoginForm() {
   const t = useTranslations('auth');
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
+  const oauthError = searchParams.get('oauth') ? t('oauthError') : null;
+  const displayError = error ?? oauthError;
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,11 +43,15 @@ export function LoginForm() {
     }
   });
 
+  const from = searchParams.get('from') ?? undefined;
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" autoComplete="on">
-      {error ? (
+      <OAuthSocialButtons from={from} />
+      <OAuthDivider />
+      {displayError ? (
         <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{displayError}</AlertDescription>
         </Alert>
       ) : null}
       <FieldGroup>
