@@ -1,8 +1,10 @@
 ---
 description: Design system — palette, fonts, icons, layout conventions
 globs:
-  - 'apps/web/**/*.tsx'
-  - 'apps/web/**/*.css'
+  - 'apps/landing/**/*.tsx'
+  - 'apps/landing/**/*.css'
+  - 'apps/dashboard/**/*.tsx'
+  - 'apps/dashboard/**/*.css'
   - 'packages/ui/**/*.tsx'
   - 'packages/ui/**/*.css'
 ---
@@ -19,12 +21,12 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 
 ## Палитра — единая система токенов
 
-Источник: `apps/web/app/globals.css` (`:root`). В коде — **только shadcn-имена + 7 проектных**, без дубликатов (`text-text-primary`, `accent-primary` и т.п.).
+Источник: `packages/ui/src/styles.css` (`:root`). В коде — **только shadcn-имена + 7 проектных**, без дубликатов (`text-text-primary`, `accent-primary` и т.п.).
 
 ## Темы
 
-- Поддерживаются `light` (`:root`) и `dark` (`.dark`) через единый набор CSS-токенов в `apps/web/app/globals.css`.
-- Системная тема по умолчанию: `next-themes` с `defaultTheme="system"` и `attribute="class"`.
+- Поддерживаются `light` (`:root`) и `dark` (`.dark`) через единый набор CSS-токенов в `packages/ui/src/styles.css`.
+- Системная тема по умолчанию: landing — `next-themes`, dashboard — custom class provider.
 - Не хардкодить значения под тему в компонентах.
 - Использовать только семантические классы (`bg-background`, `text-foreground`, `border-border`, `bg-secondary`, `bg-card`), чтобы переключение темы работало автоматически.
 
@@ -53,7 +55,7 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 
 ## Шрифт
 
-- **Inter** через `next/font/google`, subsets: `latin`, `cyrillic`
+- **Inter**: landing через `next/font/google`, dashboard через CSS/font fallback до подключения webfont
 - Variable: `--font-inter` → `--font-sans`
 - Финансовые данные: `font-variant-numeric: tabular-nums` (class `tabular-nums`)
 
@@ -66,7 +68,7 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 
 ## Компоненты (shadcn/ui)
 
-Конфигурация: `apps/web/components.json` (стиль `radix-nova`, примитивы **Radix** / `radix-ui`, иконки Phosphor). Не добавлять другие UI-библиотеки поверх shadcn.
+Конфигурация: `packages/ui/components.json` (стиль `radix-nova`, примитивы **Radix** / `radix-ui`, иконки Phosphor). Не добавлять другие UI-библиотеки поверх shadcn.
 
 ### Установленные компоненты
 
@@ -119,11 +121,11 @@ Dark modern fintech, premium SaaS. Спокойный, не кричащий. Б
 
 - **(public)** Landing, login, register — верхний **header** (`PublicShell`), `NavigationMenu`, `ThemeToggle` в header
 - **(app)** market, watchlist, profile — **sidebar** (`DashboardShell`), без top nav header; `LocaleSwitcher` + `ThemeToggle` в `DashboardContentFooter` (низ контента); профиль и выход — в footer sidebar; mobile — bottom nav
-- Примитивы: `apps/web/src/shared/ui/`; импорт `@/shared/ui/...`
+- Примитивы: `packages/ui/src/`; импорт `@repo/ui/...`
 
 ### Контейнер страницы (`container`)
 
-- Источник ширины и горизонтальных отступов — утилита Tailwind **`container`** (настройка в `apps/web/app/globals.css`: `--container-center`, `--container-padding`).
+- Источник ширины и горизонтальных отступов — утилита Tailwind **`container`** (настройка в `packages/ui/src/styles.css`).
 - **Не использовать** для обёртки контента связку `max-w-*` + `mx-auto` + ручной `px-*` — это дублирует `container`.
 - `max-w-*` допустим только для **внутренних** узких элементов (модалки, popover), не для секций лендинга и shell.
 - `PublicShell` (header, footer): внутри `<header>` / `<footer>` — один `div.container`.

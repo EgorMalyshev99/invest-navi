@@ -1,5 +1,12 @@
 # @repo/ui
 
-Reserved for shared UI primitives when a second app (docs, admin) needs them.
+Shared shadcn/ui primitives, typography, Tailwind v4 tokens, and small UI helpers for
+`apps/landing` and `apps/dashboard`.
 
-The web app uses shadcn components in `apps/web/src/shared/ui/` per project conventions.
+Import components directly from package subpaths:
+
+```tsx
+import { Button } from '@repo/ui/button';
+import { cn } from '@repo/ui/lib/utils';
+import '@repo/ui/styles.css';
+```

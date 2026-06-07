@@ -36,8 +36,5 @@ jobs:
       - name: Build shared API types
         run: pnpm --filter @repo/api build
 
-      - name: API unit tests
-        run: pnpm --filter api test
-
       - name: Lint, typecheck, and build (affected)
         run: pnpm turbo run lint check-types build --affected

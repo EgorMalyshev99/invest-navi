@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "exclude": ["node_modules", "dist", ".prettierrc.mjs", "eslint.config.mjs"],
   "compilerOptions": {
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.build.tsbuildinfo"
   }
 }

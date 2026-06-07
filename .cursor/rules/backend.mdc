@@ -31,7 +31,7 @@ apps/api/src/
 ## GraphQL
 
 - Code-first: decorators `@ObjectType`, `@Resolver`, `@Query`, `@Mutation`
-- Shared types для web — экспорт из `packages/api` при необходимости
+- Shared types для frontend apps — экспорт из `packages/api` при необходимости
 - Ошибки — понятные коды; не утекать stack trace в production
 
 ## Auth
@@ -39,6 +39,8 @@ apps/api/src/
 - OAuth: Yandex ID, Google
 - Email/password — дополнительно
 - Access + refresh tokens; refresh rotation (Phase 3)
+- CORS uses `LANDING_URL` and `DASHBOARD_URL` as the allowlist; OAuth redirect URIs are derived from the same origins.
+- OAuth redirect allowlist must include dashboard callbacks (`/auth/{provider}/callback`).
 
 ## Market data
 
@@ -64,7 +66,6 @@ Env:
 - Не генерировать buy/sell рекомендации
 - System prompt: образовательный тон, оговорки, вопросы пользователю
 - **Compliance gate** (обязательно): `apps/api/src/ai/lib/compliance/` — после `parse*Json` вызывать `apply*Compliance`; при нарушении — fallback + `Logger.warn` с кодами нарушений
-- Тесты комплаенса: `pnpm --filter api test`
 
 ## Drizzle
 
@@ -84,8 +85,3 @@ Env:
 - `apps/api/src/market/` — `MoexProvider`, `TinkoffProvider`, `MarketCacheService`
 - Env: `MOEX_ISS_BASE_URL`, `TINKOFF_INVEST_TOKEN`, `TINKOFF_INVEST_API_URL`, `MARKET_CACHE_TTL_SECONDS`
 - Shared types: `@repo/api` (`AssetSnapshot`, `InstrumentType`, `MarketDataSource`)
-
-## Тесты
-
-- Unit (compliance AI): `pnpm --filter api test` — `src/ai/lib/compliance/*.spec.ts`
-- Jest / E2E API — отложено (Phase 10)

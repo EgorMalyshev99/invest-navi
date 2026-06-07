@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleOAuthClient } from './google-oauth.client';
 import { OAUTH_CALLBACK_PATHS, type OAuthProviderId } from './oauth-providers';
 import { YandexOAuthClient } from './yandex-oauth.client';
+import { parseAppOrigins } from '../../config/app-origins';
 import { OAuthAccountsRepository } from '../../database/repositories/oauth-accounts.repository';
 import { UsersRepository } from '../../database/repositories/users.repository';
 import { AuthService } from '../auth.service';
@@ -103,9 +104,10 @@ export class OAuthService {
   }
 
   private buildAllowedRedirectUris(): string[] {
-    const origins = [this.configService.get<string>('CORS_ORIGIN'), 'http://localhost:3001'].filter(
-      (value): value is string => Boolean(value?.trim()),
-    );
+    const origins = parseAppOrigins({
+      LANDING_URL: this.configService.get<string>('LANDING_URL'),
+      DASHBOARD_URL: this.configService.get<string>('DASHBOARD_URL'),
+    });
 
     const unique = new Set<string>();
     for (const origin of origins) {

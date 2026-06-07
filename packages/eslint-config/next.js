@@ -46,4 +46,10 @@ export const nextJsConfig = [
       ...pluginReactHooks.configs.recommended.rules,
     },
   },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'prefer-arrow-callback': 'error',
+    },
+  },
 ];

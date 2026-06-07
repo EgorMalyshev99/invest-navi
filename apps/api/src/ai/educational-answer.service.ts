@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { assertEducationalQuestionInput } from '@repo/api';
 
-import { UsersRepository } from '../database/repositories/users.repository';
-import { KnowledgeLevel } from '../auth/dto/knowledge-level.enum';
 import { EducationalAnswerInput } from './dto/educational-answer.input';
 import { AssetInsightSource } from './entities/asset-insight-source.enum';
 import { EducationalAnswer } from './entities/educational-answer.type';
@@ -13,6 +11,8 @@ import {
 } from './lib/build-educational-answer-prompt';
 import { formatComplianceViolations, scanComplianceText } from './lib/compliance';
 import { AiProviderFactory } from './providers/ai-provider.factory';
+import { KnowledgeLevel } from '../auth/dto/knowledge-level.enum';
+import { UsersRepository } from '../database/repositories/users.repository';
 
 @Injectable()
 export class EducationalAnswerService {
