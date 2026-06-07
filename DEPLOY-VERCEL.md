@@ -4,11 +4,11 @@ This branch targets **Vercel** for `apps/landing`, `apps/dashboard`, and `apps/a
 
 ## Vercel projects (three)
 
-| Project              | Root Directory   | Production branch |
-| -------------------- | ---------------- | ----------------- |
-| invest-navi-landing  | `apps/landing`   | `vercel`          |
-| invest-navi-dashboard| `apps/dashboard` | `vercel`          |
-| invest-navi-api      | `apps/api`       | `vercel`          |
+| Project               | Root Directory   | Production branch |
+| --------------------- | ---------------- | ----------------- |
+| invest-navi-landing   | `apps/landing`   | `vercel`          |
+| invest-navi-dashboard | `apps/dashboard` | `vercel`          |
+| invest-navi-api       | `apps/api`       | `vercel`          |
 
 `vercel.json` in each app sets monorepo `installCommand` / `buildCommand` from repo root.
 
