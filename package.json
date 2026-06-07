@@ -11,9 +11,12 @@
     "api:build": "turbo run build --filter=api",
     "api:dev": "turbo run dev --filter=api",
     "api:lint": "turbo run lint --filter=api",
-    "web:build": "turbo run build --filter=web",
-    "web:dev": "turbo run dev --filter=web",
-    "web:lint": "turbo run lint --filter=web",
+    "landing:build": "turbo run build --filter=landing",
+    "landing:dev": "turbo run dev --filter=landing",
+    "landing:lint": "turbo run lint --filter=landing",
+    "dashboard:build": "turbo run build --filter=dashboard",
+    "dashboard:dev": "turbo run dev --filter=dashboard",
+    "dashboard:lint": "turbo run lint --filter=dashboard",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\""
@@ -23,7 +26,7 @@
     "@repo/typescript-config": "workspace:*",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "turbo": "^2.9.14"
+    "turbo": "^2.9.16"
   },
   "packageManager": "pnpm@11.1.3",
   "engines": {

@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { parseAppOrigins } from './config/app-origins';
 import { assertProductionEnv } from './config/jwt.config';
 
 async function bootstrap() {
@@ -11,9 +12,17 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableShutdownHooks();
 
-  const webOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:3001';
+  const allowedOrigins = parseAppOrigins(process.env);
   app.enableCors({
-    origin: webOrigin,
+    origin: (origin, callback) => {
+      const normalizedOrigin = typeof origin === 'string' ? origin.replace(/\/$/, '') : undefined;
+      if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error('Origin is not allowed by CORS'));
+    },
     credentials: true,
   });
 

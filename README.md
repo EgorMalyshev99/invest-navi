@@ -16,16 +16,17 @@ AI-платформа для частных инвесторов на росси
 
 ## Стек
 
-| Слой         | Технологии                                                                                                                                |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Monorepo     | Turborepo, pnpm                                                                                                                           |
-| Frontend     | Next.js 16 (App Router), React 19, FSD, TanStack Query/Table, Highcharts, shadcn/ui, Tailwind v4, next-intl (ru/en), Zod, React Hook Form |
-| Backend      | NestJS 11, GraphQL (code-first, Apollo), Drizzle ORM, PostgreSQL                                                                          |
-| Auth         | OAuth (Yandex ID, Google) + email/password, bearer + refresh tokens                                                                       |
-| Данные рынка | MOEX ISS API, Tinkoff Invest API                                                                                                          |
-| AI           | Adapter pattern: Groq, Google Gemini, OpenRouter                                                                                          |
-| Realtime     | socket.io (при необходимости)                                                                                                             |
-| Infra        | Vercel (web + api), PostgreSQL на отдельном хостинге                                                                                      |
+| Слой         | Технологии                                                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Monorepo     | Turborepo, pnpm                                                                                                             |
+| Landing      | Next.js 16 (App Router), React 19, next-intl, next-themes, shadcn/ui из `@repo/ui`, Tailwind v4                             |
+| Dashboard    | Vite, React 19, TanStack Router/Query/Table, react-i18next + ICU, Highcharts, Zod, React Hook Form, shadcn/ui из `@repo/ui` |
+| Backend      | NestJS 11, GraphQL (code-first, Apollo), Drizzle ORM, PostgreSQL                                                            |
+| Auth         | OAuth (Yandex ID, Google) + email/password, bearer + refresh tokens                                                         |
+| Данные рынка | MOEX ISS API, Tinkoff Invest API                                                                                            |
+| AI           | Adapter pattern: Groq, Google Gemini, OpenRouter                                                                            |
+| Realtime     | socket.io (при необходимости)                                                                                               |
+| Infra        | Vercel (landing + dashboard + api), PostgreSQL на отдельном хостинге                                                        |
 
 ## Структура монорепозитория
 
@@ -33,10 +34,12 @@ AI-платформа для частных инвесторов на росси
 invest-navi/
 ├── apps/
 │   ├── api/          # NestJS — GraphQL API, auth, рыночные данные, AI
-│   └── web/          # Next.js — UI (FSD в src/)
+│   ├── landing/      # Next.js — маркетинг, публичные данные
+│   └── dashboard/    # Vite + React — кабинет инвестора (FSD в src/)
 ├── packages/
-│   ├── api/          # Общие типы/DTO между api и web
+│   ├── api/          # Общие типы/DTO между api и frontend apps
 │   ├── ui/           # shadcn/ui + Tailwind v4, общие компоненты
+│   ├── i18n-messages/# Общие ICU ru/en сообщения
 │   ├── eslint-config/
 │   └── typescript-config/
 └── .github/workflows/   # CI (по мере необходимости)
@@ -44,13 +47,13 @@ invest-navi/
 
 ### Frontend (FSD)
 
-`apps/web` использует **упрощённый FSD** (4 слоя + `app/`):
+`apps/dashboard` использует **упрощённый FSD** (4 слоя + `src/routes`):
 
-- `app/` — маршрутизация Next.js, layouts, metadata, **page composition** из widgets
+- `src/routes/` — маршрутизация TanStack Router и page composition из widgets
 - `src/widgets/` — крупные блоки UI
 - `src/features/` — действия пользователя
 - `src/entities/` — бизнес-сущности (asset, diary-entry, …)
-- `src/shared/` — UI-kit, API client, i18n, утилиты
+- `src/shared/` — API client, auth, i18n, утилиты; UI primitives импортируются из `@repo/ui`
 
 Зависимости только **вниз** по слоям. Public API каждого slice — через `index.ts`.
 
@@ -76,13 +79,14 @@ pnpm --filter @repo/api build
 # Миграции БД (при первом запуске)
 pnpm --filter api db:migrate
 
-# Разработка (API :3000, Web :3001)
+# Разработка (API :3000, Landing :3001, Dashboard :3002)
 pnpm dev
 ```
 
 Откройте:
 
-- Web: http://localhost:3001
+- Landing: http://localhost:3001
+- Dashboard: http://localhost:3002
 - API: http://localhost:3000
 
 Локальная разработка — только `pnpm dev` (без Docker). База подключается по `DATABASE_URL` из `.env`.
@@ -91,7 +95,8 @@ pnpm dev
 
 ```bash
 pnpm --filter api dev
-pnpm --filter web dev
+pnpm --filter landing dev
+pnpm --filter dashboard dev
 ```
 
 ### Качество кода
@@ -99,7 +104,7 @@ pnpm --filter web dev
 ```bash
 pnpm lint
 pnpm format
-pnpm --filter web codegen   # после изменения schema.gql или *.graphql
+pnpm --filter dashboard codegen   # после изменения schema.gql или *.graphql
 ```
 
 ## Переменные окружения
@@ -109,6 +114,10 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 | Переменная                              | Описание                                               |
 | --------------------------------------- | ------------------------------------------------------ |
 | `DATABASE_URL`                          | PostgreSQL (Drizzle)                                   |
+| `LANDING_URL` / `DASHBOARD_URL`         | Origins landing/dashboard для API CORS и OAuth         |
+| `NEXT_PUBLIC_APP_URL`                   | Origin landing                                         |
+| `NEXT_PUBLIC_DASHBOARD_URL`             | Origin dashboard для CTA на лендинге                   |
+| `VITE_APP_URL` / `VITE_API_URL`         | Origins dashboard и API для Vite                       |
 | `JWT_SECRET` / `JWT_REFRESH_SECRET`     | Auth tokens                                            |
 | `YANDEX_CLIENT_ID` / `GOOGLE_CLIENT_ID` | OAuth                                                  |
 | `MOEX_*` / `TINKOFF_*`                  | Рыночные данные                                        |
@@ -156,7 +165,7 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 ### Phase 6 ✅ — Инвестиционный дневник + AI
 
 - Модуль `ai/` с adapter pattern и провайдерами Groq, Gemini, OpenRouter
-- **Compliance gate** на API: проверка AI-ответов (без buy/sell/hold, без гарантий, оговорки при сравнении с вкладом) → safe fallback; тесты `pnpm --filter api test`
+- **Compliance gate** на API: проверка AI-ответов (без buy/sell/hold, без гарантий, оговорки при сравнении с вкладом) → safe fallback
 - Единые дисклеймеры в UI (`compliance.*` в next-intl, компонент `AiDisclaimer`)
 - `assetInsight` на карточке актива; `diaryHypothesisFeedback` для черновика гипотезы
 - GraphQL `diary/` — CRUD записей, снимок цены/индекса, `reviewAt` по горизонту
@@ -182,12 +191,30 @@ pnpm --filter web codegen   # после изменения schema.gql или *.
 - Yandex ID и Google OAuth
 - Связывание OAuth-аккаунтов с существующим пользователем
 - Полировка UX входа и регистрации
+- Разделение frontend на `apps/landing` (Next.js) и `apps/dashboard` (Vite + TanStack Router)
+- shadcn/ui и дизайн-токены вынесены в `@repo/ui`, сообщения — в `@repo/i18n-messages`
 
 ### Phase 10 — Лендинг, обзор рынка и тесты
 
 - Обновить контент лендинга (`/`) с учётом реализованного функционала: актуальные разделы, сценарии, преимущества и CTA
 - Еженедельный AI-обзор рынка (полуавтоматический кэш; cron — по необходимости позже)
-- Добавить тесты: Jest, `@repo/jest-config`, unit/integration; E2E API (supertest)
+
+#### Тесты (минимальный стек)
+
+| Слой             | Инструмент                                                         | Где                                                         |
+| ---------------- | ------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Unit / component | **Vitest** (+ `@testing-library/react` для dashboard и `@repo/ui`) | `packages/api`, `apps/api`, `apps/dashboard`, `packages/ui` |
+| E2E              | **Playwright**                                                     | `e2e/` (landing + dashboard, happy-path сценарии)           |
+
+Общий конфиг — `@repo/vitest-config` (по аналогии с `@repo/eslint-config`). Без Jest и supertest.
+
+**План внедрения (без перегруза):**
+
+1. `@repo/vitest-config` + `turbo run test` в CI
+2. Vitest: compliance AI (`apps/api/src/ai/lib/compliance/`) и zod/валидации в `packages/api`
+3. Vitest + RTL: 1–2 формы или виджета в dashboard (smoke)
+4. Playwright: auth + один сквозной сценарий (например, дневник)
+5. Дальше — только по мере изменений в критичных местах; landing — в основном E2E, не unit
 
 ## Документация
 

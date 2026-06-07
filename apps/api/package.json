@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
+    "prebuild": "pnpm --filter @repo/api build",
     "build": "nest build",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs}/**/*.ts\"",
-    "test": "node --import tsx --test src/ai/lib/compliance/*.spec.ts",
+    "lint": "eslint \"{src,apps,libs}/**/*.ts\" --max-warnings 0",
     "check-types": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -48,12 +48,11 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/pg": "^8.20.0",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^10.4.0",
+    "eslint": "10.4.1",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.5.7",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   }
 }

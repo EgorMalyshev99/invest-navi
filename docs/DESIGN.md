@@ -59,8 +59,8 @@
 ### Темизация (Dark + Light)
 
 - По умолчанию используется системная тема через `next-themes` (`defaultTheme="system"`, `enableSystem`).
-- `:root` в `apps/web/app/globals.css` описывает `light` токены.
-- Класс `.dark` в `apps/web/app/globals.css` описывает `dark` токены.
+- `:root` в `packages/ui/src/styles.css` описывает `light` токены.
+- Класс `.dark` в `packages/ui/src/styles.css` описывает `dark` токены.
 - Класс `.light` не используется.
 - Компоненты **не** должны переключать классы вручную под каждую тему; использовать только семантические токены (`bg-background`, `text-foreground`, `border-border`, и т.д.).
 - Акценты и продуктовая семантика сохраняются между темами: `primary`, `accent`, `positive`, `warning`, `negative`, `info`.
@@ -137,7 +137,7 @@
 | `neutral`                 | `text-muted-foreground`       | `--muted-foreground`     |
 | `risk-high`               | `text-risk-high`              | `--risk-high`            |
 
-Источник значений: [`apps/web/app/globals.css`](apps/web/app/globals.css) (`:root` + `.dark` + `@theme inline`).
+Источник значений: [`packages/ui/src/styles.css`](packages/ui/src/styles.css) (`:root` + `.dark` + `@theme inline`).
 
 ### Градиенты
 
@@ -150,7 +150,7 @@
 
 ## Типографика
 
-Базовая реализация: `apps/web/src/shared/ui/typography.tsx` (`cva` + `variant` + `numeric` + `asChild`).
+Базовая реализация: `packages/ui/src/typography.tsx` (`cva` + `variant` + `numeric` + `asChild`).
 
 ### Принципы типографики
 
@@ -201,8 +201,8 @@
 
 ### shadcn/ui — установленная библиотека
 
-Конфигурация: `apps/web/components.json` (стиль `radix-nova`, примитивы Radix / `radix-ui`, иконки `phosphor`). Визуальный пресет Nova: умеренные скругления и сбалансированная плотность (не Lyra с `rounded-none`).
-Компоненты живут в `apps/web/src/shared/ui/` (FSD-сегмент `shared`).
+Конфигурация: `packages/ui/components.json` (стиль `radix-nova`, примитивы Radix / `radix-ui`, иконки `phosphor`). Визуальный пресет Nova: умеренные скругления и сбалансированная плотность (не Lyra с `rounded-none`).
+Компоненты живут в `packages/ui/src/` (FSD-сегмент `shared`).
 Кастомизация — через CSS custom properties и Tailwind-классы.
 
 **Оглавление registry:** типографика → формы → кнопки → таблицы → раскрывающиеся секции → диалоги → навигация → карточки → обратная связь → бейджи → меню → визуализация → утилиты registry.
@@ -211,7 +211,7 @@
 
 #### Типографика (Typography)
 
-Типографика реализуется через единый компонент `Typography` в `apps/web/src/shared/ui/typography.tsx` на базе `cva`.
+Типографика реализуется через единый компонент `Typography` в `packages/ui/src/typography.tsx` на базе `cva`.
 
 | API       | Описание                                                                                                         |
 | --------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -484,7 +484,7 @@
 | Не использовать | `max-w-*` + `mx-auto` + ручной `px-*` как обёртку секции или shell                         |
 | Структура       | Один смысловой блок = один компонент; корневой тег — `<section>`                           |
 | Контент         | `div.container` внутри секции; фон/`py-*`/`id` — на `<section>`                            |
-| Файлы           | `apps/web/src/widgets/landing-hero/ui/sections/*-section.tsx`; сборка в `landing-hero.tsx` |
+| Файлы           | `apps/landing/src/widgets/landing-hero/ui/sections/*-section.tsx`; сборка в `landing-hero.tsx` |
 | Shell           | `PublicShell` header/footer — `div.container`                                              |
 
 `max-w-*` допустим для узких внутренних UI (модалки, popover), не для лендинга.
@@ -876,7 +876,7 @@ import { TrendUpIcon, ChartLineUpIcon, WalletIcon, NotebookIcon } from '@phospho
 
 ## Реализация палитры в Tailwind v4
 
-Значения hex задаются в [`apps/web/app/globals.css`](apps/web/app/globals.css): `:root` (light) и `.dark` (dark). Переключение темы — через `next-themes` (`attribute="class"`, `defaultTheme="system"`). Мост в Tailwind — `@theme inline` (shadcn + проектные токены). Шрифт — `@theme { --font-sans }`.
+Значения hex задаются в [`packages/ui/src/styles.css`](packages/ui/src/styles.css): `:root` (light) и `.dark` (dark). Переключение темы — через `next-themes` (`attribute="class"`, `defaultTheme="system"`). Мост в Tailwind — `@theme inline` (shadcn + проектные токены). Шрифт — `@theme { --font-sans }`.
 
 ```html
 <div class="bg-background text-foreground border-border">

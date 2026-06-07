@@ -1,0 +1,32 @@
+---
+description: Landing app — Next.js marketing frontend
+globs:
+  - 'apps/landing/**/*'
+---
+
+# Landing — apps/landing
+
+## Stack
+
+Next.js 16 App Router, React 19, next-intl, next-themes, Tailwind v4, `@repo/ui`.
+
+## Scope
+
+- Marketing/public product pages only.
+- Auth pages and OAuth callbacks live in `apps/dashboard`.
+- CTA links use `NEXT_PUBLIC_DASHBOARD_URL`.
+- Public market data may use a minimal server-side GraphQL fetcher; do not move dashboard entities/query layer into landing.
+
+## i18n
+
+- Use next-intl with `localePrefix: 'never'`.
+- Messages come from `@repo/i18n-messages`.
+
+## UI
+
+- Import primitives from `@repo/ui/...`.
+- Import shared styles through `@repo/ui/styles.css`.
+- shadcn CLI config lives only in `packages/ui/components.json`.
+- Next.js keeps `postcss.config.mjs` with `@tailwindcss/postcss` for Tailwind v4.
+- Prefer arrow functions for new React components, hooks, and helpers.
+- Keep landing-specific composition in `src/widgets`.

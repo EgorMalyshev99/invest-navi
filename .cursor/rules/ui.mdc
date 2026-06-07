@@ -1,0 +1,24 @@
+---
+description: Shared UI package — shadcn primitives and tokens
+globs:
+  - 'packages/ui/**/*'
+---
+
+# UI — packages/ui
+
+## Scope
+
+- Source-export package, no build step.
+- Contains shadcn primitives, `cn`, typography, Tailwind v4 styles/tokens, and cross-app UI helpers.
+- Do not add app-specific shells, routing components, or data-table abstractions here unless both landing and dashboard need them.
+
+## Imports
+
+- Public imports: `@repo/ui/button`, `@repo/ui/lib/utils`, `@repo/ui/styles.css`.
+- Internal component imports should stay relative or package-safe.
+
+## Design
+
+- Use semantic Tailwind tokens only.
+- Keep Phosphor Icons as the icon system.
+- Financial values use tabular numerals.

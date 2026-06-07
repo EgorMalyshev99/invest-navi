@@ -1,0 +1,21 @@
+{
+  "name": "@repo/i18n-messages",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./en.json": "./src/en.json",
+    "./ru.json": "./src/ru.json"
+  },
+  "scripts": {
+    "lint": "eslint src --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "10.4.1",
+    "typescript": "6.0.3"
+  }
+}
