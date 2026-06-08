@@ -220,7 +220,9 @@ function MenubarSubTrigger({
       {...props}
     >
       {children}
-      <CaretRightIcon className="ml-auto size-4" />
+      <span className="ml-auto inline-flex size-4" aria-hidden>
+        <CaretRightIcon size={16} />
+      </span>
     </MenubarPrimitive.SubTrigger>
   );
 }

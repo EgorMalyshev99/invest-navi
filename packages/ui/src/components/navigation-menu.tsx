@@ -71,10 +71,12 @@ function NavigationMenuTrigger({
       {...props}
     >
       {children}{' '}
-      <CaretDownIcon
-        className="relative top-px ml-1 size-3 transition duration-300 group-data-open/navigation-menu-trigger:rotate-180 group-data-popup-open/navigation-menu-trigger:rotate-180"
-        aria-hidden="true"
-      />
+      <span
+        className="relative top-px ml-1 inline-flex size-3 transition duration-300 group-data-open/navigation-menu-trigger:rotate-180 group-data-popup-open/navigation-menu-trigger:rotate-180"
+        aria-hidden
+      >
+        <CaretDownIcon size={12} />
+      </span>
     </NavigationMenuPrimitive.Trigger>
   );
 }

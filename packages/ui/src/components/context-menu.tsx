@@ -102,7 +102,9 @@ function ContextMenuSubTrigger({
       {...props}
     >
       {children}
-      <CaretRightIcon className="ml-auto" />
+      <span className="ml-auto inline-flex size-4" aria-hidden>
+        <CaretRightIcon size={16} />
+      </span>
     </ContextMenuPrimitive.SubTrigger>
   );
 }

@@ -24,19 +24,33 @@ function CalendarRoot({
 function CalendarChevron({
   className,
   orientation,
-  ...props
-}: React.ComponentProps<'svg'> & {
+}: {
+  className?: string;
   orientation?: 'left' | 'right' | 'up' | 'down';
 }) {
+  const wrapperClassName = cn('inline-flex size-4', className);
+
   if (orientation === 'left') {
-    return <CaretLeftIcon className={cn('size-4', className)} {...props} />;
+    return (
+      <span className={wrapperClassName} aria-hidden>
+        <CaretLeftIcon size={16} />
+      </span>
+    );
   }
 
   if (orientation === 'right') {
-    return <CaretRightIcon className={cn('size-4', className)} {...props} />;
+    return (
+      <span className={wrapperClassName} aria-hidden>
+        <CaretRightIcon size={16} />
+      </span>
+    );
   }
 
-  return <CaretDownIcon className={cn('size-4', className)} {...props} />;
+  return (
+    <span className={wrapperClassName} aria-hidden>
+      <CaretDownIcon size={16} />
+    </span>
+  );
 }
 
 function CalendarDayButtonSlot(props: React.ComponentProps<typeof DayButton>) {

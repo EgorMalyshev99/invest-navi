@@ -17,11 +17,31 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme}
       className="toaster group"
       icons={{
-        success: <CheckCircleIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <WarningIcon className="size-4" />,
-        error: <XCircleIcon className="size-4" />,
-        loading: <SpinnerIcon className="size-4 animate-spin" />,
+        success: (
+          <span className="inline-flex size-4" aria-hidden>
+            <CheckCircleIcon size={16} />
+          </span>
+        ),
+        info: (
+          <span className="inline-flex size-4" aria-hidden>
+            <InfoIcon size={16} />
+          </span>
+        ),
+        warning: (
+          <span className="inline-flex size-4" aria-hidden>
+            <WarningIcon size={16} />
+          </span>
+        ),
+        error: (
+          <span className="inline-flex size-4" aria-hidden>
+            <XCircleIcon size={16} />
+          </span>
+        ),
+        loading: (
+          <span className="inline-flex size-4 animate-spin" aria-hidden>
+            <SpinnerIcon size={16} />
+          </span>
+        ),
       }}
       style={
         {
