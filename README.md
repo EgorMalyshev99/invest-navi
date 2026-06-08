@@ -87,14 +87,14 @@ pnpm --filter @repo/api build
 # Миграции БД (при первом запуске)
 pnpm --filter api db:migrate
 
-# Разработка (API :3000, Landing :3001, Dashboard :3002)
+# Разработка (API :3000, Landing :3001, Dashboard :3003)
 pnpm dev
 ```
 
 Откройте:
 
 - Landing: http://localhost:3001
-- Dashboard: http://localhost:3002
+- Dashboard: http://localhost:3003
 - API: http://localhost:3000
 
 Локальная разработка — только `pnpm dev` (без Docker). База подключается по `DATABASE_URL` из `.env`.

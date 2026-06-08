@@ -1,6 +1,6 @@
 import { buildGraphqlUrl, stripTrailingSlash } from '@repo/shared/lib/url';
 
-const DEFAULT_APP_URL = 'http://localhost:3002';
+const DEFAULT_APP_URL = 'http://localhost:3003';
 const DEFAULT_API_URL = 'http://localhost:3000';
 
 function getEnvValue(key: string): string | undefined {

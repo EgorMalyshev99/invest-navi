@@ -17,11 +17,12 @@ export default defineConfig((config) => {
     resolve: {
       alias: {
         '@': path.resolve(dashboardRoot, './src'),
+        '@repo/api': path.resolve(monorepoRoot, 'packages/api/src'),
       },
     },
     server: {
       host: env.VITE_APP_HOST,
-      port: Number(env.VITE_APP_PORT) || 3002,
+      port: Number(env.VITE_APP_PORT) || 3003,
       fs: {
         allow: [monorepoRoot],
       },
