@@ -1,3 +1,10 @@
+mutation RefreshTokens($refreshToken: String!) {
+  refreshTokens(refreshToken: $refreshToken) {
+    accessToken
+    refreshToken
+  }
+}
+
 mutation Login($input: LoginInput!) {
   login(input: $input) {
     accessToken

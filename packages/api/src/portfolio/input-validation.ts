@@ -1,11 +1,13 @@
 import { ValidationError } from '../auth/input-validation.js';
 import { assertAssetSymbol } from '../diary/input-validation.js';
-
-const MAX_GOAL_LENGTH = 4000;
-const MIN_QUANTITY = 0.000001;
-const MAX_QUANTITY = 1_000_000_000;
-const MIN_PRICE = 0.000001;
-const MAX_PRICE = 1_000_000_000;
+import {
+  ENTRY_DATE_PATTERN,
+  MAX_GOAL_LENGTH,
+  MAX_PRICE,
+  MAX_QUANTITY,
+  MIN_PRICE,
+  MIN_QUANTITY,
+} from '../validation/constants.js';
 
 function assertPositiveNumber(value: number, field: string, min: number, max: number): number {
   if (!Number.isFinite(value) || value < min || value > max) {
@@ -27,7 +29,7 @@ function assertOptionalGoal(value: string | null | undefined): string | null {
 
 function assertEntryDate(value: string): string {
   const trimmed = value.trim();
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+  if (!ENTRY_DATE_PATTERN.test(trimmed)) {
     throw new ValidationError('Entry date must be YYYY-MM-DD');
   }
   const parsed = new Date(`${trimmed}T00:00:00.000Z`);

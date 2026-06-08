@@ -1,8 +1,6 @@
 'use client';
 
-import {
-  cn,
-} from '@repo/ui';
+import { AiDisclaimerText } from '@repo/ui/components/ai-disclaimer-text';
 
 import { useTranslations } from '@/i18n/react-i18n';
 
@@ -23,5 +21,5 @@ export function AiDisclaimer({ variant, className }: AiDisclaimerProps) {
         ? 'aiTemplate'
         : 'educationalOnly';
 
-  return <p className={cn('text-muted-foreground text-xs', className)}>{t(key)}</p>;
+  return <AiDisclaimerText text={t(key)} className={className} />;
 }

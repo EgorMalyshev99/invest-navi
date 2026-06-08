@@ -1,5 +1,5 @@
 import type { MarketMood } from '../model/types';
-import type { MarketIndex, SectorIndex } from '@/entities/asset';
+import type { MarketIndex, SectorIndex } from '@/shared/types/market';
 
 const FLAT_THRESHOLD = 0.15;
 

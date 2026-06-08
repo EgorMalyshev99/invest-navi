@@ -1,13 +1,17 @@
 import { ValidationError } from '../auth/input-validation.js';
+import {
+  DIARY_ACTIONS,
+  DIARY_HORIZONS,
+  DIARY_STATUSES,
+  MAX_CONFIDENCE,
+  MAX_SYMBOL_LENGTH,
+  MAX_TEXT_LENGTH,
+  MIN_CONFIDENCE,
+} from '../validation/constants.js';
 
-const MAX_SYMBOL_LENGTH = 32;
-const MAX_TEXT_LENGTH = 4000;
-const MIN_CONFIDENCE = 1;
-const MAX_CONFIDENCE = 10;
-
-const DIARY_ACTIONS = new Set(['observe', 'buy', 'sell', 'hold']);
-const DIARY_HORIZONS = new Set(['1m', '3m', '1y', 'long']);
-const DIARY_STATUSES = new Set(['active', 'completed', 'cancelled']);
+const diaryActions = new Set<string>(DIARY_ACTIONS);
+const diaryHorizons = new Set<string>(DIARY_HORIZONS);
+const diaryStatuses = new Set<string>(DIARY_STATUSES);
 
 export function normalizeAssetSymbol(symbol: string): string {
   return symbol.trim().toUpperCase();
@@ -55,11 +59,11 @@ export function assertCreateDiaryEntryInput(input: CreateDiaryEntryFields): {
 } {
   const assetSymbol = assertAssetSymbol(input.assetSymbol);
   const action = input.action;
-  if (!DIARY_ACTIONS.has(action)) {
+  if (!diaryActions.has(action)) {
     throw new ValidationError('Invalid diary action');
   }
   const horizon = input.horizon;
-  if (!DIARY_HORIZONS.has(horizon)) {
+  if (!diaryHorizons.has(horizon)) {
     throw new ValidationError('Invalid diary horizon');
   }
   let confidence: number | null = null;
@@ -121,19 +125,19 @@ export function assertUpdateDiaryEntryInput(input: UpdateDiaryEntryFields): Part
   }> = {};
 
   if (input.action !== undefined) {
-    if (!DIARY_ACTIONS.has(input.action)) {
+    if (!diaryActions.has(input.action)) {
       throw new ValidationError('Invalid diary action');
     }
     updates.action = input.action as 'observe' | 'buy' | 'sell' | 'hold';
   }
   if (input.horizon !== undefined) {
-    if (!DIARY_HORIZONS.has(input.horizon)) {
+    if (!diaryHorizons.has(input.horizon)) {
       throw new ValidationError('Invalid diary horizon');
     }
     updates.horizon = input.horizon as '1m' | '3m' | '1y' | 'long';
   }
   if (input.status !== undefined) {
-    if (!DIARY_STATUSES.has(input.status)) {
+    if (!diaryStatuses.has(input.status)) {
       throw new ValidationError('Invalid diary status');
     }
     updates.status = input.status as 'active' | 'completed' | 'cancelled';

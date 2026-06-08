@@ -18,6 +18,12 @@ globs:
 - shadcn CLI in apps routes primitives via `@repo/ui/components` aliases; within `packages/ui` aliases stay relative (`src/components`, `src/lib`).
 - Internal component imports should stay relative or package-safe.
 
+## Primitives policy
+
+- Default headless primitives: `radix-ui` (shadcn `radix-nova` style).
+- `@base-ui/react` — только для `Combobox` (нет аналога в текущем radix-наборе).
+- Cross-app presentational blocks: `ai-disclaimer-text`, `route-error-fallback-content`, `route-not-found-layout`, `brand-link-label`.
+
 ## Design
 
 - Use semantic Tailwind tokens only.

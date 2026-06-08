@@ -3,10 +3,13 @@ import type {
   DiaryHorizon,
   DiaryStatus,
 } from '@/shared/api/graphql/generated/graphql';
+import type {
+  DiaryActionValue,
+  DiaryHorizonValue,
+  DiaryStatusValue,
+} from '@repo/api/validation/constants';
 
-export type DiaryActionValue = 'observe' | 'buy' | 'sell' | 'hold';
-export type DiaryHorizonValue = '1m' | '3m' | '1y' | 'long';
-export type DiaryStatusValue = 'active' | 'completed' | 'cancelled';
+export type { DiaryActionValue, DiaryHorizonValue, DiaryStatusValue };
 
 const actionToGraphql: Record<DiaryActionValue, DiaryAction> = {
   observe: 'OBSERVE',

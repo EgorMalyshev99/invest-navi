@@ -13,14 +13,11 @@ import {
   SquaresFourIcon,
   UserCircleIcon,
 } from '@phosphor-icons/react';
-import {
-  cn,
-} from '@repo/ui';
-
+import { cn } from '@repo/ui';
 
 import { DashboardContentFooter } from './dashboard-content-footer';
 
-import { logout } from '@/features/auth/api/auth-api';
+import { logout } from '@/features/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';

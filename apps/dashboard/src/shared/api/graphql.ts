@@ -2,6 +2,7 @@ import { print } from 'graphql';
 
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
+import { RefreshTokensDocument } from '@/shared/api/graphql/generated/graphql';
 import { clearTokens, getAccessToken, getRefreshToken, setTokens } from '@/shared/auth/token-store';
 import { getGraphqlUrl } from '@/shared/config/env';
 
@@ -30,15 +31,6 @@ interface GraphqlResponse<T> {
   errors?: Array<{ message: string }>;
 }
 
-const REFRESH_TOKENS_QUERY = /* GraphQL */ `
-  mutation RefreshTokens($refreshToken: String!) {
-    refreshTokens(refreshToken: $refreshToken) {
-      accessToken
-      refreshToken
-    }
-  }
-`;
-
 async function refreshAccessToken(): Promise<string | undefined> {
   const refreshToken = getRefreshToken();
   if (!refreshToken) {
@@ -49,7 +41,7 @@ async function refreshAccessToken(): Promise<string | undefined> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      query: REFRESH_TOKENS_QUERY,
+      query: print(RefreshTokensDocument),
       variables: { refreshToken },
     }),
     cache: 'no-store',

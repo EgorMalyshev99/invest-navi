@@ -12,22 +12,22 @@
 
 ## Архитектурные решения (не менять без согласования)
 
-| Область     | Решение                                                                                               |
-| ----------- | ----------------------------------------------------------------------------------------------------- |
-| Monorepo    | Turborepo + pnpm workspaces                                                                           |
-| Landing     | Next.js App Router, маркетинг + публичные данные                                                      |
-| Dashboard   | Vite + React, TanStack Router, **упрощённый FSD** (`routes` → widgets → features → entities → shared) |
-| Backend     | NestJS, **GraphQL code-first** (Apollo)                                                               |
-| ORM         | Drizzle + PostgreSQL                                                                                  |
-| Auth        | Yandex ID + Google OAuth + email/password; dashboard хранит bearer + refresh в localStorage           |
-| i18n        | landing: next-intl; dashboard: react-i18next + ICU; `ru`, `en`                                        |
-| Market data | MOEX ISS + Tinkoff Invest API                                                                         |
-| AI          | Adapter pattern: Groq, Google Gemini, OpenRouter (`AI_PROVIDER` + API keys в env)                     |
-| UI          | `@repo/ui` (shadcn/ui + Tailwind v4 tokens), Inter, Phosphor Icons                                    |
-| Themes      | landing: `next-themes`; dashboard: custom class provider; `:root` (light) + `.dark` (dark)            |
-| Tables      | TanStack Table                                                                                        |
-| Forms       | shadcn/ui `Field` + React Hook Form + Zod (`zodResolver`)                                             |
-| Deploy      | Vercel (landing + dashboard + api); PostgreSQL на отдельном хостинге                                  |
+| Область     | Решение                                                                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Monorepo    | Turborepo + pnpm workspaces                                                                                                                         |
+| Landing     | Next.js App Router, маркетинг + публичные данные                                                                                                    |
+| Dashboard   | Vite + React, TanStack Router, **упрощённый FSD** (`routes` → widgets → features → entities → shared)                                               |
+| Backend     | NestJS, **GraphQL code-first** (Apollo)                                                                                                             |
+| ORM         | Drizzle + PostgreSQL                                                                                                                                |
+| Auth        | Yandex ID + Google OAuth + email/password; dashboard хранит bearer + refresh в localStorage                                                         |
+| i18n        | landing: next-intl (`apps/landing/src/messages/`); dashboard: react-i18next + ICU (`apps/dashboard/src/messages/`); `ru`, `en` — без shared package |
+| Market data | MOEX ISS + Tinkoff Invest API                                                                                                                       |
+| AI          | Adapter pattern: Groq, Google Gemini, OpenRouter (`AI_PROVIDER` + API keys в env)                                                                   |
+| UI          | `@repo/ui` (shadcn/ui + Tailwind v4 tokens), Inter, Phosphor Icons                                                                                  |
+| Themes      | landing: `next-themes`; dashboard: custom class provider; `:root` (light) + `.dark` (dark)                                                          |
+| Tables      | TanStack Table                                                                                                                                      |
+| Forms       | shadcn/ui `Field` + React Hook Form + Zod (`zodResolver`)                                                                                           |
+| Deploy      | Vercel (landing + dashboard + api); PostgreSQL на отдельном хостинге                                                                                |
 
 ## Структура репозитория
 
@@ -35,12 +35,14 @@
 apps/api/       — NestJS GraphQL API
 apps/landing/   — Next.js; маркетинг и публичный GraphQL fetch
 apps/dashboard/ — Vite + React; FSD в apps/dashboard/src/
-packages/api/   — Shared types (build before apps/api)
-packages/ui/    — shadcn/ui primitives, Tailwind v4 styles/tokens
-packages/i18n-messages/ — Shared ICU ru/en messages
+packages/api/    — Shared types (build before apps/api)
+packages/shared/ — Shared utilities (format, url, locales)
+packages/ui/     — shadcn/ui primitives, Tailwind v4 styles/tokens
 packages/eslint-config/
 packages/typescript-config/
 ```
+
+Сообщения i18n хранятся **в каждом frontend-app отдельно** (`apps/landing/src/messages/{ru,en}.json`, `apps/dashboard/src/messages/{ru,en}.json`). При изменении копирайта синхронизируйте `ru` и `en` внутри app; cross-app sync — вручную.
 
 ## Язык и контент
 

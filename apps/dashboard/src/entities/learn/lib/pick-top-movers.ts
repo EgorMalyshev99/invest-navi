@@ -1,4 +1,4 @@
-import type { Asset } from '@/entities/asset';
+import type { Asset } from '@/shared/types/market';
 
 export interface TopMovers {
   gainers: Asset[];
