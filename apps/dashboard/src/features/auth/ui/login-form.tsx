@@ -15,21 +15,25 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/features/auth/api/auth-api';
+import { resolvePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import { loginSchema, type LoginFormValues } from '@/features/auth/model/schemas';
 import { OAuthDivider } from '@/features/auth/ui/oauth-divider';
 import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
-import { Link, useRouter, useSearchParams  } from '@/i18n/navigation';
+import { Link, useRouter, useSearchParams } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { GraphqlRequestError } from '@/shared/api/graphql';
+import { useAuth } from '@/shared/auth/auth-context';
 
 export function LoginForm() {
   const t = useTranslations('auth');
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { refreshAuthState } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const oauthError = searchParams.get('oauth') ? t('oauthError') : null;
   const displayError = error ?? oauthError;
+  const from = resolvePostAuthRedirect(searchParams.get('from') ?? undefined);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -41,13 +45,12 @@ export function LoginForm() {
     setError(null);
     try {
       await login(values);
-      router.replace(from ?? '/overview');
+      refreshAuthState();
+      router.replace(from);
     } catch (e) {
       setError(e instanceof GraphqlRequestError ? e.message : t('loginError'));
     }
   });
-
-  const from = searchParams.get('from') ?? undefined;
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" autoComplete="on">
