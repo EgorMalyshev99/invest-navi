@@ -26,7 +26,9 @@ export function LandingTopicCard({
             iconClassName,
           )}
         >
-          <IconComponent className="size-5" weight="duotone" aria-hidden />
+          <span className="inline-flex size-5" aria-hidden>
+            <IconComponent size={20} weight="duotone" />
+          </span>
         </div>
         <CardTitle className="min-w-0 flex-1 text-base leading-snug">{title}</CardTitle>
       </CardHeader>

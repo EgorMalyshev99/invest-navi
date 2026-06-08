@@ -53,15 +53,19 @@ export function DiaryCycleFlow({ className }: { className?: string }) {
                   )}
                 >
                   <span className="inline-flex size-4 shrink-0" aria-hidden>
-                    <IconComponent weight="duotone" />
+                    <IconComponent size={16} weight="duotone" />
                   </span>
                   {t(`steps.${key}`)}
                 </Badge>
               </li>
               {!isLast ? (
                 <li className="flex items-center justify-center sm:list-none" aria-hidden>
-                  <CaretDownIcon className="text-muted-foreground size-5 sm:hidden" />
-                  <CaretRightIcon className="text-muted-foreground hidden size-5 sm:block" />
+                  <span className="text-muted-foreground inline-flex size-5 sm:hidden">
+                    <CaretDownIcon size={20} />
+                  </span>
+                  <span className="text-muted-foreground hidden size-5 sm:inline-flex">
+                    <CaretRightIcon size={20} />
+                  </span>
                 </li>
               ) : null}
             </Fragment>

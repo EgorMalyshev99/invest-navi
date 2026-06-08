@@ -30,7 +30,9 @@ export function DiarySection() {
         <Card className="border-primary/20 from-primary/5 bg-gradient-to-br to-transparent">
           <CardHeader>
             <div className="text-primary flex items-center gap-2">
-              <NotebookIcon className="size-6" weight="duotone" aria-hidden />
+              <span className="inline-flex size-6" aria-hidden>
+                <NotebookIcon size={24} weight="duotone" />
+              </span>
               <CardTitle className="text-lg">{t('diaryCardTitle')}</CardTitle>
             </div>
           </CardHeader>
