@@ -52,7 +52,9 @@ export function DiaryCycleFlow({ className }: { className?: string }) {
                     accentStyles[accent],
                   )}
                 >
-                  <IconComponent className="size-4 shrink-0" weight="duotone" aria-hidden />
+                  <span className="inline-flex size-4 shrink-0" aria-hidden>
+                    <IconComponent weight="duotone" />
+                  </span>
                   {t(`steps.${key}`)}
                 </Badge>
               </li>
