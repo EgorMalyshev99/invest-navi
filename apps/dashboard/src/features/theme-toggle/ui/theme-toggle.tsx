@@ -1,17 +1,17 @@
 'use client';
 
 import { MoonIcon, SunIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@repo/ui/dropdown-menu';
+} from '@repo/ui';
+
 
 import { useTranslations } from '@/i18n/react-i18n';
 import { useTheme } from '@/shared/ui/theme-provider';
-
 
 export function ThemeToggle() {
   const t = useTranslations('theme');

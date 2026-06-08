@@ -1,8 +1,13 @@
 'use client';
 
 import { WarningCircleIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from '@repo/ui';
+
 
 import { useTranslations } from '@/i18n/react-i18n';
 

@@ -1,8 +1,14 @@
 'use client';
 
-
-import { cn } from '@repo/ui/lib/utils';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/table';
+import {
+  cn,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@repo/ui';
 import { flexRender, type Table as TanStackTable } from '@tanstack/react-table';
 
 interface DataTableProps<TData> {

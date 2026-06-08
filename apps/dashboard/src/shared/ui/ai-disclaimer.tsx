@@ -1,9 +1,10 @@
 'use client';
 
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
 
 export type AiDisclaimerVariant = 'educational' | 'template' | 'generated';
 

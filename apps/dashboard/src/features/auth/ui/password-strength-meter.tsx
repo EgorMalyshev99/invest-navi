@@ -1,10 +1,13 @@
 'use client';
 
 import * as passwordPolicy from '@repo/api/auth/password-policy';
-import { Badge } from '@repo/ui/badge';
-import { cn } from '@repo/ui/lib/utils';
-import { Progress } from '@repo/ui/progress';
-import { Typography } from '@repo/ui/typography';
+import {
+  Badge,
+  cn,
+  Progress,
+  Typography,
+} from '@repo/ui';
+
 
 import type { PasswordRuleId, PasswordStrengthLevel } from '@repo/api/auth/password-policy';
 

@@ -1,4 +1,6 @@
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
 
 import { Link } from '@/i18n/navigation';
 

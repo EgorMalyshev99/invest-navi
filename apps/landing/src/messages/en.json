@@ -1,0 +1,145 @@
+{
+  "footer": {
+    "copyright": "© {year} Invest Navigator"
+  },
+  "theme": {
+    "toggle": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "ru": "Russian",
+    "en": "English",
+    "switch": "Interface language"
+  },
+  "compliance": {
+    "educationalOnly": "Educational context only. Not investment advice.",
+    "aiTemplate": "Educational template based on market data. Not investment advice.",
+    "aiGenerated": "AI-generated text based on market data. May contain inaccuracies. Not investment advice."
+  },
+  "landing": {
+    "heroBadge": "MOEX · plain talk, no noise",
+    "heroTitle": "Get the market first — decide later",
+    "heroSubtitle": "Plain talk on the market, risks, and an idea journal. AI helps pull context for names and entries — no buy/sell hype, no FOMO.",
+    "heroNote": "We don’t drop “just buy it” takes. We help you think out loud: ask better questions and log hypotheses until things click.",
+    "heroPills": {
+      "catalog": "MOEX catalog",
+      "watchlist": "Your watchlist",
+      "diary": "Idea journal",
+      "ai": "AI insights"
+    },
+    "ctaStart": "Start free",
+    "ctaLogin": "Already in? Sign in",
+    "directionsTitle": "What are you here for?",
+    "directionsSubtitle": "Pick a lane — we’ll match the tone of tips and explanations to your goal.",
+    "directions": {
+      "d1": {
+        "title": "Get into investing",
+        "body": "Basics without the lecture vibe: stocks, bonds, risks — with Russian market examples, not a dusty textbook."
+      },
+      "d2": {
+        "title": "See what the market’s doing",
+        "body": "Today’s picture, sectors, and stand-out moves — without terminal chaos or feed panic."
+      },
+      "d3": {
+        "title": "Build a watchlist",
+        "body": "5–7 names on your list, 2–4 weeks of watching how they behave — no FOMO “buy now” energy."
+      },
+      "d4": {
+        "title": "Run an idea journal",
+        "body": "Log thesis, risks, and criteria — then honestly compare what you expected vs what happened."
+      },
+      "d5": {
+        "title": "Sanity-check your portfolio",
+        "body": "Where you’re overweight, where you’re concentrated, and what to ask each line — no “guaranteed x’s”."
+      },
+      "d6": {
+        "title": "Get bonds, for real",
+        "body": "Issuer, maturity, yield, and risks — with caveats, not the “it’s like a deposit but cooler” myth."
+      }
+    },
+    "featuresTitle": "Six questions per idea",
+    "featuresSubtitle": "On every asset card — six questions plus AI hints for each: from “what is it?” to “ready to act?” — not a ready-made trade.",
+    "features": {
+      "q1": {
+        "title": "What is this instrument?",
+        "body": "Human words: a stock is a slice of a company, a bond is debt, a fund is a basket. Where returns might come from and why price moves at all."
+      },
+      "q2": {
+        "title": "What is happening now?",
+        "body": "Day, week, and month moves and how the name looks vs the market. Not just candles — the story, not numbers for a screenshot."
+      },
+      "q3": {
+        "title": "Why might that be?",
+        "body": "AI suggests “maybe because…” angles — rates, FX, news, sector. Likely and possible, never “we already know the reason.”"
+      },
+      "q4": {
+        "title": "What are the risks?",
+        "body": "Market, sector, issuer, liquidity, rules. So you see where it could hurt, not only the upside reel."
+      },
+      "q5": {
+        "title": "Does it fit me?",
+        "body": "Your horizon, goals, and how much drawdown you can stomach. In the journal — your thesis and “nailed it / missed it” criteria, not someone else’s voice."
+      },
+      "q6": {
+        "title": "What to check before acting?",
+        "body": "Mini checklist: what confirms the idea, what breaks it, what you’ll watch. A frame for your call — not a ready-made “enter now” button."
+      }
+    },
+    "diaryBadge": "Our thing",
+    "diaryTitle": "Investment journal",
+    "diaryCycle": {
+      "intro": "Not messy notes — an actual loop:",
+      "ariaLabel": "Investment journal stages",
+      "steps": {
+        "hypothesis": "Thesis",
+        "observation": "Observation",
+        "conclusion": "Conclusion"
+      }
+    },
+    "diaryBody": "We don’t say “don’t.” AI can flag weak spots in your thesis and questions for retro — the call and responsibility stay yours.",
+    "diaryCardTitle": "In every entry",
+    "diaryPoints": {
+      "p1": "Thesis: why the name is on your radar",
+      "p2": "Risks: what could go off-script",
+      "p3": "Criteria: when you nailed it vs whiffed",
+      "p4": "Retro: what changed in your head"
+    },
+    "howTitle": "Start without the rush",
+    "howSubtitle": "Three steps — from chill observation to a decision you won’t cringe at later.",
+    "stepLabel": "Step {step}",
+    "steps": {
+      "s1": {
+        "title": "Sign up + level",
+        "body": "Email, password, and your experience level — so AI and hints don’t sound like a bank brochure if you’re just getting started."
+      },
+      "s2": {
+        "title": "Your watchlist",
+        "body": "Add MOEX names from the catalog and track moves — no “hurry before the close” pressure."
+      },
+      "s3": {
+        "title": "Thesis in the journal",
+        "body": "Log the thought, risks, and criteria — AI can help sharpen the wording; then come back and compare with reality."
+      }
+    },
+    "ctaTitle": "Start with observation?",
+    "ctaSubtitle": "Free sign-up: catalog, watchlist, and journal in one place — no extra noise."
+  },
+  "errors": {
+    "errorTitle": "Something went wrong",
+    "errorDescription": "We could not load this page. Please try again.",
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The address does not exist or has been moved.",
+    "goHome": "Go home"
+  },
+  "nav": {
+    "brand": "Invest Navigator",
+    "directions": "Goals",
+    "features": "Features",
+    "howItWorks": "Get started",
+    "login": "Sign in",
+    "register": "Sign up"
+  }
+}

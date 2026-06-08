@@ -1,6 +1,11 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
 
 import type { PortfolioSummaryFieldsFragment } from '@/shared/api/graphql/generated/graphql';
 

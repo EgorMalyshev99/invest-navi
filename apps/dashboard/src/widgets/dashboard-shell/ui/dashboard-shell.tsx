@@ -13,11 +13,12 @@ import {
   SquaresFourIcon,
   UserCircleIcon,
 } from '@phosphor-icons/react';
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
+
 
 import { DashboardContentFooter } from './dashboard-content-footer';
-
-
 
 import { logout } from '@/features/auth/api/auth-api';
 import { useIsMobile } from '@/hooks/use-mobile';

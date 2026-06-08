@@ -1,11 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@repo/ui/field';
-import { Input } from '@repo/ui/input';
-import { Textarea } from '@repo/ui/textarea';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  Input,
+  Textarea,
+} from '@repo/ui';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 

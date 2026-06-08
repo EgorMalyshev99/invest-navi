@@ -1,13 +1,15 @@
 'use client';
 
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  Skeleton,
+} from '@repo/ui';
 
 import { useDiaryRetrospectiveQuery } from '@/entities/diary-entry';
 import { AiInsightBlock } from '@/features/ai-insight';
 import { useLocale, useTranslations } from '@/i18n/react-i18n';
 import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
-
 
 interface DiaryRetrospectivePanelProps {
   entryId: string;

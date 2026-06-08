@@ -189,7 +189,7 @@ Phase 5 ✅ — Web: маркет, auth и кабинет (каталог, watch
 Phase 6 ✅ — инвестиционный дневник + AI (`diary` GraphQL, `/diary`, `diaryHypothesisFeedback`, ретроспектива).
 Phase 7 ✅ — портфель (`/portfolio`, `portfolioSummary`) и облигационный помощник (`/bonds`, `bondInsight`).
 Phase 8 ✅ — обучение (`/learn`, `/risks`, `/overview`), контекстный глоссарий, `knowledgeLevel` в hub/overview, MVP `/ai` (`educationalAnswer` + compliance).
-Текущая фаза — **Phase 9**: OAuth (Yandex ID, Google) + split frontend (`apps/landing`, `apps/dashboard`, `@repo/ui`, `@repo/i18n-messages`). Еженедельный обзор рынка и cron — **Phase 10**.
+Текущая фаза — **Phase 9**: OAuth (Yandex ID, Google) + split frontend (`apps/landing`, `apps/dashboard`, `@repo/ui`). Еженедельный обзор рынка и cron — **Phase 10**.
 
 ## Полезные команды
 

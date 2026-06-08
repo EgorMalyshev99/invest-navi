@@ -15,18 +15,20 @@ Next.js 16 App Router, React 19, next-intl, next-themes, Tailwind v4, `@repo/ui`
 - Marketing/public product pages only.
 - Auth pages and OAuth callbacks live in `apps/dashboard`.
 - CTA links use `NEXT_PUBLIC_DASHBOARD_URL`.
-- Public market data may use a minimal server-side GraphQL fetcher; do not move dashboard entities/query layer into landing.
+- Market data and catalog live in `apps/dashboard`; landing has no API fetchers.
 
 ## i18n
 
 - Use next-intl with `localePrefix: 'never'`.
-- Messages come from `@repo/i18n-messages`.
+- Messages live in `src/messages/{ru,en}.json`; static imports via `src/i18n/messages.ts`.
 
 ## UI
 
-- Import primitives from `@repo/ui/...`.
-- Import shared styles through `@repo/ui/styles.css`.
-- shadcn CLI config lives only in `packages/ui/components.json`.
+- Import primitives from `@repo/ui` or `@repo/ui/components/...`.
+- Import shared styles through `@repo/ui/globals.css`.
+- shadcn CLI: run `pnpm dlx shadcn@latest add <component>` from `apps/landing`; primitives go to `packages/ui`, blocks to `src/components/`.
+- `apps/landing/components.json` + `packages/ui/components.json` must stay in sync (`style`, `iconLibrary`, `baseColor`).
 - Next.js keeps `postcss.config.mjs` with `@tailwindcss/postcss` for Tailwind v4.
 - Prefer arrow functions for new React components, hooks, and helpers.
-- Keep landing-specific composition in `src/widgets`.
+- Landing UI lives in `src/components/` grouped by domain (`layout`, `landing`, `locale-switcher`, `theme-toggle`, `ui`).
+- Shared helpers: `src/lib/`, env: `src/config/`.

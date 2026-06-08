@@ -1,13 +1,17 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
 
 import type { PortfolioSummaryFieldsFragment } from '@/shared/api/graphql/generated/graphql';
 
 import { ChangeBadge } from '@/entities/asset';
 import { useTranslations } from '@/i18n/react-i18n';
 import { formatPrice } from '@/shared/lib/format';
-
 
 interface PortfolioSummaryCardsProps {
   summary: PortfolioSummaryFieldsFragment;

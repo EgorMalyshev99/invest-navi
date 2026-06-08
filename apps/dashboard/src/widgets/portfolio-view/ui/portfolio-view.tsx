@@ -1,10 +1,16 @@
 'use client';
 
 import { PlusIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@repo/ui';
 import { useState } from 'react';
 
 import { PortfolioAllocationsGrid } from './portfolio-allocation-panel';

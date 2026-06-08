@@ -1,8 +1,12 @@
 'use client';
 
-
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
 
 import type { WatchlistRow } from '../model/types';
 

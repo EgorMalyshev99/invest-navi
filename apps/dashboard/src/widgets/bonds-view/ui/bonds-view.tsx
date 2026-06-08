@@ -1,9 +1,12 @@
 'use client';
 
-
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Skeleton,
+} from '@repo/ui';
 
 import { BondsCatalogTable } from './bonds-catalog-table';
 import { BondsIntroPanel } from './bonds-intro-panel';

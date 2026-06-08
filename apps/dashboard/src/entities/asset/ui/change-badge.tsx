@@ -1,7 +1,10 @@
 'use client';
 
 import { TrendDownIcon, TrendUpIcon } from '@phosphor-icons/react';
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
+
 
 import { formatPercent } from '@/shared/lib/format';
 

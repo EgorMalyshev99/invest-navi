@@ -1,12 +1,12 @@
 'use client';
 
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
 
 import type { InstrumentType } from '../model/types';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
-
 
 interface TypeBadgeProps {
   type: InstrumentType;

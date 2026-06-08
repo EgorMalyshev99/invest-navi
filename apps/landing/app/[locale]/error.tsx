@@ -1,6 +1,6 @@
 'use client';
 
-import { RouteErrorFallback } from '@/shared/ui/route-error-fallback';
+import { RouteErrorFallback } from '@/components/ui/route-error-fallback';
 
 interface LocaleErrorProps {
   error: Error & { digest?: string };

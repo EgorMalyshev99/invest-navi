@@ -1,8 +1,15 @@
 'use client';
 
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
 import { useMemo } from 'react';
 
 import { WatchlistCardList } from './watchlist-card-list';

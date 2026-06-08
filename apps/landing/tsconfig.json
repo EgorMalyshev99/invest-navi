@@ -8,10 +8,7 @@
     ],
     "strictNullChecks": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@/widgets/*": ["./src/widgets/*"],
-      "@/features/*": ["./src/features/*"],
-      "@/shared/*": ["./src/shared/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],

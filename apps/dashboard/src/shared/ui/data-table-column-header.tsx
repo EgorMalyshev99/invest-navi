@@ -1,11 +1,13 @@
 'use client';
 
 import { CaretDownIcon, CaretUpIcon, CaretUpDownIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
-import { cn } from '@repo/ui/lib/utils';
+import {
+  Button,
+  cn,
+} from '@repo/ui';
+
 
 import type { Column } from '@tanstack/react-table';
-
 
 interface DataTableColumnHeaderProps<TData, TValue> {
   column: Column<TData, TValue>;

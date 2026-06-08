@@ -1,4 +1,6 @@
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Skeleton,
+} from '@repo/ui';
 
 export function DashboardShellSkeleton() {
   return (

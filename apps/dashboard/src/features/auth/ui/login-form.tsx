@@ -1,10 +1,16 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@repo/ui/field';
-import { Input } from '@repo/ui/input';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  Input,
+} from '@repo/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -16,7 +22,6 @@ import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
 import { Link, useRouter, useSearchParams  } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { GraphqlRequestError } from '@/shared/api/graphql';
-
 
 export function LoginForm() {
   const t = useTranslations('auth');

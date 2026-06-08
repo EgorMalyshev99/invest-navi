@@ -1,22 +1,29 @@
-import { cn } from '@repo/ui/lib/utils';
-import { TooltipProvider } from '@repo/ui/tooltip';
-import { Inter } from 'next/font/google';
+import { cn } from '@repo/ui';
+import localFont from 'next/font/local';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 
 import type { Metadata, Viewport } from 'next';
 
+import { ThemeProvider } from '@/components/ui/theme-provider';
+import { UiProviders } from '@/components/ui/ui-providers';
 import { routing } from '@/i18n/routing';
-import { ThemeProvider } from '@/shared/ui/theme-provider';
 
-
-import '../globals.css';
-
-const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
+const inter = localFont({
+  src: [
+    {
+      path: '../fonts/Inter.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Inter-Italic.ttf',
+      weight: '400',
+      style: 'italic',
+    },
+  ],
   variable: '--font-inter',
-  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -62,7 +69,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning className={cn(inter.variable)}>
+    <html lang={locale} suppressHydrationWarning className={cn(inter.className)}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
@@ -71,9 +78,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             enableSystem
             disableTransitionOnChange
           >
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
+            <UiProviders>{children}</UiProviders>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

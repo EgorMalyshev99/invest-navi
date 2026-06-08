@@ -1,14 +1,14 @@
 'use client';
 
-import { Separator } from '@repo/ui/separator';
+import {
+  Separator,
+} from '@repo/ui';
 import { Suspense } from 'react';
-
 
 import { LocaleSwitcher } from '@/features/locale-switcher';
 import { LocaleSwitcherSkeleton } from '@/features/locale-switcher/ui/locale-switcher-skeleton';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { useTranslations } from '@/i18n/react-i18n';
-
 
 export function DashboardContentFooter() {
   const t = useTranslations('layout');

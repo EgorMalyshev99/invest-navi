@@ -1,17 +1,16 @@
 'use client';
 
 import { CaretDownIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
 import {
+  Button,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@repo/ui/dropdown-menu';
-import { cn } from '@repo/ui/lib/utils';
+} from '@repo/ui';
 import { useTranslation } from 'react-i18next';
-
 
 import { updateProfile } from '@/features/auth/api/auth-api';
 import { toGraphqlPreferredLocale } from '@/features/auth/lib/graphql-enums';
@@ -21,7 +20,6 @@ import { usePathname, useRouter } from '@/i18n/navigation';
 import { useLocale, useTranslations } from '@/i18n/react-i18n';
 import { routing } from '@/i18n/routing';
 import { getAccessToken } from '@/shared/auth/token-store';
-
 
 type LocaleSwitcherProps = {
   align?: 'start' | 'center' | 'end';

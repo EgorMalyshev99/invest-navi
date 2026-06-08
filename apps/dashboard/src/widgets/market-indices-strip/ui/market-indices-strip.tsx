@@ -1,7 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@repo/ui';
 
 import { ChangeBadge, type MarketIndex, useIndicesQuery } from '@/entities/asset';
 import { formatCompactNumber } from '@/shared/lib/format';

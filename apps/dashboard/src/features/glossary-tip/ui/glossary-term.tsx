@@ -5,13 +5,11 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@repo/ui/tooltip';
+} from '@repo/ui';
 
 import type { GlossaryTermId } from '@/entities/learn';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
-
 
 interface GlossaryTermProps {
   termId: GlossaryTermId;

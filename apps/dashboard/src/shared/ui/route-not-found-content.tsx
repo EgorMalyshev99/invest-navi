@@ -1,8 +1,12 @@
 'use client';
 
-
-import { Button } from '@repo/ui/button';
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@repo/ui/empty';
+import {
+  Button,
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from '@repo/ui';
 
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';

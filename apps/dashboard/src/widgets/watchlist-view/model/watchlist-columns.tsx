@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from '@repo/ui/button';
+import {
+  Button,
+} from '@repo/ui';
 import { useMemo } from 'react';
-
 
 import type { WatchlistRow } from './types';
 import type { WatchlistStatus } from '@/features/watchlist/model/types';
