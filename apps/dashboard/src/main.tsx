@@ -9,6 +9,7 @@ import { createRoot } from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
 import { AuthProvider, useAuth } from './shared/auth/auth-context';
 import { ThemeProvider } from './shared/ui/theme-provider';
+import { UiProviders } from './shared/ui/ui-providers';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,9 +47,11 @@ function AppRouter() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="system">
-      <AuthProvider>
-        <AppRouter />
-      </AuthProvider>
+      <UiProviders>
+        <AuthProvider>
+          <AppRouter />
+        </AuthProvider>
+      </UiProviders>
     </ThemeProvider>
   </StrictMode>,
 );

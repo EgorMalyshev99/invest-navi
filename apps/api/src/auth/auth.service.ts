@@ -9,7 +9,11 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { assertLoginInput, assertRegisterInput, assertUpdateProfileName } from '@repo/api';
 
-import { resolveJwtSecrets, type JwtSecrets } from '../config/jwt.config';
+import {
+  resolveJwtExpiresInSeconds,
+  resolveJwtSecrets,
+  type JwtSecrets,
+} from '../config/jwt.config';
 import { users } from '../database';
 import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
@@ -185,11 +189,11 @@ export class AuthService {
   }
 
   private get accessExpiresInSeconds(): number {
-    return this.configService.get<number>('JWT_EXPIRES_IN_SECONDS') ?? 900;
+    return resolveJwtExpiresInSeconds(this.configService, 'JWT_EXPIRES_IN_SECONDS', 900);
   }
 
   private get refreshExpiresInSeconds(): number {
-    return this.configService.get<number>('JWT_REFRESH_EXPIRES_IN_SECONDS') ?? 604800;
+    return resolveJwtExpiresInSeconds(this.configService, 'JWT_REFRESH_EXPIRES_IN_SECONDS', 604800);
   }
 
   private validateLogin(email: string, password: string) {

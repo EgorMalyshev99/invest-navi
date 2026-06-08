@@ -5,6 +5,17 @@ export interface JwtSecrets {
   refreshSecret: string;
 }
 
+export function resolveJwtExpiresInSeconds(
+  configService: ConfigService,
+  key: 'JWT_EXPIRES_IN_SECONDS' | 'JWT_REFRESH_EXPIRES_IN_SECONDS',
+  fallback: number,
+): number {
+  const raw = configService.get<string>(key);
+  const parsed = Number(raw);
+
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 export function resolveJwtSecrets(configService: ConfigService): JwtSecrets {
   const isProduction = process.env.NODE_ENV === 'production';
   const accessSecret = configService.get<string>('JWT_SECRET');
