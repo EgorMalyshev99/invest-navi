@@ -22,9 +22,13 @@ export const useTranslations = (namespace?: string) => {
       {
         rich: (key: string, values: RichValues & TranslationValues) => {
           const fullKey = namespace ? `${namespace}.${key}` : key;
-          const message = t(fullKey, values);
+          const message = t(fullKey);
 
-          return message.split(/(\{[a-zA-Z0-9_.-]+\})/g).map((part) => {
+          if (typeof message !== 'string') {
+            return message;
+          }
+
+          return message.split(/(\{[a-zA-Z0-9_.-]+\})/g).map((part, index) => {
             const match = part.match(/^\{([a-zA-Z0-9_.-]+)\}$/);
             if (!match) {
               return part;
@@ -36,11 +40,19 @@ export const useTranslations = (namespace?: string) => {
             }
 
             const render = values[token];
-            return typeof render === 'function' ? (
-              <span key={`${token}-${part}`}>{(render as (chunks?: ReactNode) => ReactNode)()}</span>
-            ) : (
-              part
-            );
+            if (typeof render === 'function') {
+              return (
+                <span key={`${token}-${index}`}>
+                  {(render as (chunks?: ReactNode) => ReactNode)()}
+                </span>
+              );
+            }
+
+            if (render !== undefined && render !== null) {
+              return String(render);
+            }
+
+            return part;
           });
         },
       },
