@@ -44,14 +44,20 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <CaretDownIcon
+        <span
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
-        />
-        <CaretUpIcon
+          className="pointer-events-none inline-flex shrink-0 group-aria-expanded/accordion-trigger:hidden"
+          aria-hidden
+        >
+          <CaretDownIcon size={16} />
+        </span>
+        <span
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
-        />
+          className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline-flex"
+          aria-hidden
+        >
+          <CaretUpIcon size={16} />
+        </span>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

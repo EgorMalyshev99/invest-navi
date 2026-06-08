@@ -65,7 +65,9 @@ function CommandInput({
           {...props}
         />
         <InputGroupAddon>
-          <MagnifyingGlassIcon className="size-4 shrink-0 opacity-50" />
+          <span className="inline-flex size-4 shrink-0 opacity-50" aria-hidden>
+            <MagnifyingGlassIcon size={16} />
+          </span>
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -142,7 +144,12 @@ function CommandItem({
       {...props}
     >
       {children}
-      <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      <span
+        className="ml-auto inline-flex size-4 opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
+        aria-hidden
+      >
+        <CheckIcon size={16} />
+      </span>
     </CommandPrimitive.Item>
   );
 }

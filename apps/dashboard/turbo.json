@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "dev": {
-      "dependsOn": ["@repo/api#dev", "@repo/shared#dev"],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },

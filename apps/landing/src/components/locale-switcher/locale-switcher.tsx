@@ -44,7 +44,9 @@ export function LocaleSwitcher({ align = 'end', className }: LocaleSwitcherProps
         >
           <LocaleFlag locale={locale} />
           <span className="text-sm font-medium tracking-wide">{getLocaleLabelCode(locale)}</span>
-          <CaretDownIcon className="text-muted-foreground size-4" aria-hidden />
+          <span className="text-muted-foreground inline-flex size-4" aria-hidden>
+            <CaretDownIcon size={16} />
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="min-w-36">

@@ -1,7 +1,7 @@
 'use client';
 
 import { MinusIcon } from '@phosphor-icons/react/Minus';
-import { OTPInput, OTPInputContext } from 'input-otp';
+import { OTPInput, OTPInputContext, type RenderProps } from 'input-otp';
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
@@ -47,8 +47,11 @@ function InputOTPSlot({
 }: React.ComponentProps<'div'> & {
   index: number;
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+  const inputOTPContext = React.useContext(OTPInputContext) as RenderProps | null;
+  const slot = inputOTPContext?.slots[index];
+  const char = slot?.char;
+  const hasFakeCaret = slot?.hasFakeCaret ?? false;
+  const isActive = slot?.isActive ?? false;
 
   return (
     <div
@@ -78,7 +81,9 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
       role="separator"
       {...props}
     >
-      <MinusIcon />
+      <span className="inline-flex size-4" aria-hidden>
+        <MinusIcon size={16} />
+      </span>
     </div>
   );
 }

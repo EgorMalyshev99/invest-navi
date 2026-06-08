@@ -24,7 +24,9 @@ function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Tr
       {...props}
     >
       {children}
-      <CaretDownIcon className="text-muted-foreground pointer-events-none size-4" />
+      <span className="text-muted-foreground pointer-events-none inline-flex size-4" aria-hidden>
+        <CaretDownIcon size={16} />
+      </span>
     </ComboboxPrimitive.Trigger>
   );
 }
@@ -37,7 +39,9 @@ function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
       className={cn(className)}
       {...props}
     >
-      <XIcon className="pointer-events-none" />
+      <span className="pointer-events-none inline-flex size-4" aria-hidden>
+        <XIcon size={16} />
+      </span>
     </ComboboxPrimitive.Clear>
   );
 }
@@ -142,7 +146,7 @@ function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.
           <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
         }
       >
-        <CheckIcon className="pointer-events-none" />
+        <CheckIcon size={16} />
       </ComboboxPrimitive.ItemIndicator>
     </ComboboxPrimitive.Item>
   );
@@ -231,7 +235,9 @@ function ComboboxChip({
           className="-ml-1 opacity-50 hover:opacity-100"
           data-slot="combobox-chip-remove"
         >
-          <XIcon className="pointer-events-none" />
+          <span className="pointer-events-none inline-flex size-4" aria-hidden>
+            <XIcon size={16} />
+          </span>
         </ComboboxPrimitive.ChipRemove>
       )}
     </ComboboxPrimitive.Chip>

@@ -1,15 +1,18 @@
 import { SpinnerIcon } from '@phosphor-icons/react/Spinner';
 
+import type { ComponentProps } from 'react';
+
 import { cn } from '../lib/utils';
 
-function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
+function Spinner({ className }: Pick<ComponentProps<'svg'>, 'className'>) {
   return (
-    <SpinnerIcon
+    <span
       role="status"
       aria-label="Loading"
-      className={cn('size-4 animate-spin', className)}
-      {...props}
-    />
+      className={cn('inline-flex size-4 animate-spin', className)}
+    >
+      <SpinnerIcon size={16} />
+    </span>
   );
 }
 

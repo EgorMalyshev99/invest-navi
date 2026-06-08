@@ -2,6 +2,7 @@
   "name": "@repo/shared",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "pnpm build --watch",
@@ -16,12 +17,12 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/entry.js",
-      "require": "./dist/entry.js"
+      "types": "./dist/entry.d.ts",
+      "import": "./dist/entry.js"
     },
-    "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/*.js"
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.js"
     }
   },
   "devDependencies": {

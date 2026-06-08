@@ -62,7 +62,9 @@ function PaginationPrevious({
       className={cn('pl-1.5!', className)}
       {...props}
     >
-      <CaretLeftIcon data-icon="inline-start" />
+      <span data-icon="inline-start" className="inline-flex size-4" aria-hidden>
+        <CaretLeftIcon size={16} />
+      </span>
       <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   );
@@ -81,7 +83,9 @@ function PaginationNext({
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
-      <CaretRightIcon data-icon="inline-end" />
+      <span data-icon="inline-end" className="inline-flex size-4" aria-hidden>
+        <CaretRightIcon size={16} />
+      </span>
     </PaginationLink>
   );
 }

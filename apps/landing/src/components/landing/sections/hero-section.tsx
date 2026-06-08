@@ -28,7 +28,9 @@ export function HeroSection() {
 
       <div className="relative container flex flex-col items-center justify-center text-center">
         <Badge variant="secondary" className="mb-6 gap-1.5 px-3 py-1">
-          <SparkleIcon className="text-primary size-3.5" weight="fill" aria-hidden />
+          <span className="text-primary inline-flex size-3.5" aria-hidden>
+            <SparkleIcon size={14} weight="fill" />
+          </span>
           {t('heroBadge')}
         </Badge>
 

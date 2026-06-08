@@ -19,8 +19,12 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" className="size-9" aria-label={t('toggle')}>
-          <SunIcon className="size-5 dark:hidden" aria-hidden />
-          <MoonIcon className="hidden size-5 dark:block" aria-hidden />
+          <span className="inline-flex size-5 dark:hidden" aria-hidden>
+            <SunIcon size={20} />
+          </span>
+          <span className="hidden size-5 dark:inline-flex" aria-hidden>
+            <MoonIcon size={20} />
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

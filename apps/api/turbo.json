@@ -1,6 +1,11 @@
 {
   "extends": ["//"],
   "tasks": {
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "dependsOn": ["^build"],
       "env": [
