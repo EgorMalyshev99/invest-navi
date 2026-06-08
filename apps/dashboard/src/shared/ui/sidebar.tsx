@@ -1,11 +1,19 @@
 import { SidebarIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
-import { Input } from '@repo/ui/input';
-import { cn } from '@repo/ui/lib/utils';
-import { Separator } from '@repo/ui/separator';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@repo/ui/sheet';
-import { Skeleton } from '@repo/ui/skeleton';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/tooltip';
+import {
+  Button,
+  cn,
+  Input,
+  Separator,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from 'radix-ui';
 import * as React from 'react';

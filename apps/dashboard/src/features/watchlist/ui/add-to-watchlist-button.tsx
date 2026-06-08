@@ -1,16 +1,16 @@
 'use client';
 
 import { BookmarkSimpleIcon, CheckIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
+import {
+  Button,
+} from '@repo/ui';
+
 
 import { useWatchlist } from '../model/use-watchlist';
 
 import type { Asset } from '@/entities/asset';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
-
-
 
 interface AddToWatchlistButtonProps {
   asset: Pick<Asset, 'symbol' | 'name'>;

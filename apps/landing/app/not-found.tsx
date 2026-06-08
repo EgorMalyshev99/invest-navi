@@ -1,13 +1,11 @@
 import { NextIntlClientProvider } from 'next-intl';
 
+import { RouteNotFoundContent } from '@/components/ui/route-not-found-content';
 import { routing } from '@/i18n/routing';
-import { RouteNotFoundContent } from '@/shared/ui/route-not-found-content';
-
-import './globals.css';
 
 export default async function RootNotFound() {
   const locale = routing.defaultLocale;
-  const messages = (await import('@repo/i18n-messages/ru.json')).default;
+  const messages = (await import('@/messages/ru.json')).default;
 
   return (
     <html lang={locale}>

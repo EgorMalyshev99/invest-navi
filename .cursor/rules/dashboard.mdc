@@ -25,8 +25,9 @@ Vite + React 19, TanStack Router file-based routes, TanStack Query, react-i18nex
 
 ## UI/forms
 
-- Import primitives from `@repo/ui/...`; dashboard-only `data-table` and `sidebar` stay local.
-- shadcn CLI config lives only in `packages/ui/components.json`.
+- Import primitives from `@repo/ui` or `@repo/ui/components/...`; dashboard-only `data-table` and `sidebar` stay local.
+- shadcn CLI: run `pnpm dlx shadcn@latest add <component>` from `apps/dashboard`; primitives go to `packages/ui`, blocks to `src/components/`.
+- `apps/dashboard/components.json` + `packages/ui/components.json` must stay in sync (`style`, `iconLibrary`, `baseColor`).
 - Tailwind v4 in dashboard uses `@tailwindcss/vite` (no local `postcss.config.mjs`).
 - Prefer arrow functions for new React components, hooks, and helpers.
 - Forms use shadcn `Field` + React Hook Form + Zod.

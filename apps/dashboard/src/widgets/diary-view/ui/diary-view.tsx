@@ -1,11 +1,20 @@
 'use client';
 
 import { PlusIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Skeleton } from '@repo/ui/skeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@repo/ui';
 import { useMemo, useState } from 'react';
 
 import { DiaryEntryCard } from './diary-entry-card';
@@ -23,7 +32,6 @@ import { GlossaryTerm } from '@/features/glossary-tip';
 import { Link, useSearchParams  } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
-
 
 type FilterTab = 'all' | DiaryStatusValue;
 

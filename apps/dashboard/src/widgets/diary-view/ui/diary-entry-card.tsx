@@ -1,9 +1,13 @@
 'use client';
 
-
-import { Badge } from '@repo/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { cn } from '@repo/ui/lib/utils';
+import {
+  Badge,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  cn,
+} from '@repo/ui';
 
 import type { DiaryEntryFieldsFragment } from '@/shared/api/graphql/generated/graphql';
 

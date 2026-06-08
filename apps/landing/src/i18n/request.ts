@@ -3,8 +3,8 @@ import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 
 const messages = {
-  en: () => import('@repo/i18n-messages/en.json').then((module) => module.default),
-  ru: () => import('@repo/i18n-messages/ru.json').then((module) => module.default),
+  en: () => import('@/messages/en.json').then((module) => module.default),
+  ru: () => import('@/messages/ru.json').then((module) => module.default),
 };
 
 export default getRequestConfig(async ({ requestLocale }) => {

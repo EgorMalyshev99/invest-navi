@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from '@repo/ui/button';
+import {
+  Button,
+} from '@repo/ui';
 import { Suspense } from 'react';
-
 
 import { LocaleSwitcher } from '@/features/locale-switcher';
 import { LocaleSwitcherSkeleton } from '@/features/locale-switcher/ui/locale-switcher-skeleton';
@@ -10,7 +11,6 @@ import { ThemeToggle } from '@/features/theme-toggle';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { BrandLink } from '@/shared/ui/brand-link';
-
 
 interface PublicShellProps {
   children: React.ReactNode;

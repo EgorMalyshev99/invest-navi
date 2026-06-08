@@ -1,9 +1,14 @@
 'use client';
 
 import { ArrowLeftIcon, InfoIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Skeleton,
+} from '@repo/ui';
+
 
 import {
   ChangeBadge,
@@ -20,7 +25,6 @@ import { Link } from '@/i18n/navigation';
 import { useLocale, useTranslations } from '@/i18n/react-i18n';
 import { formatPrice } from '@/shared/lib/format';
 import { AiDisclaimer } from '@/shared/ui/ai-disclaimer';
-
 
 interface AssetDetailProps {
   symbol: string;

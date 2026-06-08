@@ -1,12 +1,16 @@
 'use client';
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui';
 
 import type { WatchlistStatus } from '../model/types';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
-
 
 const STATUSES: WatchlistStatus[] = [
   'watching',

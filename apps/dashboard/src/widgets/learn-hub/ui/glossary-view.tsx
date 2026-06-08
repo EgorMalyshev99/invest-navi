@@ -1,8 +1,14 @@
 'use client';
 
 import { ArrowLeftIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
+
 
 import { GLOSSARY_TERM_IDS } from '@/entities/learn';
 import { Link } from '@/i18n/navigation';

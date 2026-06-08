@@ -1,10 +1,18 @@
 'use client';
 
 import { ArrowRightIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@repo/ui';
+
 
 import {
   ChangeBadge,
@@ -22,7 +30,6 @@ import { GlossaryTerm } from '@/features/glossary-tip';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { formatCompactNumber, formatFxRate, formatPrice } from '@/shared/lib/format';
-
 
 function MoverRow({ asset }: { asset: Asset }) {
   return (

@@ -1,10 +1,16 @@
 'use client';
 
 import { SparkleIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Textarea } from '@repo/ui/textarea';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Textarea,
+} from '@repo/ui';
 import { useState } from 'react';
 
 import { useEducationalAnswerMutation } from '@/entities/educational-answer';

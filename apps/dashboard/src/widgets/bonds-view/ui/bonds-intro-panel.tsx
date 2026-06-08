@@ -1,13 +1,15 @@
 'use client';
 
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@repo/ui/accordion';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
 
 import { GlossaryTerm } from '@/features/glossary-tip';
 import { useTranslations } from '@/i18n/react-i18n';

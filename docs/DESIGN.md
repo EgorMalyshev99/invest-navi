@@ -478,14 +478,14 @@
 
 #### Лендинг: контейнер и секции
 
-| Правило         | Реализация                                                                                 |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| Ширина контента | Tailwind `container` (`globals.css`: `--container-center`, `--container-padding`)          |
-| Не использовать | `max-w-*` + `mx-auto` + ручной `px-*` как обёртку секции или shell                         |
-| Структура       | Один смысловой блок = один компонент; корневой тег — `<section>`                           |
-| Контент         | `div.container` внутри секции; фон/`py-*`/`id` — на `<section>`                            |
-| Файлы           | `apps/landing/src/widgets/landing-hero/ui/sections/*-section.tsx`; сборка в `landing-hero.tsx` |
-| Shell           | `PublicShell` header/footer — `div.container`                                              |
+| Правило         | Реализация                                                                                         |
+| --------------- | -------------------------------------------------------------------------------------------------- |
+| Ширина контента | Tailwind `container` (`globals.css`: `--container-center`, `--container-padding`)                  |
+| Не использовать | `max-w-*` + `mx-auto` + ручной `px-*` как обёртку секции или shell                                 |
+| Структура       | Один смысловой блок = один компонент; корневой тег — `<section>`                                   |
+| Контент         | `div.container` внутри секции; фон/`py-*`/`id` — на `<section>`                                    |
+| Файлы           | `apps/landing/src/components/landing/sections/*-section.tsx`; композиция в `app/[locale]/page.tsx` |
+| Shell           | `PublicShell` header/footer — `div.container`                                                      |
 
 `max-w-*` допустим для узких внутренних UI (модалки, popover), не для лендинга.
 

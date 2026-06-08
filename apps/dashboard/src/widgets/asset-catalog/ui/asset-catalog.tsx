@@ -1,10 +1,16 @@
 'use client';
 
-
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@repo/ui';
 
 import { AssetCatalogTable } from './asset-catalog-table';
 
@@ -16,7 +22,6 @@ import { AddToWatchlistButton } from '@/features/watchlist';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { formatPrice } from '@/shared/lib/format';
-
 
 function SimpleAssetCard({ asset }: { asset: Asset }) {
   const education = buildAssetEducation(asset, []);

@@ -1,7 +1,9 @@
 'use client';
 
 import { PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
+import {
+  Button,
+} from '@repo/ui';
 import { useMemo } from 'react';
 
 import type { PortfolioPositionFieldsFragment } from '@/shared/api/graphql/generated/graphql';

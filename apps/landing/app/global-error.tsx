@@ -1,6 +1,6 @@
 'use client';
 
-import './globals.css';
+import { Button } from '@repo/ui';
 
 interface GlobalErrorProps {
   error: Error & { digest?: string };
@@ -17,13 +17,7 @@ export default function GlobalError({ reset }: GlobalErrorProps) {
             Не удалось загрузить приложение. Попробуйте обновить страницу.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-4 py-2 text-sm font-medium"
-        >
-          Повторить
-        </button>
+        <Button onClick={() => reset()}>Повторить</Button>
       </body>
     </html>
   );

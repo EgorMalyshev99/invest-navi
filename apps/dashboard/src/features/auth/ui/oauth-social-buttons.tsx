@@ -1,10 +1,11 @@
 'use client';
 
-import { Button } from '@repo/ui/button';
+import {
+  Button,
+} from '@repo/ui';
 
 import { getOAuthAuthorizeUrl } from '@/features/auth/lib/start-oauth';
 import { useTranslations } from '@/i18n/react-i18n';
-
 
 type OAuthSocialButtonsProps = {
   from?: string;

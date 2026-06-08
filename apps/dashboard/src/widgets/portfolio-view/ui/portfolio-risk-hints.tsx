@@ -1,8 +1,16 @@
 'use client';
 
 import { InfoIcon, WarningIcon } from '@phosphor-icons/react';
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/alert';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui';
+
 
 import type { PortfolioSummaryFieldsFragment } from '@/shared/api/graphql/generated/graphql';
 

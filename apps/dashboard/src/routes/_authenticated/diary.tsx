@@ -1,7 +1,8 @@
-import { Skeleton } from '@repo/ui/skeleton';
+import {
+  Skeleton,
+} from '@repo/ui';
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
-
 
 import { DiaryView } from '@/widgets/diary-view';
 

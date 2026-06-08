@@ -1,8 +1,9 @@
-import { cn } from '@repo/ui/lib/utils';
+import {
+  cn,
+} from '@repo/ui';
 import { GB, RU } from 'country-flag-icons/react/3x2';
 
 import type { AppLocale } from '@/features/locale-switcher/model/locales';
-
 
 const localeFlags: Record<AppLocale, typeof RU> = {
   ru: RU,

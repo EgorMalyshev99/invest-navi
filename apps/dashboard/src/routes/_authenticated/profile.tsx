@@ -1,6 +1,7 @@
-import { Typography } from '@repo/ui/typography';
+import {
+  Typography,
+} from '@repo/ui';
 import { createFileRoute } from '@tanstack/react-router';
-
 
 import { ProfileForm } from '@/features/profile';
 import { useTranslations } from '@/i18n/react-i18n';

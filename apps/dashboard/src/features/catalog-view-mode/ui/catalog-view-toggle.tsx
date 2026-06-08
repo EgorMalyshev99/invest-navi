@@ -1,14 +1,15 @@
 'use client';
 
 import { SlidersHorizontalIcon, SparkleIcon } from '@phosphor-icons/react';
-import { Button } from '@repo/ui/button';
-import { cn } from '@repo/ui/lib/utils';
+import {
+  Button,
+  cn,
+} from '@repo/ui';
+
 
 import { useCatalogViewMode } from '../model/use-catalog-view-mode';
 
 import { useTranslations } from '@/i18n/react-i18n';
-
-
 
 export function CatalogViewToggle() {
   const t = useTranslations('catalog');
