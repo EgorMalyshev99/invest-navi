@@ -15,5 +15,16 @@ type LocaleFlagProps = {
 
 export function LocaleFlag({ locale, className }: LocaleFlagProps) {
   const Flag = localeFlags[locale];
-  return <Flag className={cn('h-4 w-6 shrink-0 rounded-sm', className)} aria-hidden />;
+
+  return (
+    <span
+      className={cn(
+        'inline-flex h-4 w-6 shrink-0 overflow-hidden rounded-sm [&_svg]:size-full',
+        className,
+      )}
+      aria-hidden
+    >
+      <Flag />
+    </span>
+  );
 }
