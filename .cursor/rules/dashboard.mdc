@@ -25,6 +25,7 @@ Vite + React 19, TanStack Router file-based routes, TanStack Query, react-i18nex
 
 ## UI/forms
 
+- `LocaleSwitcher`, `ThemeToggle`, `PublicShell` остаются в dashboard (react-i18next / custom theme / TanStack Router) — намеренный split с landing.
 - Import primitives from `@repo/ui` or `@repo/ui/components/...`; dashboard-only `data-table` and `sidebar` stay local.
 - shadcn CLI: run `pnpm dlx shadcn@latest add <component>` from `apps/dashboard`; primitives go to `packages/ui`, blocks to `src/components/`.
 - `apps/dashboard/components.json` + `packages/ui/components.json` must stay in sync (`style`, `iconLibrary`, `baseColor`).

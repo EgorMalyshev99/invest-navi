@@ -1,0 +1,24 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "LANDING_URL",
+        "DASHBOARD_URL",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "JWT_REFRESH_SECRET",
+        "AI_PROVIDER",
+        "GROQ_API_KEY",
+        "GEMINI_API_KEY",
+        "OPENROUTER_API_KEY",
+        "TINKOFF_TOKEN",
+        "YANDEX_CLIENT_ID",
+        "YANDEX_CLIENT_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "PORT"
+      ]
+    }
+  }
+}

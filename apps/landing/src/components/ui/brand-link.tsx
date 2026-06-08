@@ -1,6 +1,5 @@
-import {
-  cn,
-} from '@repo/ui';
+import { cn } from '@repo/ui';
+import { BrandLinkLabel, type BrandLinkShowLabel } from '@repo/ui/components/brand-link-label';
 import Image from 'next/image';
 
 import { Link } from '@/i18n/navigation';
@@ -9,7 +8,7 @@ type BrandLinkProps = {
   href: React.ComponentProps<typeof Link>['href'];
   label: string;
   /** `desktop` — название только от `md` (лендинг); `sidebar` — скрывается в icon-collapsed сайдбара */
-  showLabel?: boolean | 'desktop' | 'sidebar';
+  showLabel?: BrandLinkShowLabel;
   className?: string;
   logoClassName?: string;
   priority?: boolean;
@@ -23,7 +22,6 @@ export function BrandLink({
   logoClassName,
   priority = false,
 }: BrandLinkProps) {
-  const labelVisible = showLabel === true;
   const labelHidden = showLabel === false;
 
   return (
@@ -43,17 +41,7 @@ export function BrandLink({
         className={cn('size-9 shrink-0 rounded-lg', logoClassName)}
         priority={priority}
       />
-      <span
-        className={cn(
-          'truncate font-semibold tracking-tight',
-          showLabel === 'desktop' && 'hidden md:inline',
-          showLabel === 'sidebar' && 'group-data-[collapsible=icon]:hidden',
-          labelHidden && 'sr-only',
-          labelVisible && 'inline',
-        )}
-      >
-        {label}
-      </span>
+      <BrandLinkLabel label={label} showLabel={showLabel} />
     </Link>
   );
 }

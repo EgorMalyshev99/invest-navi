@@ -15,7 +15,7 @@
     "landing:dev": "turbo run dev --filter=landing",
     "landing:lint": "turbo run lint --filter=landing",
     "dashboard:build": "turbo run build --filter=dashboard",
-    "dashboard:dev": "turbo run dev --filter=dashboard",
+    "dashboard:dev": "turbo run dev --filter=dashboard --filter=@repo/api",
     "dashboard:lint": "turbo run lint --filter=dashboard",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",

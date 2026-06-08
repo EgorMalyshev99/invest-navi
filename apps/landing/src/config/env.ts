@@ -1,10 +1,8 @@
+import { buildGraphqlUrl, stripTrailingSlash } from '@repo/shared/lib/url';
+
 const DEFAULT_APP_URL = 'http://localhost:3001';
 const DEFAULT_API_URL = 'http://localhost:3000';
 const DEFAULT_DASHBOARD_URL = 'http://localhost:3002';
-
-function stripTrailingSlash(value: string): string {
-  return value.replace(/\/$/, '');
-}
 
 /** Public web app origin (OAuth redirects, canonical app URL). */
 export function getAppUrl(): string {
@@ -22,7 +20,7 @@ export function getApiBaseUrl(): string {
 }
 
 export function getGraphqlUrl(): string {
-  return `${getApiBaseUrl()}/graphql`;
+  return buildGraphqlUrl(getApiBaseUrl());
 }
 
 export function getDashboardUrl(path = '/'): string {

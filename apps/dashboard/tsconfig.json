@@ -3,11 +3,7 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@/widgets/*": ["./src/widgets/*"],
-      "@/features/*": ["./src/features/*"],
-      "@/entities/*": ["./src/entities/*"],
-      "@/shared/*": ["./src/shared/*"]
+      "@/*": ["./src/*"]
     },
     "allowArbitraryExtensions": true,
     "module": "ESNext",

@@ -148,6 +148,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@repo/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -182,7 +185,7 @@ importers:
         specifier: ^2.4.1
         version: 2.4.3(intl-messageformat@11.2.8)
       radix-ui:
-        specifier: ^1.4.3
+        specifier: ^1.5.0
         version: 1.5.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
         specifier: ^19.2.7
@@ -257,6 +260,9 @@ importers:
       '@phosphor-icons/react':
         specifier: ^2.1.10
         version: 2.1.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@repo/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -324,12 +330,6 @@ importers:
       eslint:
         specifier: 10.4.1
         version: 10.4.1(jiti@2.7.0)
-      ts-loader:
-        specifier: ^9.5.7
-        version: 9.6.0(typescript@6.0.3)(webpack@5.106.0(@swc/core@1.15.40))
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.15.40)(@types/node@25.9.2)(typescript@6.0.3)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -388,6 +388,24 @@ importers:
         specifier: ^8.59.4
         version: 8.60.1(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3)
 
+  packages/shared:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.2
+      eslint:
+        specifier: 10.4.1
+        version: 10.4.1(jiti@2.7.0)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
   packages/typescript-config: {}
 
   packages/ui:
@@ -395,9 +413,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@date-fns/tz@1.5.0)(@types/react@19.2.17)(date-fns@4.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@highcharts/react':
-        specifier: ^5.0.1
-        version: 5.0.1(@types/react@19.2.17)(highcharts@12.6.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@phosphor-icons/react':
         specifier: ^2.1.10
         version: 2.1.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -410,9 +425,6 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      highcharts:
-        specifier: ^12.6.0
-        version: 12.6.0
       input-otp:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -431,9 +443,6 @@ importers:
       react-resizable-panels:
         specifier: ^4.11.2
         version: 4.11.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      shadcn:
-        specifier: ^4.10.0
-        version: 4.10.0(@types/node@25.9.2)(typescript@6.0.3)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -468,6 +477,9 @@ importers:
       eslint:
         specifier: 10.4.1
         version: 10.4.1(jiti@2.7.0)
+      shadcn:
+        specifier: ^4.10.0
+        version: 4.10.0(@types/node@25.9.2)(typescript@6.0.3)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -1628,17 +1640,6 @@ packages:
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@highcharts/react@5.0.1':
-    resolution: {integrity: sha512-F2PNUw2+6YGAmjei2LFQbToaG0VBs8cXXWCHa2adipPQd1H6sU7vdwIZNBWxm/aQsbnm+da30ooWoiLIWwEX1A==}
-    peerDependencies:
-      '@types/react': 19.2.17
-      highcharts: '>=12.0.0'
-      react: '>=18'
-      react-dom: '>=18'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@hono/node-server@1.19.14':
     resolution: {integrity: sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw==}
@@ -5356,17 +5357,6 @@ packages:
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
 
-  highcharts@12.6.0:
-    resolution: {integrity: sha512-zWwoXECOakJT2huBMqIZOjDNLLgyZFCcfZqTj2g6cvYOGxjF3nvooC+rIaF5aKiharluyGKNflfRNrzOAIjdRg==}
-    peerDependencies:
-      jspdf: ^4.1.0
-      svg2pdf.js: ^2.7.0
-    peerDependenciesMeta:
-      jspdf:
-        optional: true
-      svg2pdf.js:
-        optional: true
-
   hono@4.12.23:
     resolution: {integrity: sha512-eIaZ9qDgu7XV0pxOCrg7/WhnQ6Ivm22UcxhXx/A3dcbqbbYgBEkc6e/J/s7j2tS96zoB0S9VBdLwQNCWwUo4LA==}
     engines: {node: '>=16.9.0'}
@@ -8854,14 +8844,6 @@ snapshots:
   '@graphql-typed-document-node/core@3.2.0(graphql@16.14.1)':
     dependencies:
       graphql: 16.14.1
-
-  '@highcharts/react@5.0.1(@types/react@19.2.17)(highcharts@12.6.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
-    dependencies:
-      highcharts: 12.6.0
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-    optionalDependencies:
-      '@types/react': 19.2.17
 
   '@hono/node-server@1.19.14(hono@4.12.23)':
     dependencies:
@@ -12591,8 +12573,6 @@ snapshots:
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
-
-  highcharts@12.6.0: {}
 
   hono@4.12.23: {}
 

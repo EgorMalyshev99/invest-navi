@@ -1,7 +1,23 @@
 {
   "extends": ["//"],
   "tasks": {
+    "dev": {
+      "dependsOn": ["@repo/api#dev", "@repo/shared#dev"],
+      "cache": false,
+      "persistent": true
+    },
     "build": {
+      "dependsOn": ["^build", "codegen"],
+      "env": [
+        "VITE_APP_URL",
+        "VITE_API_URL",
+        "VITE_APP_HOST",
+        "VITE_APP_PORT",
+        "VITE_YANDEX_CLIENT_ID",
+        "VITE_GOOGLE_CLIENT_ID"
+      ]
+    },
+    "check-types": {
       "dependsOn": ["^build", "codegen"]
     },
     "codegen": {

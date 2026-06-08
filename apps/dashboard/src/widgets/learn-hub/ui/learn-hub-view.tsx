@@ -1,19 +1,10 @@
 'use client';
 
 import { ArrowRightIcon, BookOpenTextIcon, ShieldWarningIcon } from '@phosphor-icons/react';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui';
-
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
 
 import { getLearnHubArticleOrder, type LearnCategory } from '@/entities/learn';
-import { useMeQuery } from '@/features/auth/api/use-me-query';
-import { fromGraphqlKnowledgeLevel } from '@/features/auth/lib/graphql-enums';
+import { fromGraphqlKnowledgeLevel, useMeQuery } from '@/features/auth';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 

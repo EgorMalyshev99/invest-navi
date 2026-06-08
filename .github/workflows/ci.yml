@@ -36,5 +36,15 @@ jobs:
       - name: Build shared API types
         run: pnpm --filter @repo/api build
 
+      - name: Check GraphQL schema drift
+        run: pnpm --filter api schema:check
+        env:
+          DATABASE_URL: postgresql://invest:invest_secret@localhost:5432/invest_navi
+          JWT_SECRET: ci-access-secret
+          JWT_REFRESH_SECRET: ci-refresh-secret
+
+      - name: Generate dashboard GraphQL types
+        run: pnpm --filter dashboard codegen
+
       - name: Lint, typecheck, and build (affected)
         run: pnpm turbo run lint check-types build --affected

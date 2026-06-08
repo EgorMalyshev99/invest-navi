@@ -24,6 +24,7 @@ Next.js 16 App Router, React 19, next-intl, next-themes, Tailwind v4, `@repo/ui`
 
 ## UI
 
+- `LocaleSwitcher`, `ThemeToggle`, `PublicShell` остаются в landing (next-intl / next-themes / App Router) — намеренный split с dashboard.
 - Import primitives from `@repo/ui` or `@repo/ui/components/...`.
 - Import shared styles through `@repo/ui/globals.css`.
 - shadcn CLI: run `pnpm dlx shadcn@latest add <component>` from `apps/landing`; primitives go to `packages/ui`, blocks to `src/components/`.

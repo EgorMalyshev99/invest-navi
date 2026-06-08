@@ -1,0 +1,18 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "dependsOn": ["@repo/shared#dev"],
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "env": [
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_DASHBOARD_URL",
+        "NEXT_PUBLIC_API_URL",
+        "VERCEL_URL"
+      ]
+    }
+  }
+}

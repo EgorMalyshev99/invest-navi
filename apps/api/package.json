@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
-    "prebuild": "pnpm --filter @repo/api build",
     "build": "nest build",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --max-warnings 0",
     "check-types": "tsc --noEmit",
+    "schema:generate": "nest build && node dist/generate-schema.js",
+    "schema:check": "nest build && cp src/schema.gql src/schema.gql.bak && node dist/generate-schema.js && diff -q src/schema.gql src/schema.gql.bak && rm src/schema.gql.bak",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"

@@ -10,19 +10,18 @@ const dashboardRoot = path.dirname(fileURLToPath(import.meta.url));
 const monorepoRoot = path.resolve(dashboardRoot, '../..');
 
 export default defineConfig((config) => {
-  const env = loadEnv(config.mode, process.cwd(), '');
+  const env = loadEnv(config.mode, dashboardRoot, '');
 
   return {
     plugins: [tailwindcss(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), react()],
     resolve: {
       alias: {
         '@': path.resolve(dashboardRoot, './src'),
-        '@repo/api': path.resolve(monorepoRoot, 'packages/api/src'),
       },
     },
     server: {
       host: env.VITE_APP_HOST,
-      port: Number(env.VITE_APP_PORT) || 3000,
+      port: Number(env.VITE_APP_PORT) || 3002,
       fs: {
         allow: [monorepoRoot],
       },

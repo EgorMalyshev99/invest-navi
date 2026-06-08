@@ -16,17 +16,16 @@ AI-платформа для частных инвесторов на росси
 
 ## Стек
 
-| Слой         | Технологии                                                                                                                  |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| Monorepo     | Turborepo, pnpm                                                                                                             |
-| Landing      | Next.js 16 (App Router), React 19, next-intl, next-themes, shadcn/ui из `@repo/ui`, Tailwind v4                             |
-| Dashboard    | Vite, React 19, TanStack Router/Query/Table, react-i18next + ICU, Highcharts, Zod, React Hook Form, shadcn/ui из `@repo/ui` |
-| Backend      | NestJS 11, GraphQL (code-first, Apollo), Drizzle ORM, PostgreSQL                                                            |
-| Auth         | OAuth (Yandex ID, Google) + email/password, bearer + refresh tokens                                                         |
-| Данные рынка | MOEX ISS API, Tinkoff Invest API                                                                                            |
-| AI           | Adapter pattern: Groq, Google Gemini, OpenRouter                                                                            |
-| Realtime     | socket.io (при необходимости)                                                                                               |
-| Infra        | Vercel (landing + dashboard + api), PostgreSQL на отдельном хостинге                                                        |
+| Слой         | Технологии                                                                                                      |
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
+| Monorepo     | Turborepo, pnpm                                                                                                 |
+| Landing      | Next.js 16 (App Router), React 19, next-intl, next-themes, shadcn/ui из `@repo/ui`, Tailwind v4                 |
+| Dashboard    | Vite, React 19, TanStack Router/Query/Table, react-i18next + ICU, Zod, React Hook Form, shadcn/ui из `@repo/ui` |
+| Backend      | NestJS 11, GraphQL (code-first, Apollo), Drizzle ORM, PostgreSQL                                                |
+| Auth         | OAuth (Yandex ID, Google) + email/password, bearer + refresh tokens                                             |
+| Данные рынка | MOEX ISS API, Tinkoff Invest API                                                                                |
+| AI           | Adapter pattern: Groq, Google Gemini, OpenRouter                                                                |
+| Infra        | Vercel (landing + dashboard + api), PostgreSQL на отдельном хостинге                                            |
 
 ## Структура монорепозитория
 
@@ -38,8 +37,8 @@ invest-navi/
 │   └── dashboard/    # Vite + React — кабинет инвестора (FSD в src/)
 ├── packages/
 │   ├── api/          # Общие типы/DTO между api и frontend apps
+│   ├── shared/       # Общие утилиты (format, url, locales)
 │   ├── ui/           # shadcn/ui + Tailwind v4, общие компоненты
-│   ├── i18n-messages/# Общие ICU ru/en сообщения
 │   ├── eslint-config/
 │   └── typescript-config/
 └── .github/workflows/   # CI (по мере необходимости)
@@ -56,6 +55,15 @@ invest-navi/
 - `src/shared/` — API client, auth, i18n, утилиты; UI primitives импортируются из `@repo/ui`
 
 Зависимости только **вниз** по слоям. Public API каждого slice — через `index.ts`.
+
+### i18n
+
+Сообщения хранятся **отдельно в каждом frontend-app**:
+
+- Landing: `apps/landing/src/messages/{ru,en}.json` (next-intl)
+- Dashboard: `apps/dashboard/src/messages/{ru,en}.json` (react-i18next + ICU)
+
+При изменении UI-копирайта синхронизируйте `ru` и `en` внутри приложения. Cross-app sync — вручную (общего i18n-пакета нет).
 
 ## Требования
 
@@ -104,12 +112,24 @@ pnpm --filter dashboard dev
 ```bash
 pnpm lint
 pnpm format
+pnpm --filter api schema:generate # после изменения GraphQL resolvers
 pnpm --filter dashboard codegen   # после изменения schema.gql или *.graphql
 ```
 
 ## Переменные окружения
 
-Создайте `.env.local` в корне и в приложениях по мере появления интеграций (Phase 2+):
+Создайте `.env.local` в корне и в приложениях по мере появления интеграций (Phase 2+).
+
+### Матрица по приложениям
+
+| Переменная                                                                       | App       | Назначение                           |
+| -------------------------------------------------------------------------------- | --------- | ------------------------------------ |
+| `LANDING_URL`, `DASHBOARD_URL`                                                   | api       | CORS и OAuth redirect allowlist      |
+| `DATABASE_URL`, `JWT_*`, `AI_*`, `YANDEX_*`, `GOOGLE_*` (secrets)                | api       | Серверные секреты и интеграции       |
+| `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_API_URL`        | landing   | Публичные origins для Next.js        |
+| `VITE_APP_URL`, `VITE_API_URL`, `VITE_YANDEX_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID` | dashboard | Публичные origins и OAuth client IDs |
+
+### Справочник
 
 | Переменная                              | Описание                                               |
 | --------------------------------------- | ------------------------------------------------------ |

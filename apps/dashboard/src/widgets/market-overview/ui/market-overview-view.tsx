@@ -13,7 +13,6 @@ import {
   Skeleton,
 } from '@repo/ui';
 
-
 import {
   ChangeBadge,
   type Asset,
@@ -24,8 +23,7 @@ import {
   useSectorsQuery,
 } from '@/entities/asset';
 import { pickSectorHighlights, pickTopMovers, resolveMarketMood } from '@/entities/learn';
-import { useMeQuery } from '@/features/auth/api/use-me-query';
-import { fromGraphqlKnowledgeLevel } from '@/features/auth/lib/graphql-enums';
+import { fromGraphqlKnowledgeLevel, useMeQuery } from '@/features/auth';
 import { GlossaryTerm } from '@/features/glossary-tip';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
