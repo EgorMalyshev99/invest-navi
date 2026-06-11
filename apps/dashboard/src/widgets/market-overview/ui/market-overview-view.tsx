@@ -26,7 +26,8 @@ import { pickSectorHighlights, pickTopMovers, resolveMarketMood } from '@/entiti
 import { fromGraphqlKnowledgeLevel, useMeQuery } from '@/features/auth';
 import { GlossaryTerm } from '@/features/glossary-tip';
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from '@/i18n/react-i18n';
+import { useLocale, useTranslations } from '@/i18n/react-i18n';
+import { WeeklyReviewCard } from '@/widgets/weekly-review';
 import { formatCompactNumber, formatFxRate, formatPrice } from '@/shared/lib/format';
 
 function MoverRow({ asset }: { asset: Asset }) {
@@ -48,6 +49,7 @@ function MoverRow({ asset }: { asset: Asset }) {
 
 export function MarketOverviewView() {
   const t = useTranslations('overview');
+  const locale = useLocale();
   const { data: meData } = useMeQuery();
   const knowledgeLevel = meData?.me.knowledgeLevel
     ? fromGraphqlKnowledgeLevel(meData.me.knowledgeLevel)
@@ -94,6 +96,8 @@ export function MarketOverviewView() {
         <h1 className="text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">{t('subtitle')}</p>
       </header>
+
+      <WeeklyReviewCard locale={locale} />
 
       <Card className="border-primary/20 from-primary/5 bg-gradient-to-br to-transparent">
         <CardHeader>

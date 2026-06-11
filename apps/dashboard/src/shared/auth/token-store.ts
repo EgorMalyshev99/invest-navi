@@ -1,41 +1,45 @@
-const ACCESS_TOKEN_KEY = 'invest_navi_access_token';
-const REFRESH_TOKEN_KEY = 'invest_navi_refresh_token';
 const TOKEN_CHANGE_EVENT = 'invest-navi-auth-token-change';
+export const SESSION_EXPIRED_EVENT = 'invest-navi-session-expired';
 
-function readStorage(key: string): string | undefined {
-  if (typeof window === 'undefined') {
-    return undefined;
-  }
-
-  return window.localStorage.getItem(key) ?? undefined;
-}
+let accessToken: string | undefined;
 
 export function getAccessToken(): string | undefined {
-  return readStorage(ACCESS_TOKEN_KEY);
+  return accessToken;
 }
 
-export function getRefreshToken(): string | undefined {
-  return readStorage(REFRESH_TOKEN_KEY);
+export function setAccessToken(token: string) {
+  accessToken = token;
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
+  }
 }
 
-export function setTokens(tokens: { accessToken: string; refreshToken: string }) {
-  window.localStorage.setItem(ACCESS_TOKEN_KEY, tokens.accessToken);
-  window.localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+export function clearAccessToken(options?: { expired?: boolean }) {
+  accessToken = undefined;
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
+  if (options?.expired) {
+    window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+  }
 }
 
-export function clearTokens() {
-  window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-  window.localStorage.removeItem(REFRESH_TOKEN_KEY);
-  window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
+/** Remove legacy localStorage tokens from pre-hardening builds. */
+export function clearLegacyStoredTokens() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.removeItem('invest_navi_access_token');
+  window.localStorage.removeItem('invest_navi_refresh_token');
 }
 
 export function subscribeToTokenChanges(callback: () => void) {
   window.addEventListener(TOKEN_CHANGE_EVENT, callback);
-  window.addEventListener('storage', callback);
 
   return () => {
     window.removeEventListener(TOKEN_CHANGE_EVENT, callback);
-    window.removeEventListener('storage', callback);
   };
 }

@@ -67,8 +67,9 @@ export function DashboardShell({ children }: DashboardShellProps) {
   ];
 
   const handleLogout = () => {
-    logout();
-    router.replace('/login');
+    void logout().then(() => {
+      router.replace('/login');
+    });
   };
 
   return (

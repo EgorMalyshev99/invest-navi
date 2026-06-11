@@ -8,6 +8,7 @@ allowBuilds:
   '@apollo/protobufjs': true
   '@nestjs/core': true
   '@parcel/watcher': true
+  '@scarf/scarf': true
   '@swc/core': true
   esbuild: true
   msw: true

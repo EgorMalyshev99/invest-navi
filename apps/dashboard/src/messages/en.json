@@ -300,6 +300,7 @@
   "auth": {
     "loginTitle": "Sign in",
     "registerTitle": "Create account",
+    "onboardingTitle": "Profile setup",
     "email": "Email",
     "password": "Password",
     "passwordConfirm": "Confirm password",
@@ -327,6 +328,12 @@
     "googleLogin": "Continue with Google",
     "oauthDivider": "or",
     "oauthError": "External sign-in failed. Try email and password.",
+    "oauthErrorDenied": "External sign-in was cancelled.",
+    "oauthErrorInvalid": "Invalid response from the provider. Please try again.",
+    "oauthErrorFailed": "Could not complete sign-in. Try email and password.",
+    "oauthCallbackLoading": "Completing sign-in…",
+    "linkYandex": "Connect Yandex",
+    "linkGoogle": "Connect Google",
     "loginSubmit": "Sign in",
     "continue": "Continue",
     "finishRegistration": "Go to dashboard",
@@ -381,6 +388,13 @@
     "goLearn": "Learning hub",
     "goRisks": "Risks with examples",
     "disclaimer": "Summary based on MOEX market data. Not investment advice.",
+    "weeklyReview": {
+      "title": "Weekly review",
+      "subtitle": "Educational recap of sectors, the ruble, and risks — refreshed once a week.",
+      "sectors": "Sectors",
+      "bondsAndRub": "Bonds and ruble",
+      "risks": "What to watch"
+    },
     "beginnerCardTitle": "Where to start",
     "beginnerCardBody": "If you just opened a brokerage account, start with a short guide: goal, watchlist, and a journal — without rushing to buy.",
     "beginnerCardCta": "Open beginner guide",
@@ -716,6 +730,23 @@
     "save": "Save",
     "saved": "Changes saved",
     "saveError": "Could not save",
+    "oauth": {
+      "title": "Connected accounts",
+      "description": "Link Yandex ID or Google for faster sign-in.",
+      "providers": {
+        "yandex": "Yandex ID",
+        "google": "Google"
+      },
+      "statusLinked": "Linked",
+      "statusNotLinked": "Not linked",
+      "unlink": "Unlink",
+      "linkedSuccess": "Account linked successfully.",
+      "unlinkedSuccess": "Account unlinked.",
+      "unlinkFailed": "Could not unlink account.",
+      "linkDenied": "Linking was cancelled.",
+      "linkInvalid": "Invalid response from the provider.",
+      "linkFailed": "Could not link account."
+    },
     "levels": {
       "beginner": {
         "title": "Beginner",

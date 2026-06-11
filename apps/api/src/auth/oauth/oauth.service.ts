@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { GoogleOAuthClient } from './google-oauth.client';
@@ -8,7 +13,7 @@ import { parseAppOrigins } from '../../config/app-origins';
 import { OAuthAccountsRepository } from '../../database/repositories/oauth-accounts.repository';
 import { UsersRepository } from '../../database/repositories/users.repository';
 import { AuthService } from '../auth.service';
-import { AuthTokens } from '../dto/auth-tokens.type';
+import type { AuthOAuthSession } from '../dto/auth-oauth-result.type';
 
 import type { OAuthProfile } from './oauth-profile.type';
 
@@ -23,24 +28,45 @@ export class OAuthService {
     private readonly authService: AuthService,
   ) {}
 
-  async completeYandexLogin(code: string, redirectUri: string): Promise<AuthTokens> {
+  async completeYandexLogin(code: string, redirectUri: string): Promise<AuthOAuthSession> {
     return this.completeProviderLogin('yandex', code, redirectUri, () =>
       this.yandexOAuthClient.exchangeCodeAndGetProfile(code.trim(), redirectUri),
     );
   }
 
-  async completeGoogleLogin(code: string, redirectUri: string): Promise<AuthTokens> {
+  async completeGoogleLogin(code: string, redirectUri: string): Promise<AuthOAuthSession> {
     return this.completeProviderLogin('google', code, redirectUri, () =>
       this.googleOAuthClient.exchangeCodeAndGetProfile(code.trim(), redirectUri),
     );
   }
 
-  private async completeProviderLogin(
+  async linkYandexProvider(
+    userId: string,
+    code: string,
+    redirectUri: string,
+  ): Promise<{ linked: true }> {
+    return this.linkProvider('yandex', userId, code, redirectUri, () =>
+      this.yandexOAuthClient.exchangeCodeAndGetProfile(code.trim(), redirectUri),
+    );
+  }
+
+  async linkGoogleProvider(
+    userId: string,
+    code: string,
+    redirectUri: string,
+  ): Promise<{ linked: true }> {
+    return this.linkProvider('google', userId, code, redirectUri, () =>
+      this.googleOAuthClient.exchangeCodeAndGetProfile(code.trim(), redirectUri),
+    );
+  }
+
+  private async linkProvider(
     provider: OAuthProviderId,
+    userId: string,
     code: string,
     redirectUri: string,
     resolveProfile: () => Promise<OAuthProfile>,
-  ): Promise<AuthTokens> {
+  ): Promise<{ linked: true }> {
     if (!code?.trim()) {
       throw new BadRequestException('Authorization code is required');
     }
@@ -48,7 +74,50 @@ export class OAuthService {
     this.assertAllowedRedirectUri(redirectUri);
 
     const profile = await resolveProfile();
+    const { providerUserId, email } = profile;
 
+    const existingLink = await this.oauthAccountsRepository.findByProvider(
+      provider,
+      providerUserId,
+    );
+    if (existingLink) {
+      if (existingLink.userId === userId) {
+        return { linked: true };
+      }
+      throw new ConflictException('OAuth account is already linked to another user');
+    }
+
+    const userProviderLink = await this.oauthAccountsRepository.findByUserAndProvider(
+      userId,
+      provider,
+    );
+    if (userProviderLink) {
+      return { linked: true };
+    }
+
+    await this.oauthAccountsRepository.create({
+      userId,
+      provider,
+      providerUserId,
+      providerEmail: email,
+    });
+
+    return { linked: true };
+  }
+
+  private async completeProviderLogin(
+    provider: OAuthProviderId,
+    code: string,
+    redirectUri: string,
+    resolveProfile: () => Promise<OAuthProfile>,
+  ): Promise<AuthOAuthSession> {
+    if (!code?.trim()) {
+      throw new BadRequestException('Authorization code is required');
+    }
+
+    this.assertAllowedRedirectUri(redirectUri);
+
+    const profile = await resolveProfile();
     const { providerUserId, email, name, avatarUrl } = profile;
 
     const linked = await this.oauthAccountsRepository.findByProvider(provider, providerUserId);
@@ -57,7 +126,7 @@ export class OAuthService {
       if (!user?.email) {
         throw new UnauthorizedException('Linked user not found');
       }
-      return this.authService.issueTokensForUser(user.id, user.email);
+      return this.issueOAuthResult(user.id, user.email, false);
     }
 
     const existingByEmail = await this.usersRepository.findByEmail(email);
@@ -68,7 +137,7 @@ export class OAuthService {
         providerUserId,
         providerEmail: email,
       });
-      return this.authService.issueTokensForUser(existingByEmail.id, existingByEmail.email);
+      return this.issueOAuthResult(existingByEmail.id, existingByEmail.email, false);
     }
 
     const [created] = await this.usersRepository.create({
@@ -88,10 +157,22 @@ export class OAuthService {
       providerEmail: email,
     });
 
-    return this.authService.issueTokensForUser(created.id, created.email);
+    return this.issueOAuthResult(created.id, created.email, true);
   }
 
-  private assertAllowedRedirectUri(redirectUri: string): void {
+  private async issueOAuthResult(
+    userId: string,
+    email: string,
+    isNewUser: boolean,
+  ): Promise<AuthOAuthSession> {
+    const tokens = await this.authService.issueTokensForUser(userId, email);
+    return {
+      ...tokens,
+      isNewUser,
+    };
+  }
+
+  assertAllowedRedirectUri(redirectUri: string): void {
     const normalized = redirectUri?.trim();
     if (!normalized) {
       throw new BadRequestException('redirectUri is required');

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { getAccessToken, subscribeToTokenChanges } from './token-store';
+import { clearLegacyStoredTokens, getAccessToken, subscribeToTokenChanges } from './token-store';
 
 export interface AuthContextValue {
   isAuthenticated: boolean;
@@ -19,6 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    clearLegacyStoredTokens();
     refreshAuthState();
     setIsReady(true);
     return subscribeToTokenChanges(refreshAuthState);

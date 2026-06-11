@@ -17,6 +17,9 @@
     },
     "codegen": {
       "outputs": ["src/shared/api/graphql/generated/**"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   }
 }

@@ -15,19 +15,29 @@ import {
   type JwtSecrets,
 } from '../config/jwt.config';
 import { users } from '../database';
-import { AuthTokens } from './dto/auth-tokens.type';
 import { AuthUser } from './dto/auth-user.type';
 import { KnowledgeLevel } from './dto/knowledge-level.enum';
+import { OAuthProvider } from './dto/oauth-provider.enum';
 import { PreferredLocale } from './dto/preferred-locale.enum';
 import { RegisterInput } from './dto/register.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { hashPassword, verifyPassword } from './lib/password';
 import { JwtPayload } from './types/jwt-payload.type';
+import { OAuthAccountsRepository } from '../database/repositories/oauth-accounts.repository';
+import {
+  hashRefreshToken,
+  RefreshSessionsRepository,
+} from '../database/repositories/refresh-sessions.repository';
 import { UsersRepository } from '../database/repositories/users.repository';
 
 export interface AuthenticatedUser {
   userId: string;
   email: string;
+}
+
+export interface AuthSessionResult {
+  accessToken: string;
+  refreshToken: string;
 }
 
 @Injectable()
@@ -36,13 +46,15 @@ export class AuthService {
 
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly oauthAccountsRepository: OAuthAccountsRepository,
+    private readonly refreshSessionsRepository: RefreshSessionsRepository,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {
     this.jwtSecrets = resolveJwtSecrets(configService);
   }
 
-  async login(email: string, password: string): Promise<AuthTokens> {
+  async login(email: string, password: string): Promise<AuthSessionResult> {
     const { email: normalizedEmail, password: validPassword } = this.validateLogin(email, password);
 
     const user = await this.usersRepository.findByEmail(normalizedEmail);
@@ -59,7 +71,7 @@ export class AuthService {
     return this.issueTokens(user.id, user.email);
   }
 
-  async register(input: RegisterInput): Promise<AuthTokens> {
+  async register(input: RegisterInput): Promise<AuthSessionResult> {
     const { email: normalizedEmail, password, name } = this.validateRegister(input);
 
     const existingUser = await this.usersRepository.findByEmail(normalizedEmail);
@@ -83,26 +95,51 @@ export class AuthService {
     return this.issueTokens(createdUser.id, createdUser.email);
   }
 
-  async refreshTokens(refreshToken: string): Promise<AuthTokens> {
+  async refreshWithOpaqueToken(refreshToken: string | undefined): Promise<AuthSessionResult> {
     if (!refreshToken?.trim()) {
-      throw new BadRequestException('Refresh token is required');
+      throw new UnauthorizedException('Refresh token is required');
     }
 
-    let payload: JwtPayload;
+    const tokenHash = hashRefreshToken(refreshToken.trim());
+    const session = await this.refreshSessionsRepository.findByTokenHash(tokenHash);
 
-    try {
-      payload = await this.jwtService.verifyAsync<JwtPayload>(refreshToken.trim(), {
-        secret: this.refreshSecret,
-      });
-    } catch {
+    if (!session) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    if (payload.tokenType !== 'refresh') {
-      throw new UnauthorizedException('Invalid token type');
+    if (session.revokedAt) {
+      await this.refreshSessionsRepository.revokeFamily(session.familyId);
+      throw new UnauthorizedException('Refresh token reuse detected');
     }
 
-    return this.issueTokens(payload.sub, payload.email);
+    if (session.expiresAt.getTime() <= Date.now()) {
+      await this.refreshSessionsRepository.revokeSession(session.id);
+      throw new UnauthorizedException('Refresh token expired');
+    }
+
+    const user = await this.usersRepository.findById(session.userId);
+    if (!user?.email) {
+      await this.refreshSessionsRepository.revokeFamily(session.familyId);
+      throw new UnauthorizedException('User not found');
+    }
+
+    await this.refreshSessionsRepository.revokeSession(session.id);
+    return this.issueTokens(user.id, user.email, session.familyId);
+  }
+
+  async revokeOpaqueRefreshToken(refreshToken: string | undefined, userId: string): Promise<void> {
+    if (!refreshToken?.trim()) {
+      return;
+    }
+
+    const tokenHash = hashRefreshToken(refreshToken.trim());
+    const session = await this.refreshSessionsRepository.findByTokenHash(tokenHash);
+
+    if (!session || session.userId !== userId) {
+      return;
+    }
+
+    await this.refreshSessionsRepository.revokeSession(session.id);
   }
 
   async getProfile(userId: string): Promise<AuthUser> {
@@ -112,10 +149,15 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    return this.toAuthUser(user);
+    const oauthAccounts = await this.oauthAccountsRepository.findByUserId(userId);
+
+    return this.toAuthUser(
+      user,
+      oauthAccounts.map((account) => account.provider as OAuthProvider),
+    );
   }
 
-  async issueTokensForUser(userId: string, email: string): Promise<AuthTokens> {
+  async issueTokensForUser(userId: string, email: string): Promise<AuthSessionResult> {
     return this.issueTokens(userId, email);
   }
 
@@ -140,52 +182,84 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    return this.toAuthUser(updated);
+    return this.toAuthUser(updated, await this.loadOAuthProviders(userId));
   }
 
-  private toAuthUser(user: typeof users.$inferSelect): AuthUser {
+  async unlinkOAuthProvider(userId: string, provider: OAuthProvider): Promise<AuthUser> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user?.email) {
+      throw new NotFoundException('User not found');
+    }
+
+    const linkedAccounts = await this.oauthAccountsRepository.findByUserId(userId);
+    const targetAccount = linkedAccounts.find((account) => account.provider === provider);
+
+    if (!targetAccount) {
+      throw new BadRequestException('OAuth provider is not linked');
+    }
+
+    const hasPassword = Boolean(user.passwordHash);
+    const remainingOAuthCount = linkedAccounts.filter(
+      (account) => account.provider !== provider,
+    ).length;
+
+    if (!hasPassword && remainingOAuthCount === 0) {
+      throw new BadRequestException('Cannot unlink the only sign-in method');
+    }
+
+    await this.oauthAccountsRepository.deleteByUserAndProvider(userId, provider);
+
+    return this.toAuthUser(user, await this.loadOAuthProviders(userId));
+  }
+
+  private async loadOAuthProviders(userId: string): Promise<OAuthProvider[]> {
+    const accounts = await this.oauthAccountsRepository.findByUserId(userId);
+    return accounts.map((account) => account.provider as OAuthProvider);
+  }
+
+  private toAuthUser(
+    user: typeof users.$inferSelect,
+    oauthProviders: OAuthProvider[] = [],
+  ): AuthUser {
     return {
       userId: user.id,
       email: user.email!,
       name: user.name,
       knowledgeLevel: user.knowledgeLevel as KnowledgeLevel,
       preferredLocale: user.preferredLocale as PreferredLocale,
+      oauthProviders,
     };
   }
 
-  private async issueTokens(userId: string, email: string): Promise<AuthTokens> {
+  private async issueTokens(
+    userId: string,
+    email: string,
+    familyId?: string,
+  ): Promise<AuthSessionResult> {
     const accessPayload: JwtPayload = {
       sub: userId,
       email,
       tokenType: 'access',
     };
 
-    const refreshPayload: JwtPayload = {
-      sub: userId,
-      email,
-      tokenType: 'refresh',
-    };
+    const accessToken = await this.jwtService.signAsync(accessPayload, {
+      secret: this.accessSecret,
+      expiresIn: this.accessExpiresInSeconds,
+    });
 
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(accessPayload, {
-        secret: this.accessSecret,
-        expiresIn: this.accessExpiresInSeconds,
-      }),
-      this.jwtService.signAsync(refreshPayload, {
-        secret: this.refreshSecret,
-        expiresIn: this.refreshExpiresInSeconds,
-      }),
-    ]);
+    const expiresAt = new Date(Date.now() + this.refreshExpiresInSeconds * 1000);
+    const { rawToken } = await this.refreshSessionsRepository.createSession(
+      userId,
+      expiresAt,
+      familyId,
+    );
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken: rawToken };
   }
 
   private get accessSecret(): string {
     return this.jwtSecrets.accessSecret;
-  }
-
-  private get refreshSecret(): string {
-    return this.jwtSecrets.refreshSecret;
   }
 
   private get accessExpiresInSeconds(): number {

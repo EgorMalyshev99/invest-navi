@@ -3,6 +3,8 @@ import { sanitizeComplianceText, scanComplianceTexts } from './compliance-text';
 import type { BondInsightContent } from '../bond-insight.types';
 import type { DiaryHypothesisFeedbackContent } from '../diary-feedback.types';
 import type { AssetInsightContent } from '../insight.types';
+import type { WeeklyReviewContent } from '@repo/api';
+
 import type {
   ComplianceGateResult,
   ComplianceViolationCode,
@@ -183,6 +185,44 @@ export function applyRetroInsightCompliance(
   }
 
   const scan = scanComplianceTexts([sanitized.summary, ...sanitized.questions]);
+  return gateResult(scan.ok ? sanitized : null, scan.violations);
+}
+
+export function applyWeeklyReviewCompliance(
+  content: WeeklyReviewContent,
+): ComplianceGateResult<WeeklyReviewContent> {
+  const originalTexts = [
+    content.summary,
+    content.bondsAndRub,
+    ...content.sectors,
+    ...content.events,
+    ...content.risksForNextWeek,
+  ];
+  const preViolations = rejectIfPreSanitizeViolations(originalTexts);
+  if (preViolations) {
+    return gateResult<WeeklyReviewContent>(null, preViolations);
+  }
+
+  const sanitized = {
+    summary: sanitizeComplianceText(content.summary),
+    sectors: sanitizeStrings(content.sectors),
+    bondsAndRub: sanitizeComplianceText(content.bondsAndRub),
+    events: sanitizeStrings(content.events),
+    risksForNextWeek: sanitizeStrings(content.risksForNextWeek),
+  };
+
+  if (!sanitized.summary || !sanitized.bondsAndRub || sanitized.sectors.length === 0) {
+    return gateResult<WeeklyReviewContent>(null, ['TRADING_DIRECTIVE']);
+  }
+
+  const scan = scanComplianceTexts([
+    sanitized.summary,
+    sanitized.bondsAndRub,
+    ...sanitized.sectors,
+    ...sanitized.events,
+    ...sanitized.risksForNextWeek,
+  ]);
+
   return gateResult(scan.ok ? sanitized : null, scan.violations);
 }
 

@@ -4,12 +4,13 @@ import { fetchDiaryHypothesisFeedback } from './diary-api';
 
 import type { DiaryHypothesisFeedbackInput } from '@/shared/api/graphql/generated/graphql';
 
-export function diaryHypothesisFeedbackMutationOptions() {
+/** GraphQL field is a query; exposed as on-demand request hook for form UX. */
+export function diaryHypothesisFeedbackQueryOptions() {
   return mutationOptions({
     mutationFn: (input: DiaryHypothesisFeedbackInput) => fetchDiaryHypothesisFeedback(input),
   });
 }
 
-export function useDiaryHypothesisFeedbackMutation() {
-  return useMutation(diaryHypothesisFeedbackMutationOptions());
+export function useDiaryHypothesisFeedbackQuery() {
+  return useMutation(diaryHypothesisFeedbackQueryOptions());
 }

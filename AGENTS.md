@@ -177,21 +177,23 @@ export default function MarketPage() {
 
 ## Тестирование
 
-> **Phase 10:** Vitest (unit/component) + Playwright (E2E). Стек и план — в [README.md](./README.md#phase-10--лендинг-обзор-рынка-и-тесты).
+> Vitest (unit/component) + Playwright (E2E). Стек — в [README.md](./README.md#деплой).
 
 - Перед PR: `pnpm lint`, при изменении shared types — `pnpm --filter @repo/api build`
 
 ## Phase scope
 
-Phase 1 ✅ — инфраструктура (monorepo, ESLint, Prettier, документация).
-Phase 2 ✅ — Tailwind v4, shadcn/ui, Drizzle + PostgreSQL, FSD-скелет.
-Phase 3 ✅ — Auth (email/password + JWT), GraphQL base.
-Phase 4 ✅ — MOEX ISS + T-Invest API, entities Asset/Sector/Index, `packages/api` contracts, market cache.
-Phase 5 ✅ — Web: маркет, auth и кабинет (каталог, watchlist, auth gate, shells, profile, next-intl, codegen, миграции).
-Phase 6 ✅ — инвестиционный дневник + AI (`diary` GraphQL, `/diary`, `diaryHypothesisFeedback`, ретроспектива).
-Phase 7 ✅ — портфель (`/portfolio`, `portfolioSummary`) и облигационный помощник (`/bonds`, `bondInsight`).
-Phase 8 ✅ — обучение (`/learn`, `/risks`, `/overview`), контекстный глоссарий, `knowledgeLevel` в hub/overview, MVP `/ai` (`educationalAnswer` + compliance).
-Текущая фаза — **Phase 9**: OAuth (Yandex ID, Google) + split frontend (`apps/landing`, `apps/dashboard`, `@repo/ui`). Еженедельный обзор рынка и cron — **Phase 10**.
+**Phase 1–10 ✅** — MVP завершён (см. таблицу в [README.md](./README.md#завершённые-этапы-phase-110)).
+
+**Phase 11+** (текущий фокус):
+
+| Phase | Фокус                                                                       |
+| ----- | --------------------------------------------------------------------------- |
+| 11    | Продакшен: Vercel SPA fix, деплой-док, E2E deep links, API hosting decision |
+| 12    | Watchlist server-side + AI insight                                          |
+| 13    | Key rate, top movers, catalog search, multi-period asset data               |
+| 14    | Diary delete, portfolio narrative, sector comparison                        |
+| 15    | Cron weekly review, notifications, password reset, SEO, monitoring          |
 
 ## Полезные команды
 

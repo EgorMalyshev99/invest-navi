@@ -2,6 +2,7 @@ import { buildGraphqlUrl, stripTrailingSlash } from '@repo/shared/lib/url';
 
 const DEFAULT_APP_URL = 'http://localhost:3003';
 const DEFAULT_API_URL = 'http://localhost:3000';
+const DEFAULT_LANDING_URL = 'http://localhost:3001';
 
 function getEnvValue(key: string): string | undefined {
   return import.meta.env[key]?.trim();
@@ -31,4 +32,11 @@ export function getYandexClientId(): string | undefined {
 
 export function getGoogleClientId(): string | undefined {
   return getEnvValue('VITE_GOOGLE_CLIENT_ID');
+}
+
+/** Public landing origin for auth page brand links. */
+export function getLandingUrl(): string {
+  const configured = getEnvValue('VITE_LANDING_URL');
+  if (configured) return stripTrailingSlash(configured);
+  return DEFAULT_LANDING_URL;
 }

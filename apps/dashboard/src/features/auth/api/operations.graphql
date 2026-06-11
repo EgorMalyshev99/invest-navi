@@ -1,21 +1,12 @@
-mutation RefreshTokens($refreshToken: String!) {
-  refreshTokens(refreshToken: $refreshToken) {
-    accessToken
-    refreshToken
-  }
-}
-
 mutation Login($input: LoginInput!) {
   login(input: $input) {
     accessToken
-    refreshToken
   }
 }
 
 mutation Register($input: RegisterInput!) {
   register(input: $input) {
     accessToken
-    refreshToken
   }
 }
 
@@ -36,5 +27,17 @@ query Me {
     name
     knowledgeLevel
     preferredLocale
+    oauthProviders
+  }
+}
+
+mutation UnlinkOAuthProvider($provider: OAuthProvider!) {
+  unlinkOAuthProvider(provider: $provider) {
+    userId
+    email
+    name
+    knowledgeLevel
+    preferredLocale
+    oauthProviders
   }
 }

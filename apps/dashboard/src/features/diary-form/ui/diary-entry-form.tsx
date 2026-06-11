@@ -1,6 +1,5 @@
 'use client';
 
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SparkleIcon } from '@phosphor-icons/react';
 import {
@@ -30,7 +29,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import {
   useCreateDiaryEntryMutation,
-  useDiaryHypothesisFeedbackMutation,
+  useDiaryHypothesisFeedbackQuery,
 } from '@/entities/diary-entry';
 import { AiInsightBlock } from '@/features/ai-insight';
 import {
@@ -60,7 +59,7 @@ export function DiaryEntryForm({ initialSymbol, onCreated }: DiaryEntryFormProps
   const [error, setError] = useState<string | null>(null);
 
   const createEntry = useCreateDiaryEntryMutation();
-  const feedbackMutation = useDiaryHypothesisFeedbackMutation();
+  const feedbackMutation = useDiaryHypothesisFeedbackQuery();
 
   const form = useForm<DiaryEntryFormValues>({
     resolver: zodResolver(diaryEntryFormSchema),

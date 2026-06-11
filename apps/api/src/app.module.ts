@@ -17,6 +17,7 @@ import { DiaryModule } from './diary';
 import { HealthModule } from './health';
 import { MarketModule } from './market';
 import { PortfolioModule } from './portfolio';
+import { WeeklyReviewModule } from './weekly-review';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { PortfolioModule } from './portfolio';
       autoSchemaFile: process.env.VERCEL === '1' ? true : join(process.cwd(), 'src/schema.gql'),
       context: ({ req, res }) => ({ req, res }),
       sortSchema: true,
+      introspection: process.env.NODE_ENV !== 'production',
+      playground: false,
     }),
     DatabaseModule,
     HealthModule,
@@ -45,6 +48,7 @@ import { PortfolioModule } from './portfolio';
     AiModule,
     DiaryModule,
     PortfolioModule,
+    WeeklyReviewModule,
   ],
   controllers: [],
   providers: [
