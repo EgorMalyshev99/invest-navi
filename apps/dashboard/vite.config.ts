@@ -11,13 +11,21 @@ const monorepoRoot = path.resolve(dashboardRoot, '../..');
 
 export default defineConfig((config) => {
   const env = loadEnv(config.mode, dashboardRoot, '');
+  const isDev = config.command === 'serve';
+  const apiPackageRoot = path.resolve(monorepoRoot, 'packages/api');
+  const apiSourceRoot = path.resolve(apiPackageRoot, 'src');
 
   return {
     plugins: [tailwindcss(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), react()],
     resolve: {
       alias: {
         '@': path.resolve(dashboardRoot, './src'),
-        '@repo/api': path.resolve(monorepoRoot, 'packages/api/src'),
+        ...(isDev
+          ? {
+              '@repo/api$': path.resolve(apiSourceRoot, 'entry.ts'),
+              '@repo/api': apiSourceRoot,
+            }
+          : {}),
       },
     },
     server: {
