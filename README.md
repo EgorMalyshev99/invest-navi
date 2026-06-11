@@ -149,96 +149,107 @@ pnpm --filter api openapi:generate # после изменения REST-конт
 | `GEMINI_API_KEY`                                     | [Google AI Studio](https://aistudio.google.com/apikey) |
 | `OPENROUTER_API_KEY`                                 | [OpenRouter](https://openrouter.ai/keys)               |
 
-## Roadmap
+## Статус проекта
 
-### Phase 1 ✅ — Инфраструктура
+MVP **Phase 1–10 завершён**: landing, dashboard, API, дневник, портфель, облигации, обучение, OAuth, weekly review, Vitest + Playwright. Продукт в стадии **post-MVP** — фокус на стабилизации деплоя и закрытии пробелов из [PRODUCT.md](./docs/PRODUCT.md) (watchlist на сервере, ключевая ставка, поиск в каталоге).
 
-- Monorepo: Turborepo + pnpm workspaces
-- Базовые shared-пакеты (`packages/*`)
-- Линтинг/форматирование: ESLint + Prettier
-- Стартовая документация (`README.md`, `AGENTS.md`, правила Cursor)
+## Завершённые этапы (Phase 1–10)
 
-### Phase 2 ✅ — UI и Data Foundation
+| Phase | Итог                                                             |
+| ----- | ---------------------------------------------------------------- |
+| 1     | Monorepo, shared-пакеты, ESLint/Prettier, документация           |
+| 2     | Tailwind v4, shadcn/ui, Drizzle + PostgreSQL                     |
+| 3     | GraphQL code-first, JWT auth (register/login/refresh/me)         |
+| 4     | MOEX ISS + T-Invest, market cache, `packages/api` contracts      |
+| 5     | Каталог, watchlist (local), auth gate, profile, FSD, codegen     |
+| 6     | Инвестиционный дневник + AI compliance pipeline                  |
+| 7     | Портфель (ручной ввод) + облигационный помощник                  |
+| 8     | Обучение, риски, overview, глоссарий, MVP `/ai`                  |
+| 9     | OAuth (Yandex/Google), split landing/dashboard, `@repo/ui`       |
+| 10    | Контент лендинга, weekly review, Vitest/Playwright, OpenAPI REST |
 
-- Tailwind v4 + shadcn/ui setup
-- Дизайн-токены и типографика (Inter, dark palette)
-- Drizzle ORM, базовая схема PostgreSQL (`DATABASE_URL` из env)
+## Roadmap (Phase 11+)
 
-### Phase 3 ✅ — Auth и GraphQL Base
+### Phase 11 — Стабилизация продакшена (P0)
 
-- GraphQL code-first на NestJS (Apollo)
-- Auth flow: `register`, `login`, `refreshTokens`, `me`
-- JWT access/refresh tokens
+- Fix dashboard SPA 404 на Vercel (SPA rewrite + `outputDirectory`)
+- Документация деплоя (см. [Деплой](#деплой))
+- E2E: direct URL + reload для dashboard paths
+- Дозакрыть тесты: RTL smoke (1 форма), `applyWeeklyReviewCompliance` unit
+- **API hosting:** NestJS `main.ts` не адаптирован под Vercel Serverless — в `apps/api/vercel.json` только `buildCommand`. Рекомендация: **вынести API на long-running хостинг** (Railway, Render, Fly.io, VPS) или добавить Vercel adapter; dashboard и landing остаются на Vercel
 
-### Phase 4 ✅ — Рыночные данные и доменные сущности
+### Phase 12 — Watchlist (P1)
 
-- Интеграция MOEX ISS (акции TQBR, индексы IMOEX/RGBI, сектора)
-- Интеграция T-Invest API (обогащение акций: FIGI, валюта, сектор, див. доходность)
-- GraphQL: `assets`, `asset(symbol)`, `indices`, `sectors`, `marketProviders`
-- In-memory кэш (`MARKET_CACHE_TTL_SECONDS`)
-- Shared-контракты в `packages/api` (`AssetSnapshot`, enums)
+- Серверная watchlist (Drizzle + GraphQL CRUD)
+- Миграция localStorage → server при первом логине
+- AI `watchlistInsight` (compliance pipeline) вместо hardcoded правил
 
-### Phase 5 ✅ — Web: маркет, auth и кабинет
+### Phase 13 — Картина рынка и каталог (P1)
 
-- Каталог `/market`, карточка `/market/[symbol]`, watchlist `/watchlist`; GraphQL codegen
-- Auth gate: Landing `/`, `/login`, `/register` (2 шага), middleware + JWT cookie; PublicShell (header) / DashboardShell (sidebar)
-- Профиль `/profile`: `knowledgeLevel`, `preferredLocale`; next-intl `ru`/`en`, `localePrefix: 'never'`
-- FSD `shared/ui`, миграции Drizzle (`pnpm --filter api db:migrate`)
+- Блок ключевой ставки (CBR API или curated static)
+- `topMovers` (gainers/losers), search/filter в каталоге
+- Multi-period price changes на карточке актива
 
-### Phase 6 ✅ — Инвестиционный дневник + AI
+### Phase 14 — Дневник и портфель (P2)
 
-- Модуль `ai/` с adapter pattern и провайдерами Groq, Gemini, OpenRouter
-- **Compliance gate** на API: проверка AI-ответов (без buy/sell/hold, без гарантий, оговорки при сравнении с вкладом) → safe fallback
-- Единые дисклеймеры в UI (`compliance.*` в next-intl, компонент `AiDisclaimer`)
-- `assetInsight` на карточке актива; `diaryHypothesisFeedback` для черновика гипотезы
-- GraphQL `diary/` — CRUD записей, снимок цены/индекса, `reviewAt` по горизонту
-- Web `/diary` — форма гипотезы, AI-разбор, ретроспектива, фильтры статусов
-- Связка с `/market/[symbol]` → «Гипотеза в дневнике»
+- `deleteDiaryEntry`, уточнение retrospective milestones
+- `portfolioNarrative` (LLM + compliance)
+- Sector comparison на карточке актива
 
-### Phase 7 ✅ — Портфель и облигационный помощник
+### Phase 15 — Рост и удержание (P2–P3)
 
-- Портфель: ручной ввод позиций, `/portfolio`, GraphQL CRUD + `portfolioSummary` (структура, концентрация, образовательные risk hints)
-- Облигации: MOEX ISS, `/bonds` и `/bonds/[symbol]`, `bondInsight` (AI + шаблон), вводный блок без сравнения с вкладом без оговорок
+- Weekly review cron, email/push для retrospective
+- Password reset, SEO-страницы активов на landing
+- ETF/funds в каталоге, Sentry, custom domains
 
-### Phase 8 ✅ — Обучающий слой и риск-навигация
+**Вне scope:** брокерская интеграция, торговые сигналы, real-time терминал.
 
-- Раздел «Обучение» (`/learn`, глоссарий) — 8 статей, перекрёстные ссылки в разделы приложения
-- «Картина рынка» (`/overview`) — entrypoint, блок «путь новичка», карточка для `knowledgeLevel: beginner`
-- Раздел рисков (`/risks`) с примерами и ссылками на статьи
-- Контекстный глоссарий (`GlossaryTerm`) на market, portfolio, asset/bond detail, diary, bonds intro
-- Персонализация hub обучения по `knowledgeLevel` в профиле
-- MVP AI Q&A (`/ai`, GraphQL `educationalAnswer`) — compliance pipeline, disclaimer
+Рекомендуемый трек: **Product depth** — Phase 12 → 13 → 14.
 
-### Phase 9 ✅ — OAuth и split frontend
+## Деплой
 
-- Yandex ID и Google OAuth (login + REST callback, prod env)
-- Автолинк по email; ручная привязка/отвязка в `/profile` (`me.oauthProviders`, `unlinkOAuthProvider`, `POST /auth/oauth/*/link`)
-- Onboarding новых OAuth-пользователей (`/onboarding`, `isNewUser` в OAuth-ответе)
-- UX auth-страниц: `AuthPageShell`, условные OAuth-кнопки, детальные ошибки
-- Split: `apps/landing` (маркетинг) + `apps/dashboard` (кабинет + auth)
-- shadcn/ui и дизайн-токены в `@repo/ui`
+Три отдельных проекта на Vercel (monorepo, Root Directory на приложение):
 
-### Phase 10 ✅ — Лендинг, обзор рынка и тесты
+| Проект    | Root Directory   | Output  | Framework        | `vercel.json`                                            |
+| --------- | ---------------- | ------- | ---------------- | -------------------------------------------------------- |
+| landing   | `apps/landing`   | `.next` | Next.js          | [apps/landing/vercel.json](apps/landing/vercel.json)     |
+| dashboard | `apps/dashboard` | `dist`  | Other (Vite SPA) | [apps/dashboard/vercel.json](apps/dashboard/vercel.json) |
+| api       | `apps/api`       | —       | см. Phase 11     | [apps/api/vercel.json](apps/api/vercel.json)             |
 
-- Обновить контент лендинга (`/`) с учётом реализованного функционала: актуальные разделы, сценарии, преимущества и CTA
-- Еженедельный AI-обзор рынка (полуавтоматический кэш; cron — по необходимости позже)
+### Dashboard SPA (fix 404 на прямых URL)
 
-#### Тесты (минимальный стек)
+Dashboard — Vite SPA + TanStack Router. Прямой заход на `/market`, `/diary`, `/auth/*/callback` или refresh требует rewrite всех path → `index.html`.
 
-| Слой             | Инструмент                                                         | Где                                                         |
-| ---------------- | ------------------------------------------------------------------ | ----------------------------------------------------------- |
-| Unit / component | **Vitest** (+ `@testing-library/react` для dashboard и `@repo/ui`) | `packages/api`, `apps/api`, `apps/dashboard`, `packages/ui` |
-| E2E              | **Playwright**                                                     | `e2e/` (landing + dashboard, happy-path сценарии)           |
+В [apps/dashboard/vercel.json](apps/dashboard/vercel.json):
 
-Общий конфиг — `@repo/vitest-config` (по аналогии с `@repo/eslint-config`). Без Jest и supertest.
+- `outputDirectory: "dist"`
+- `framework: null` — не давать автопресету Vercel перезаписать rewrites
+- `rewrites`: `/(.*)` → `/index.html` (кроме `/assets/*`)
 
-**План внедрения (без перегруза):**
+**Checklist в Vercel Dashboard (dashboard-проект):**
 
-1. `@repo/vitest-config` + `turbo run test` в CI
-2. Vitest: compliance AI (`apps/api/src/ai/lib/compliance/`) и zod/валидации в `packages/api`
-3. Vitest + RTL: 1–2 формы или виджета в dashboard (smoke)
-4. Playwright: auth + один сквозной сценарий (например, дневник)
-5. Дальше — только по мере изменений в критичных местах; landing — в основном E2E, не unit
+1. Root Directory = `apps/dashboard`
+2. Framework Preset = **Other** (не Next.js)
+3. Build Command и Install Command — из `vercel.json` (monorepo: `cd ../.. && pnpm install`)
+4. Env **Production + Preview**: `VITE_APP_URL`, `VITE_API_URL`, `VITE_LANDING_URL`, `VITE_YANDEX_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID`
+5. OAuth redirect URIs в провайдерах: `https://<dashboard-domain>/auth/yandex/callback`, `.../auth/google/callback`
+
+**Локальная проверка prod-build:**
+
+```bash
+pnpm --filter dashboard build && pnpm --filter dashboard preview
+# http://localhost:4173/market — должен открыться без 404
+```
+
+### Env matrix (production)
+
+| App       | Ключевые переменные                                                            |
+| --------- | ------------------------------------------------------------------------------ |
+| api       | `DATABASE_URL`, `LANDING_URL`, `DASHBOARD_URL`, `JWT_*`, `AI_*`, OAuth secrets |
+| landing   | `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_API_URL`      |
+| dashboard | `VITE_APP_URL`, `VITE_API_URL`, `VITE_LANDING_URL`, OAuth client IDs           |
+
+CORS на API: `LANDING_URL` и `DASHBOARD_URL` должны совпадать с реальными origins фронтендов.
 
 ## Документация
 

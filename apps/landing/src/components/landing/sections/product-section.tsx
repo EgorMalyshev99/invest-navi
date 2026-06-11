@@ -10,9 +10,10 @@ import {
 import { Button } from '@repo/ui';
 import { useTranslations } from 'next-intl';
 
-import { getDashboardUrl } from '@/config/env';
 import { LandingTopicCard } from '../landing-topic-card';
 import { SectionHeading } from '../section-heading';
+
+import { getDashboardUrl } from '@/config/env';
 
 const PRODUCT_KEYS = ['learn', 'overview', 'risks', 'ai'] as const;
 
@@ -42,9 +43,11 @@ export function ProductSection() {
             />
           ))}
         </div>
-        <div className="border-primary/20 from-primary/5 to-accent/5 bg-card rounded-xl border bg-gradient-to-br p-6 md:p-8">
+        <div className="border-primary/20 from-primary/5 to-accent/5 bg-card rounded-xl border bg-linear-to-br p-6 md:p-8">
           <div className="text-primary mb-3 flex items-center gap-2">
-            <SparkleIcon className="size-5" aria-hidden />
+            <span className="inline-flex size-5" aria-hidden>
+              <SparkleIcon size={20} />
+            </span>
             <h3 className="text-lg font-semibold">{t('weeklyTitle')}</h3>
           </div>
           <p className="text-muted-foreground mb-4 max-w-3xl text-sm leading-relaxed">
