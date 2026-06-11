@@ -13,6 +13,8 @@ import {
 } from '@repo/ui';
 import { useState } from 'react';
 
+import { ValidationError, assertEducationalQuestionInput } from '@repo/api';
+
 import { useEducationalAnswerMutation } from '@/entities/educational-answer';
 import { AiInsightBlock } from '@/features/ai-insight';
 import { useLocale, useTranslations } from '@/i18n/react-i18n';
@@ -30,21 +32,21 @@ export function AiAssistantView() {
   const mutation = useEducationalAnswerMutation();
 
   const handleSubmit = async (text?: string) => {
-    const value = (text ?? question).trim();
-    if (value.length < 3) {
-      setError(t('errorTooShort'));
-      return;
-    }
-
     setError(null);
-    setQuestion(value);
 
     try {
+      const validated = assertEducationalQuestionInput(text ?? question, locale);
+      setQuestion(validated.question);
+
       await mutation.mutateAsync({
-        question: value,
-        locale,
+        question: validated.question,
+        locale: validated.locale,
       });
     } catch (err) {
+      if (err instanceof ValidationError) {
+        setError(t('errorTooShort'));
+        return;
+      }
       setError(err instanceof GraphqlRequestError ? err.message : t('errorGeneric'));
     }
   };

@@ -1,7 +1,6 @@
 import { Navigate, Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { Suspense } from 'react';
 
-import { getAccessToken } from '@/shared/auth/token-store';
 import { DashboardShell, DashboardShellSkeleton } from '@/widgets/dashboard-shell';
 
 export const Route = createFileRoute('/_authenticated')({
@@ -10,7 +9,7 @@ export const Route = createFileRoute('/_authenticated')({
       return;
     }
 
-    if (!getAccessToken()) {
+    if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/login',
         search: { from: location.pathname },
@@ -27,7 +26,7 @@ function AuthenticatedLayout() {
     return <DashboardShellSkeleton />;
   }
 
-  if (!getAccessToken()) {
+  if (!auth.isAuthenticated) {
     return <Navigate to="/login" search={{ from: window.location.pathname }} />;
   }
 

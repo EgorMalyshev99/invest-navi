@@ -15,10 +15,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/features/auth/api/auth-api';
+import { resolveOAuthErrorMessage } from '@/features/auth/lib/resolve-oauth-error';
 import { resolvePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import { loginSchema, type LoginFormValues } from '@/features/auth/model/schemas';
-import { OAuthDivider } from '@/features/auth/ui/oauth-divider';
 import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
 import { Link, useRouter, useSearchParams } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
@@ -31,7 +31,7 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const { refreshAuthState } = useAuth();
   const [error, setError] = useState<string | null>(null);
-  const oauthError = searchParams.get('oauth') ? t('oauthError') : null;
+  const oauthError = resolveOAuthErrorMessage(searchParams.get('oauth'), t);
   const displayError = error ?? oauthError;
   const from = resolvePostAuthRedirect(searchParams.get('from') ?? undefined);
 
@@ -55,7 +55,6 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" autoComplete="on">
       <OAuthSocialButtons from={from} />
-      <OAuthDivider />
       {displayError ? (
         <Alert variant="destructive">
           <AlertDescription>{displayError}</AlertDescription>

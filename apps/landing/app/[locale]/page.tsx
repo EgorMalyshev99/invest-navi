@@ -4,6 +4,7 @@ import { DirectionsSection } from '@/components/landing/sections/directions-sect
 import { FeaturesSection } from '@/components/landing/sections/features-section';
 import { HeroSection } from '@/components/landing/sections/hero-section';
 import { HowSection } from '@/components/landing/sections/how-section';
+import { ProductSection } from '@/components/landing/sections/product-section';
 import { PublicShell } from '@/components/layout/default';
 
 const PUBLIC_HEADER_HEIGHT = '3.5rem';
@@ -18,6 +19,7 @@ export default function LandingPage() {
         <HeroSection />
       </div>
       <DirectionsSection />
+      <ProductSection />
       <FeaturesSection />
       <DiarySection />
       <HowSection />

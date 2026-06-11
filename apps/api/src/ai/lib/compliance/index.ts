@@ -9,6 +9,7 @@ export {
   applyBondInsightCompliance,
   applyDiaryFeedbackCompliance,
   applyRetroInsightCompliance,
+  applyWeeklyReviewCompliance,
   formatComplianceViolations,
 } from './compliance-gate';
 export { sanitizeComplianceText, scanComplianceText, scanComplianceTexts } from './compliance-text';

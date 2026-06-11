@@ -13,19 +13,20 @@ import {
   RegisterDocument,
   UpdateProfileDocument,
 } from '@/shared/api/graphql/generated/graphql';
-import { clearTokens, setTokens } from '@/shared/auth/token-store';
+import { logoutViaRest } from '@/shared/auth/auth-session';
+import { setAccessToken } from '@/shared/auth/token-store';
 
 export type { KnowledgeLevel, PreferredLocale };
 
 export async function login(input: LoginInput) {
   const data = await graphqlRequest(LoginDocument, { input });
-  setTokens(data.login);
+  setAccessToken(data.login.accessToken);
   return data.login;
 }
 
 export async function register(input: RegisterInput) {
   const data = await graphqlRequest(RegisterDocument, { input });
-  setTokens(data.register);
+  setAccessToken(data.register.accessToken);
   return data.register;
 }
 
@@ -38,6 +39,6 @@ export async function updateProfile(input: UpdateProfileInput) {
   return data.updateProfile;
 }
 
-export function logout() {
-  clearTokens();
+export async function logout() {
+  await logoutViaRest();
 }

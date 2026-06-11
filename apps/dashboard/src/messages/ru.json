@@ -300,6 +300,7 @@
   "auth": {
     "loginTitle": "Вход",
     "registerTitle": "Регистрация",
+    "onboardingTitle": "Настройка профиля",
     "email": "Email",
     "password": "Пароль",
     "passwordConfirm": "Повторите пароль",
@@ -327,6 +328,12 @@
     "googleLogin": "Войти через Google",
     "oauthDivider": "или",
     "oauthError": "Не удалось войти через внешний сервис. Попробуйте email и пароль.",
+    "oauthErrorDenied": "Вход через внешний сервис отменён.",
+    "oauthErrorInvalid": "Некорректный ответ от провайдера. Попробуйте снова.",
+    "oauthErrorFailed": "Не удалось завершить вход. Попробуйте email и пароль.",
+    "oauthCallbackLoading": "Завершаем вход…",
+    "linkYandex": "Привязать Яндекс",
+    "linkGoogle": "Привязать Google",
     "loginSubmit": "Войти",
     "continue": "Продолжить",
     "finishRegistration": "Перейти в кабинет",
@@ -381,6 +388,13 @@
     "goLearn": "Раздел обучения",
     "goRisks": "Риски на примерах",
     "disclaimer": "Сводка основана на рыночных данных MOEX. Не является инвестиционной рекомендацией.",
+    "weeklyReview": {
+      "title": "Обзор недели",
+      "subtitle": "Образовательная сводка по секторам, рублю и рискам — обновляется раз в неделю.",
+      "sectors": "Сектора",
+      "bondsAndRub": "Облигации и рубль",
+      "risks": "На что обратить внимание"
+    },
     "beginnerCardTitle": "С чего начать",
     "beginnerCardBody": "Если вы только открыли счёт — начните с короткой статьи: цель, список наблюдения и дневник идей без спешки с покупками.",
     "beginnerCardCta": "Открыть гайд для новичков",
@@ -716,6 +730,23 @@
     "save": "Сохранить",
     "saved": "Изменения сохранены",
     "saveError": "Не удалось сохранить",
+    "oauth": {
+      "title": "Внешние аккаунты",
+      "description": "Привяжите Yandex ID или Google для быстрого входа.",
+      "providers": {
+        "yandex": "Яндекс ID",
+        "google": "Google"
+      },
+      "statusLinked": "Привязан",
+      "statusNotLinked": "Не привязан",
+      "unlink": "Отвязать",
+      "linkedSuccess": "Аккаунт успешно привязан.",
+      "unlinkedSuccess": "Аккаунт отвязан.",
+      "unlinkFailed": "Не удалось отвязать аккаунт.",
+      "linkDenied": "Привязка отменена.",
+      "linkInvalid": "Некорректный ответ от провайдера.",
+      "linkFailed": "Не удалось привязать аккаунт."
+    },
     "levels": {
       "beginner": {
         "title": "Новичок",

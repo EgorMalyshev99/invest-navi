@@ -1,0 +1,13 @@
+query WeeklyMarketReview($locale: String) {
+  weeklyMarketReview(locale: $locale) {
+    weekStart
+    locale
+    summary
+    sectors
+    bondsAndRub
+    events
+    risksForNextWeek
+    source
+    generatedAt
+  }
+}

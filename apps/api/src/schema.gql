@@ -1,7 +1,3 @@
-# ------------------------------------------------------
-# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
-# ------------------------------------------------------
-
 type Asset {
   changePercent: Float!
   currency: String
@@ -38,15 +34,15 @@ enum AssetInsightSource {
   FALLBACK
 }
 
-type AuthTokens {
+type AuthAccess {
   accessToken: String!
-  refreshToken: String!
 }
 
 type AuthUser {
   email: String!
   knowledgeLevel: KnowledgeLevel!
   name: String
+  oauthProviders: [OAuthProvider!]!
   preferredLocale: PreferredLocale!
   userId: String!
 }
@@ -248,12 +244,17 @@ type Mutation {
   createPortfolioPosition(input: CreatePortfolioPositionInput!): PortfolioPosition!
   deletePortfolioPosition(id: String!): Boolean!
   educationalAnswer(input: EducationalAnswerInput!): EducationalAnswer!
-  login(input: LoginInput!): AuthTokens!
-  refreshTokens(refreshToken: String!): AuthTokens!
-  register(input: RegisterInput!): AuthTokens!
+  login(input: LoginInput!): AuthAccess!
+  register(input: RegisterInput!): AuthAccess!
+  unlinkOAuthProvider(provider: OAuthProvider!): AuthUser!
   updateDiaryEntry(id: String!, input: UpdateDiaryEntryInput!): DiaryEntry!
   updatePortfolioPosition(id: String!, input: UpdatePortfolioPositionInput!): PortfolioPosition!
   updateProfile(input: UpdateProfileInput!): AuthUser!
+}
+
+enum OAuthProvider {
+  GOOGLE
+  YANDEX
 }
 
 type PortfolioAllocationSlice {
@@ -348,6 +349,9 @@ type Query {
 
   """MOEX sector indices"""
   sectors: [Sector!]!
+
+  """Educational weekly MOEX market review (cached per ISO week)"""
+  weeklyMarketReview(locale: String = "ru"): WeeklyMarketReview!
 }
 
 input RegisterInput {
@@ -389,4 +393,17 @@ input UpdateProfileInput {
   knowledgeLevel: KnowledgeLevel
   name: String
   preferredLocale: PreferredLocale
+}
+
+type WeeklyMarketReview {
+  bondsAndRub: String!
+  events: [String!]!
+  generatedAt: DateTime!
+  locale: String!
+  provider: String
+  risksForNextWeek: [String!]!
+  sectors: [String!]!
+  source: AssetInsightSource!
+  summary: String!
+  weekStart: DateTime!
 }

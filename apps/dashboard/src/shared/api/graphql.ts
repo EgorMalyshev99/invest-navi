@@ -2,8 +2,8 @@ import { print } from 'graphql';
 
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
-import { RefreshTokensDocument } from '@/shared/api/graphql/generated/graphql';
-import { clearTokens, getAccessToken, getRefreshToken, setTokens } from '@/shared/auth/token-store';
+import { refreshAccessTokenViaRest } from '@/shared/auth/auth-session';
+import { clearAccessToken, getAccessToken } from '@/shared/auth/token-store';
 import { getGraphqlUrl } from '@/shared/config/env';
 
 export class GraphqlRequestError extends Error {
@@ -31,41 +31,6 @@ interface GraphqlResponse<T> {
   errors?: Array<{ message: string }>;
 }
 
-async function refreshAccessToken(): Promise<string | undefined> {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
-    return undefined;
-  }
-
-  const response = await fetch(getGraphqlUrl(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      query: print(RefreshTokensDocument),
-      variables: { refreshToken },
-    }),
-    cache: 'no-store',
-  });
-
-  if (!response.ok) {
-    clearTokens();
-    return undefined;
-  }
-
-  const payload = (await response.json()) as GraphqlResponse<{
-    refreshTokens: { accessToken: string; refreshToken: string };
-  }>;
-
-  const tokens = payload.data?.refreshTokens;
-  if (!tokens || payload.errors?.length) {
-    clearTokens();
-    return undefined;
-  }
-
-  setTokens(tokens);
-  return tokens.accessToken;
-}
-
 function isUnauthorizedError(errors?: Array<{ message: string }>): boolean {
   return errors?.some((error) => /unauthorized|forbidden|jwt|token/i.test(error.message)) ?? false;
 }
@@ -83,6 +48,7 @@ async function executeGraphql<TResult, TVariables>(
   const response = await fetch(getGraphqlUrl(), {
     method: 'POST',
     headers,
+    credentials: 'include',
     body: JSON.stringify({
       query: print(document),
       variables: variables ?? {},
@@ -115,7 +81,7 @@ export async function graphqlRequest<TResult, TVariables = Record<string, never>
       throw error;
     }
 
-    accessToken = await refreshAccessToken();
+    accessToken = await refreshAccessTokenViaRest();
     if (!accessToken) {
       throw error;
     }
@@ -124,9 +90,11 @@ export async function graphqlRequest<TResult, TVariables = Record<string, never>
   }
 
   if (isUnauthorizedError(payload.errors)) {
-    accessToken = await refreshAccessToken();
+    accessToken = await refreshAccessTokenViaRest();
     if (accessToken) {
       payload = await executeGraphql(document, variables, accessToken);
+    } else {
+      clearAccessToken({ expired: true });
     }
   }
 

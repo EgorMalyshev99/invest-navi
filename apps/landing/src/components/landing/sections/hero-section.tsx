@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { getDashboardUrl } from '@/config/env';
 
-const HERO_PILL_KEYS = ['catalog', 'watchlist', 'diary', 'ai'] as const;
+const HERO_PILL_KEYS = ['catalog', 'learn', 'overview', 'diary', 'ai'] as const;
 
 export function HeroSection() {
   const t = useTranslations('landing');

@@ -25,9 +25,36 @@
     "heroNote": "We don’t drop “just buy it” takes. We help you think out loud: ask better questions and log hypotheses until things click.",
     "heroPills": {
       "catalog": "MOEX catalog",
-      "watchlist": "Your watchlist",
+      "learn": "Learning",
+      "overview": "Market picture",
       "diary": "Idea journal",
-      "ai": "AI insights"
+      "ai": "AI assistant"
+    },
+    "product": {
+      "title": "Already in the dashboard",
+      "subtitle": "Learning, market overview, risks, and AI — no trading signals, no noise.",
+      "items": {
+        "learn": {
+          "title": "Learning & glossary",
+          "body": "Eight articles plus in-context tips: open a name and see what a term means without panic-googling."
+        },
+        "overview": {
+          "title": "Market picture",
+          "body": "Indices, sectors, and a weekly AI recap — context instead of chasing every tick."
+        },
+        "risks": {
+          "title": "Risks with examples",
+          "body": "Rates, FX, liquidity — with questions to ask yourself before any decision."
+        },
+        "ai": {
+          "title": "Educational AI Q&A",
+          "body": "Ask a market question, get an explanation with caveats. No buy/sell/hold."
+        }
+      },
+      "weeklyTitle": "Weekly review",
+      "weeklyBody": "Once a week — a short recap on sectors, the ruble, bonds, and risks. Full text lives in the dashboard on Market picture.",
+      "weeklyCta": "Open in dashboard",
+      "oauthNote": "Sign in with email, Yandex ID, or Google — onboarding tunes hints to your level."
     },
     "ctaStart": "Start free",
     "ctaLogin": "Already in? Sign in",
@@ -111,8 +138,8 @@
     "stepLabel": "Step {step}",
     "steps": {
       "s1": {
-        "title": "Sign up + level",
-        "body": "Email, password, and your experience level — so AI and hints don’t sound like a bank brochure if you’re just getting started."
+        "title": "Sign up & sign in",
+        "body": "Email, Yandex ID, or Google — pick your experience level so AI and hints speak your language."
       },
       "s2": {
         "title": "Your watchlist",

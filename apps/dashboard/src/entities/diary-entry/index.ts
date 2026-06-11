@@ -14,5 +14,5 @@ export {
   diaryRetrospectiveQueryOptions,
   useDiaryRetrospectiveQuery,
 } from './api/use-diary-retrospective-query';
-export { useDiaryHypothesisFeedbackMutation } from './api/use-diary-hypothesis-feedback-mutation';
+export { useDiaryHypothesisFeedbackQuery } from './api/use-diary-hypothesis-feedback-query';
 export { diaryKeys } from './model/query-keys';

@@ -1,15 +1,18 @@
 import 'reflect-metadata';
 
+import cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import { parseAppOrigins } from './config/app-origins';
+import { setupSwagger } from './config/setup-swagger';
 import { assertProductionEnv } from './config/jwt.config';
 
 async function bootstrap() {
   assertProductionEnv();
 
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
   app.enableShutdownHooks();
 
   const allowedOrigins = parseAppOrigins(process.env);
@@ -25,6 +28,8 @@ async function bootstrap() {
     },
     credentials: true,
   });
+
+  setupSwagger(app);
 
   const port = Number(process.env.PORT) || 3000;
   await app.listen(port);

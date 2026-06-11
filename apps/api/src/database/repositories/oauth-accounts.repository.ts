@@ -21,7 +21,26 @@ export class OAuthAccountsRepository {
     });
   }
 
+  findByUserId(userId: string) {
+    return this.db.query.oauthAccounts.findMany({
+      where: eq(oauthAccounts.userId, userId),
+    });
+  }
+
+  findByUserAndProvider(userId: string, provider: OAuthProvider) {
+    return this.db.query.oauthAccounts.findFirst({
+      where: and(eq(oauthAccounts.userId, userId), eq(oauthAccounts.provider, provider)),
+    });
+  }
+
   create(values: typeof oauthAccounts.$inferInsert) {
     return this.db.insert(oauthAccounts).values(values).returning();
+  }
+
+  deleteByUserAndProvider(userId: string, provider: OAuthProvider) {
+    return this.db
+      .delete(oauthAccounts)
+      .where(and(eq(oauthAccounts.userId, userId), eq(oauthAccounts.provider, provider)))
+      .returning();
   }
 }

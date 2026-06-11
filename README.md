@@ -110,10 +110,13 @@ pnpm --filter dashboard dev
 ### Качество кода
 
 ```bash
+pnpm test
+pnpm test:e2e
 pnpm lint
 pnpm format
 pnpm --filter api schema:generate # после изменения GraphQL resolvers
 pnpm --filter dashboard codegen   # после изменения schema.gql или *.graphql
+pnpm --filter api openapi:generate # после изменения REST-контроллеров
 ```
 
 ## Переменные окружения
@@ -122,29 +125,29 @@ pnpm --filter dashboard codegen   # после изменения schema.gql и�
 
 ### Матрица по приложениям
 
-| Переменная                                                                       | App       | Назначение                           |
-| -------------------------------------------------------------------------------- | --------- | ------------------------------------ |
-| `LANDING_URL`, `DASHBOARD_URL`                                                   | api       | CORS и OAuth redirect allowlist      |
-| `DATABASE_URL`, `JWT_*`, `AI_*`, `YANDEX_*`, `GOOGLE_*` (secrets)                | api       | Серверные секреты и интеграции       |
-| `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_API_URL`        | landing   | Публичные origins для Next.js        |
-| `VITE_APP_URL`, `VITE_API_URL`, `VITE_YANDEX_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID` | dashboard | Публичные origins и OAuth client IDs |
+| Переменная                                                                                           | App       | Назначение                           |
+| ---------------------------------------------------------------------------------------------------- | --------- | ------------------------------------ |
+| `LANDING_URL`, `DASHBOARD_URL`                                                                       | api       | CORS и OAuth redirect allowlist      |
+| `DATABASE_URL`, `JWT_*`, `AI_*`, `YANDEX_*`, `GOOGLE_*` (secrets)                                    | api       | Серверные секреты и интеграции       |
+| `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_API_URL`                            | landing   | Публичные origins для Next.js        |
+| `VITE_APP_URL`, `VITE_API_URL`, `VITE_LANDING_URL`, `VITE_YANDEX_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID` | dashboard | Публичные origins и OAuth client IDs |
 
 ### Справочник
 
-| Переменная                              | Описание                                               |
-| --------------------------------------- | ------------------------------------------------------ |
-| `DATABASE_URL`                          | PostgreSQL (Drizzle)                                   |
-| `LANDING_URL` / `DASHBOARD_URL`         | Origins landing/dashboard для API CORS и OAuth         |
-| `NEXT_PUBLIC_APP_URL`                   | Origin landing                                         |
-| `NEXT_PUBLIC_DASHBOARD_URL`             | Origin dashboard для CTA на лендинге                   |
-| `VITE_APP_URL` / `VITE_API_URL`         | Origins dashboard и API для Vite                       |
-| `JWT_SECRET` / `JWT_REFRESH_SECRET`     | Auth tokens                                            |
-| `YANDEX_CLIENT_ID` / `GOOGLE_CLIENT_ID` | OAuth                                                  |
-| `MOEX_*` / `TINKOFF_*`                  | Рыночные данные                                        |
-| `AI_PROVIDER`                           | Активный LLM: `groq`, `gemini`, `openrouter`           |
-| `GROQ_API_KEY`                          | [Groq](https://console.groq.com/)                      |
-| `GEMINI_API_KEY`                        | [Google AI Studio](https://aistudio.google.com/apikey) |
-| `OPENROUTER_API_KEY`                    | [OpenRouter](https://openrouter.ai/keys)               |
+| Переменная                                           | Описание                                               |
+| ---------------------------------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`                                       | PostgreSQL (Drizzle)                                   |
+| `LANDING_URL` / `DASHBOARD_URL`                      | Origins landing/dashboard для API CORS и OAuth         |
+| `NEXT_PUBLIC_APP_URL`                                | Origin landing                                         |
+| `NEXT_PUBLIC_DASHBOARD_URL`                          | Origin dashboard для CTA на лендинге                   |
+| `VITE_APP_URL` / `VITE_API_URL` / `VITE_LANDING_URL` | Origins dashboard, API и landing для Vite              |
+| `JWT_SECRET` / `JWT_REFRESH_SECRET`                  | Auth tokens                                            |
+| `YANDEX_CLIENT_ID` / `GOOGLE_CLIENT_ID`              | OAuth                                                  |
+| `MOEX_*` / `TINKOFF_*`                               | Рыночные данные                                        |
+| `AI_PROVIDER`                                        | Активный LLM: `groq`, `gemini`, `openrouter`           |
+| `GROQ_API_KEY`                                       | [Groq](https://console.groq.com/)                      |
+| `GEMINI_API_KEY`                                     | [Google AI Studio](https://aistudio.google.com/apikey) |
+| `OPENROUTER_API_KEY`                                 | [OpenRouter](https://openrouter.ai/keys)               |
 
 ## Roadmap
 
@@ -206,15 +209,16 @@ pnpm --filter dashboard codegen   # после изменения schema.gql и�
 - Персонализация hub обучения по `knowledgeLevel` в профиле
 - MVP AI Q&A (`/ai`, GraphQL `educationalAnswer`) — compliance pipeline, disclaimer
 
-### Phase 9 — OAuth (после получения токенов)
+### Phase 9 ✅ — OAuth и split frontend
 
-- Yandex ID и Google OAuth
-- Связывание OAuth-аккаунтов с существующим пользователем
-- Полировка UX входа и регистрации
-- Разделение frontend на `apps/landing` (Next.js) и `apps/dashboard` (Vite + TanStack Router)
-- shadcn/ui и дизайн-токены вынесены в `@repo/ui`
+- Yandex ID и Google OAuth (login + REST callback, prod env)
+- Автолинк по email; ручная привязка/отвязка в `/profile` (`me.oauthProviders`, `unlinkOAuthProvider`, `POST /auth/oauth/*/link`)
+- Onboarding новых OAuth-пользователей (`/onboarding`, `isNewUser` в OAuth-ответе)
+- UX auth-страниц: `AuthPageShell`, условные OAuth-кнопки, детальные ошибки
+- Split: `apps/landing` (маркетинг) + `apps/dashboard` (кабинет + auth)
+- shadcn/ui и дизайн-токены в `@repo/ui`
 
-### Phase 10 — Лендинг, обзор рынка и тесты
+### Phase 10 ✅ — Лендинг, обзор рынка и тесты
 
 - Обновить контент лендинга (`/`) с учётом реализованного функционала: актуальные разделы, сценарии, преимущества и CTA
 - Еженедельный AI-обзор рынка (полуавтоматический кэш; cron — по необходимости позже)

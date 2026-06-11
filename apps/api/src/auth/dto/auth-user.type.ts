@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { KnowledgeLevel } from './knowledge-level.enum';
+import { OAuthProvider } from './oauth-provider.enum';
 import { PreferredLocale } from './preferred-locale.enum';
 
 @ObjectType()
@@ -19,4 +20,7 @@ export class AuthUser {
 
   @Field(() => PreferredLocale)
   preferredLocale!: PreferredLocale;
+
+  @Field(() => [OAuthProvider])
+  oauthProviders!: OAuthProvider[];
 }

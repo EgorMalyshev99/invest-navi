@@ -4,4 +4,5 @@ export type QueryHookOverrides = {
   staleTime?: number;
   refetchInterval?: number | false;
   refetchOnWindowFocus?: boolean;
+  refetchOnMount?: boolean | 'always';
 };

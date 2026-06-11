@@ -36,6 +36,13 @@ jobs:
       - name: Build shared API types
         run: pnpm --filter @repo/api build
 
+      - name: Check OpenAPI drift
+        run: pnpm --filter api openapi:check
+        env:
+          DATABASE_URL: postgresql://invest:invest_secret@localhost:5432/invest_navi
+          JWT_SECRET: ci-access-secret
+          JWT_REFRESH_SECRET: ci-refresh-secret
+
       - name: Check GraphQL schema drift
         run: pnpm --filter api schema:check
         env:
@@ -46,5 +53,58 @@ jobs:
       - name: Generate dashboard GraphQL types
         run: pnpm --filter dashboard codegen
 
-      - name: Lint, typecheck, and build (affected)
-        run: pnpm turbo run lint check-types build --affected
+      - name: Lint, typecheck, build, and test (affected)
+        run: pnpm turbo run lint check-types build test --affected
+        env:
+          DATABASE_URL: postgresql://invest:invest_secret@localhost:5432/invest_navi
+          JWT_SECRET: ci-access-secret
+          JWT_REFRESH_SECRET: ci-refresh-secret
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: invest
+          POSTGRES_PASSWORD: invest_secret
+          POSTGRES_DB: invest_navi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U invest -d invest_navi"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build shared API types
+        run: pnpm --filter @repo/api build
+
+      - name: Migrate database
+        run: pnpm --filter api db:migrate
+        env:
+          DATABASE_URL: postgresql://invest:invest_secret@localhost:5432/invest_navi
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright E2E
+        run: pnpm test:e2e
+        env:
+          DATABASE_URL: postgresql://invest:invest_secret@localhost:5432/invest_navi
+          JWT_SECRET: ci-access-secret
+          JWT_REFRESH_SECRET: ci-refresh-secret
+          CI: true
