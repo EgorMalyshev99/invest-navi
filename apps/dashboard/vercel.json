@@ -4,5 +4,10 @@
   "buildCommand": "cd ../.. && turbo run build --filter=dashboard",
   "outputDirectory": "dist",
   "framework": null,
-  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/((?!assets/|favicon\\.ico|favicons/|img/|manifest\\.webmanifest).*)",
+      "destination": "/index.html"
+    }
+  ]
 }

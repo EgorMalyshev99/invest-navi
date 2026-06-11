@@ -6,6 +6,8 @@ import {
 } from '@tanstack/react-router';
 import * as React from 'react';
 
+import { parseAuthNavigateTarget } from '@/features/auth/lib/parse-auth-navigate-target';
+
 type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
   href: string;
 };
@@ -47,8 +49,14 @@ export const useRouter = () => {
 
   return React.useMemo(
     () => ({
-      push: (href: string) => navigate({ to: href }),
-      replace: (href: string) => navigate({ to: href, replace: true }),
+      push: (href: string) => {
+        const target = parseAuthNavigateTarget(href);
+        navigate(target);
+      },
+      replace: (href: string) => {
+        const target = parseAuthNavigateTarget(href);
+        navigate({ ...target, replace: true });
+      },
       back: () => window.history.back(),
       refresh: () => window.location.reload(),
     }),

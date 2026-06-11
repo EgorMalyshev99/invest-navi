@@ -93,9 +93,9 @@ pnpm dev
 
 Откройте:
 
-- Landing: http://localhost:3001
-- Dashboard: http://localhost:3003
-- API: http://localhost:3000
+- Landing: [http://localhost:3001](http://localhost:3001)
+- Dashboard: [http://localhost:3003](http://localhost:3003)
+- API: [http://localhost:3000](http://localhost:3000)
 
 Локальная разработка — только `pnpm dev` (без Docker). База подключается по `DATABASE_URL` из `.env`.
 
@@ -176,7 +176,6 @@ MVP **Phase 1–10 завершён**: landing, dashboard, API, дневник, 
 - Документация деплоя (см. [Деплой](#деплой))
 - E2E: direct URL + reload для dashboard paths
 - Дозакрыть тесты: RTL smoke (1 форма), `applyWeeklyReviewCompliance` unit
-- **API hosting:** NestJS `main.ts` не адаптирован под Vercel Serverless — в `apps/api/vercel.json` только `buildCommand`. Рекомендация: **вынести API на long-running хостинг** (Railway, Render, Fly.io, VPS) или добавить Vercel adapter; dashboard и landing остаются на Vercel
 
 ### Phase 12 — Watchlist (P1)
 
@@ -224,7 +223,7 @@ Dashboard — Vite SPA + TanStack Router. Прямой заход на `/market`
 
 - `outputDirectory: "dist"`
 - `framework: null` — не давать автопресету Vercel перезаписать rewrites
-- `rewrites`: `/(.*)` → `/index.html` (кроме `/assets/*`)
+- `rewrites`: `/(.*)` → `/index.html` (кроме `/assets/`\*)
 
 **Checklist в Vercel Dashboard (dashboard-проект):**
 
