@@ -1,5 +1,6 @@
 import { isOAuthProviderConfigured } from '@/features/auth/lib/oauth-config';
 import { OAUTH_PROVIDER_CONFIG, type OAuthProvider } from '@/features/auth/lib/oauth-providers';
+import { storePostAuthFrom } from '@/features/auth/lib/post-auth-from';
 import { getAppUrl, getGoogleClientId, getYandexClientId } from '@/shared/config/env';
 
 const YANDEX_AUTHORIZE_URL = 'https://oauth.yandex.ru/authorize';
@@ -57,6 +58,7 @@ export function getOAuthAuthorizeUrl(
 
   if (from?.startsWith('/') && !from.startsWith('//')) {
     window.sessionStorage.setItem(config.fromCookie, from);
+    storePostAuthFrom(from);
   }
   window.sessionStorage.setItem(config.stateCookie, state);
   window.sessionStorage.setItem(OAUTH_MODE_STORAGE_KEY, mode);

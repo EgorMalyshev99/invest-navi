@@ -1,5 +1,6 @@
 import { OAUTH_PROVIDER_CONFIG, type OAuthProvider } from '@/features/auth/lib/oauth-providers';
-import { resolvePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
+import { storePostAuthFrom } from '@/features/auth/lib/post-auth-from';
+import { consumePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
 import {
   clearOAuthModeFromStorage,
   getOAuthModeFromStorage,
@@ -130,6 +131,7 @@ export async function handleOAuthCallback(
   }
 
   const from = window.sessionStorage.getItem(config.fromCookie);
+  storePostAuthFrom(from ?? undefined);
   clearOAuthSession(config);
   setAccessToken(result.accessToken);
 
@@ -137,5 +139,5 @@ export async function handleOAuthCallback(
     return '/onboarding';
   }
 
-  return resolvePostAuthRedirect(from ?? undefined);
+  return consumePostAuthRedirect(from ?? undefined);
 }

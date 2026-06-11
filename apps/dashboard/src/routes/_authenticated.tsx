@@ -1,6 +1,7 @@
 import { Navigate, Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { Suspense } from 'react';
 
+import { storePostAuthFrom } from '@/features/auth/lib/post-auth-from';
 import { DashboardShell, DashboardShellSkeleton } from '@/widgets/dashboard-shell';
 
 export const Route = createFileRoute('/_authenticated')({
@@ -10,6 +11,7 @@ export const Route = createFileRoute('/_authenticated')({
     }
 
     if (!context.auth.isAuthenticated) {
+      storePostAuthFrom(location.pathname);
       throw redirect({
         to: '/login',
         search: { from: location.pathname },
@@ -27,6 +29,7 @@ function AuthenticatedLayout() {
   }
 
   if (!auth.isAuthenticated) {
+    storePostAuthFrom(window.location.pathname);
     return <Navigate to="/login" search={{ from: window.location.pathname }} />;
   }
 

@@ -20,6 +20,7 @@ import { useState } from 'react';
 
 import { updateProfile } from '@/features/auth/api/auth-api';
 import { toGraphqlKnowledgeLevel } from '@/features/auth/lib/graphql-enums';
+import { consumePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
 import { knowledgeLevelSchema, type KnowledgeLevelValue } from '@/features/auth/model/schemas';
 import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
@@ -52,7 +53,7 @@ export function KnowledgeLevelOnboarding({ onComplete }: KnowledgeLevelOnboardin
       if (onComplete) {
         onComplete();
       } else {
-        router.replace('/overview');
+        router.replace(consumePostAuthRedirect());
       }
     } catch (e) {
       setError(e instanceof GraphqlRequestError ? e.message : t('registerError'));

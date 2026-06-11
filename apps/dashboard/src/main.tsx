@@ -12,6 +12,8 @@ import { SESSION_EXPIRED_EVENT } from './shared/auth/token-store';
 import { ThemeProvider } from './shared/ui/theme-provider';
 import { UiProviders } from './shared/ui/ui-providers';
 
+import { storePostAuthFrom } from '@/features/auth/lib/post-auth-from';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -46,7 +48,14 @@ function AppRouter() {
   useEffect(() => {
     const onSessionExpired = () => {
       queryClient.clear();
-      void router.navigate({ to: '/login' });
+      const from = router.state.location.pathname;
+      if (from && from !== '/login' && from !== '/register') {
+        storePostAuthFrom(from);
+      }
+      void router.navigate({
+        to: '/login',
+        search: from && from !== '/login' && from !== '/register' ? { from } : undefined,
+      });
     };
 
     window.addEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);

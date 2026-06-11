@@ -1,18 +1,16 @@
-const AUTH_ROUTES = new Set(['/login', '/register']);
+import {
+  clearStoredPostAuthFrom,
+  getStoredPostAuthFrom,
+  sanitizePostAuthPath,
+} from '@/features/auth/lib/post-auth-from';
 
 export function resolvePostAuthRedirect(from: string | undefined, fallback = '/overview'): string {
-  if (!from) {
-    return fallback;
-  }
+  const path = sanitizePostAuthPath(from) ?? sanitizePostAuthPath(getStoredPostAuthFrom());
+  return path ?? fallback;
+}
 
-  try {
-    const path = from.startsWith('http') ? new URL(from).pathname : from;
-    if (path.startsWith('/') && !path.startsWith('//') && !AUTH_ROUTES.has(path)) {
-      return path;
-    }
-  } catch {
-    return fallback;
-  }
-
-  return fallback;
+export function consumePostAuthRedirect(from?: string, fallback = '/overview'): string {
+  const target = resolvePostAuthRedirect(from, fallback);
+  clearStoredPostAuthFrom();
+  return target;
 }

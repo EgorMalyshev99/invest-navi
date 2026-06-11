@@ -185,11 +185,12 @@ export class OAuthService {
   }
 
   private buildAllowedRedirectUris(): string[] {
-    const origins = parseAppOrigins({
-      LANDING_URL: this.configService.get<string>('LANDING_URL'),
-      DASHBOARD_URL: this.configService.get<string>('DASHBOARD_URL'),
-    });
+    const dashboardUrl = this.configService.get<string>('DASHBOARD_URL')?.trim();
+    if (!dashboardUrl) {
+      return [];
+    }
 
+    const origins = parseAppOrigins({ DASHBOARD_URL: dashboardUrl });
     const unique = new Set<string>();
     for (const origin of origins) {
       const base = origin.replace(/\/$/, '');

@@ -11,12 +11,16 @@ import {
   FieldLabel,
   Input,
 } from '@repo/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/features/auth/api/auth-api';
+import { storePostAuthFrom, sanitizePostAuthPath } from '@/features/auth/lib/post-auth-from';
 import { resolveOAuthErrorMessage } from '@/features/auth/lib/resolve-oauth-error';
-import { resolvePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
+import {
+  consumePostAuthRedirect,
+  resolvePostAuthRedirect,
+} from '@/features/auth/lib/resolve-post-auth-redirect';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import { loginSchema, type LoginFormValues } from '@/features/auth/model/schemas';
 import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
@@ -33,7 +37,16 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const oauthError = resolveOAuthErrorMessage(searchParams.get('oauth'), t);
   const displayError = error ?? oauthError;
-  const from = resolvePostAuthRedirect(searchParams.get('from') ?? undefined);
+  const rawFrom = searchParams.get('from');
+  const postAuthFrom = resolvePostAuthRedirect(rawFrom ?? undefined);
+  const registerHref =
+    rawFrom && sanitizePostAuthPath(rawFrom)
+      ? `/register?from=${encodeURIComponent(rawFrom)}`
+      : '/register';
+
+  useEffect(() => {
+    storePostAuthFrom(rawFrom ?? undefined);
+  }, [rawFrom]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -46,7 +59,7 @@ export function LoginForm() {
     try {
       await login(values);
       refreshAuthState();
-      router.replace(from);
+      router.replace(consumePostAuthRedirect(rawFrom ?? undefined));
     } catch (e) {
       setError(e instanceof GraphqlRequestError ? e.message : t('loginError'));
     }
@@ -54,7 +67,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" autoComplete="on">
-      <OAuthSocialButtons from={from} />
+      <OAuthSocialButtons from={postAuthFrom} />
       {displayError ? (
         <Alert variant="destructive">
           <AlertDescription>{displayError}</AlertDescription>
@@ -91,7 +104,7 @@ export function LoginForm() {
       </Button>
       <p className="text-muted-foreground text-center text-sm">
         {t('noAccount')}{' '}
-        <Link href="/register" className="text-primary hover:underline">
+        <Link href={registerHref} className="text-primary hover:underline">
           {t('registerLink')}
         </Link>
       </p>

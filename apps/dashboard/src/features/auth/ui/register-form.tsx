@@ -13,22 +13,32 @@ import {
   Input,
   Typography,
 } from '@repo/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import { register } from '@/features/auth/api/auth-api';
+import { storePostAuthFrom } from '@/features/auth/lib/post-auth-from';
+import { resolvePostAuthRedirect } from '@/features/auth/lib/resolve-post-auth-redirect';
 import { translateFieldError } from '@/features/auth/lib/translate-field-error';
 import { registerStep1Schema, type RegisterStep1FormValues } from '@/features/auth/model/schemas';
 import { KnowledgeLevelOnboarding } from '@/features/auth/ui/knowledge-level-onboarding';
 import { OAuthSocialButtons } from '@/features/auth/ui/oauth-social-buttons';
 import { PasswordStrengthMeter } from '@/features/auth/ui/password-strength-meter';
+import { useSearchParams } from '@/i18n/navigation';
 import { useTranslations } from '@/i18n/react-i18n';
 import { GraphqlRequestError } from '@/shared/api/graphql';
 
 export function RegisterForm() {
   const t = useTranslations('auth');
+  const searchParams = useSearchParams();
+  const rawFrom = searchParams.get('from');
+  const oauthFrom = resolvePostAuthRedirect(rawFrom ?? undefined);
   const [step, setStep] = useState<1 | 2>(1);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    storePostAuthFrom(rawFrom ?? undefined);
+  }, [rawFrom]);
 
   const form = useForm<RegisterStep1FormValues>({
     resolver: zodResolver(registerStep1Schema),
@@ -63,7 +73,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={onStep1} className="flex flex-col gap-4" autoComplete="on">
       <Typography variant="muted">{t('step1Subtitle')}</Typography>
-      <OAuthSocialButtons />
+      <OAuthSocialButtons from={oauthFrom} />
       {error ? (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
